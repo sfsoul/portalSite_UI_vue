@@ -1,0 +1,19 @@
+.navbar {
+    position: relative;
+  
+    .header-login {
+      position: absolute;
+      right: 1%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  
+    .header-search {
+      position: absolute;
+      right: 6%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 8%;
+      height: 26px;
+    }
+  }
