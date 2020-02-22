@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = "中亚通茂门户网站1234" // page title
+const name = "中亚通茂门户网站" // page title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -32,7 +32,7 @@ module.exports = {
   devServer: {
     port: port,
     open: true,
-    host:'192.168.8.247',
+    /* host:'192.168.8.247', */
     overlay: {
       warnings: false,
       errors: true
@@ -62,10 +62,10 @@ module.exports = {
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test
     config.plugins.delete('prefetch') // TODO: need test
-   /*  config.optimization.minimize(true)
-    config.optimization.splitChunks({
-      chunks:'all'
-    }) */
+    /*  config.optimization.minimize(true)
+     config.optimization.splitChunks({
+       chunks:'all'
+     }) */
     // set svg-sprite-loader
     config.module
       .rule('svg')
@@ -95,7 +95,7 @@ module.exports = {
       .end()
 
     config
-    // https://webpack.js.org/configuration/devtool/#development
+      // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === 'development',
         config => config.devtool('cheap-source-map')
       )
