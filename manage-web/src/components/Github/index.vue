@@ -9,7 +9,7 @@ export default {
   name: 'Github',
   methods: {
     click() {
-      window.open('https://github.com/ruixijiejie/eladmin', '_blank')
+      window.open('https://github.com/maokofan/portalSite_UI_vue/tree/master/manage-web', '_blank')
     }
   }
 }
