@@ -33,11 +33,11 @@
               布局设置
             </el-dropdown-item>
           </span>
-          <router-link to="/user/center">
+          <span style="display:block;" @click="$refs.pass.dialog = true">
             <el-dropdown-item>
-              个人中心
+              修改密码
             </el-dropdown-item>
-          </router-link>
+          </span>
           <span style="display:block;" @click="open">
             <el-dropdown-item divided>
               退出登录
@@ -46,6 +46,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <UpdatePass ref="pass" />
   </div>
 </template>
 
@@ -58,6 +59,7 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import Avatar from '@/assets/images/avatar.png'
+import UpdatePass from '@/views/system/user/updatePass'
 
 export default {
   components: {
@@ -66,7 +68,8 @@ export default {
     Screenfull,
     SizeSelect,
     Search,
-    Github
+    Github,
+    UpdatePass
   },
   data() {
     return {

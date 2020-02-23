@@ -43,6 +43,33 @@ export const constantRouterMap = [
       meta: { title: '首页', icon: 'index', affix: true, noCache: true }
     }]
   },
+  {
+    path: '/system',
+    component: Layout,
+    redirect: '/system/user',
+    name: '系统管理',
+    meta: { title: '系统管理', icon: 'system' },
+    children: [
+      {
+        path: 'user',
+        name: '用户管理',
+        component: () => import('@/views/system/user/index'),
+        meta: { title: '用户管理', icon: 'peoples', noCache: true }
+      },
+      {
+        path: 'role',
+        name: '角色管理',
+        component: () => import('@/views/system/role/index'),
+        meta: { title: '角色管理', icon: 'role', noCache: true }
+      },
+      {
+        path: 'permission',
+        name: '权限管理',
+        component: () => import('@/views/system/permission/index'),
+        meta: { title: '权限管理', icon: 'permission', noCache: true }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
