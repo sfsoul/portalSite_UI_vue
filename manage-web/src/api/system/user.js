@@ -1,9 +1,5 @@
 import request from '@/utils/request'
 
-const defaultHeaders = {
-  'Content-Type': 'application/json;charset=utf-8'
-}
-
 export function updatePass(user) {
   const data = {
     passwd: user.newPass
@@ -11,7 +7,6 @@ export function updatePass(user) {
   return request({
     url: 'back/user/updatePasswd',
     method: 'post',
-    headers: defaultHeaders,
     data
   })
 }
@@ -23,7 +18,6 @@ export function validatePass(user) {
   return request({
     url: 'back/user/validate',
     method: 'post',
-    headers: defaultHeaders,
     data
   })
 }

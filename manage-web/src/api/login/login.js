@@ -1,14 +1,9 @@
 import request from '@/utils/request'
 
-const defaultHeaders = {
-  'Content-Type': 'application/json;charset=utf-8'
-}
-
 export function login(username, passwd) {
   return request({
     url: 'back/user/signin',
     method: 'post',
-    headers: defaultHeaders,
     data: {
       username,
       passwd

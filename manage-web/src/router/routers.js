@@ -38,9 +38,31 @@ export const constantRouterMap = [
     redirect: '/dashboard',
     children: [{
       path: 'dashboard',
-      name: 'Dashboard',
+      name: '首页',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'index', affix: true, noCache: true }
+    }]
+  },
+  {
+    path: '/news',
+    component: Layout,
+    redirect: '/news',
+    children: [{
+      path: 'news',
+      name: '新闻管理',
+      component: () => import('@/views/news/index'),
+      meta: { title: '新闻管理', icon: 'news', noCache: true }
+    }]
+  },
+  {
+    path: '/file',
+    component: Layout,
+    redirect: '/file',
+    children: [{
+      path: 'news',
+      name: '文件管理',
+      component: () => import('@/views/file/index'),
+      meta: { title: '文件管理', icon: 'file', noCache: true }
     }]
   },
   {

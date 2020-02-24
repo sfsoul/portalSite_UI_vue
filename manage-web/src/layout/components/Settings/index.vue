@@ -24,6 +24,11 @@
       </div>
 
       <div class="drawer-item">
+        <span>显示底部</span>
+        <el-switch v-model="showFooter" class="drawer-switch" />
+      </div>
+
+      <div class="drawer-item">
         <span>菜单UniqueOpened</span>
         <el-switch v-model="uniqueOpened" class="drawer-switch" />
       </div>
@@ -70,6 +75,17 @@ export default {
       set(val) {
         this.$store.dispatch('settings/changeSetting', {
           key: 'sidebarLogo',
+          value: val
+        })
+      }
+    },
+    showFooter: {
+      get() {
+        return this.$store.state.settings.showFooter
+      },
+      set(val) {
+        this.$store.dispatch('settings/changeSetting', {
+          key: 'showFooter',
           value: val
         })
       }
