@@ -1,5 +1,5 @@
 <template>
-        <div style="position: relative;min-width: 1200px;" >
+        <div class="institution" >
              <sidebar-menu></sidebar-menu>      
             <div style="margin: 100px 18% 40px 18%;position: relative;" >
                     <news-title titlea="制度" titleb="文档" english="System Document" :ismany="false" ></news-title>
@@ -14,35 +14,7 @@
                                     <items :row="item" ></items>
                             </el-col>
                     </el-row>
-                   <!--  <el-row :gutter="20" justify="space-between" >
-                            <el-col :xs="12" :md="8" :lg="4"  class="train-col-content" >
-                                <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                            <el-col :xs="12" :md="8" :lg="4"   class="train-col-content" >
-                                    <item></item>
-                            </el-col>
-                    </el-row> -->
+                  
                     <el-pagination
                        background 
                       :page-size="pageSize"
@@ -140,5 +112,10 @@
             position: absolute;
             top: 1%;
             right: 2%;
+    }
+    .institution {
+         position: relative;
+         min-width: 1200px;
+         height: 75vh;
     }
     </style>

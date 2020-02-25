@@ -1,13 +1,20 @@
+@mixin col-xl($width:80%){
+  @media (min-width:2560px){
+    width: $width;
+  }
+}
+
 .navbar {
     position: relative;
   
     .header-login {
+      @include col-xl();
       position: absolute;
       right: 1%;
       top: 50%;
       transform: translateY(-50%);
     }
-  
+    
     .header-search {
       position: absolute;
       right: 6%;
@@ -16,4 +23,5 @@
       width: 8%;
       height: 26px;
     }
-  }
+}
+

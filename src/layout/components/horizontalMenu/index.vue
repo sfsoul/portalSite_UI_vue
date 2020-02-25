@@ -1,6 +1,7 @@
 <template>
     <div class="navbar" >
       <logo></logo>
+      <!------------导航菜单---------------->
         <el-menu
            mode="horizontal"
            background-color="#fff"

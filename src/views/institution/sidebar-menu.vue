@@ -1,5 +1,5 @@
 <template>
-    <div   >
+    <div style=" position: relative;width:300px;" >
         <dl class="list nigiri" style="transform: perspective(1200px)" >
             <dt>部门名称</dt>
             <span><dd>软件部</dd></span>
@@ -26,7 +26,8 @@
     transform-style: preserve-3d;
     text-transform: uppercase;
     position: absolute;
-    width: 300px;
+   
+    width: 100%;
     text-align: center;
     left: 0%;
 
