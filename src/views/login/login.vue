@@ -9,7 +9,7 @@
                             <el-input placeholder="请输入密码" v-model="userInfo.password" show-password autocomplete="off" size="medium" @focus="pwdGetFocus" ></el-input>
                     </el-form-item>
                 </el-form>
-                <el-button style="width:100%" type="primary" round size="medium" :loading="subloading" >登录</el-button>
+                <el-button style="width:100%" type="primary" round size="medium" :loading="subloading" @click="handleLogin" >登录</el-button>
                 <div style="margin: 14px 0px 0px 10px" >
                     <span>没有账号?
                         <el-link type="primary" style="color: #1886d1;cursor: pointer;" >注册</el-link>
@@ -65,6 +65,27 @@ export default {
             this.pawFocus = true
             this.offFocus = false
             this.userFocus =false
+        },
+        /**
+         * 登录
+         */
+        handleLogin(){
+            this.subloading = true;
+            this.$refs.userForm.validate(valid => {
+                if(valid){
+                    this.$store.dispatch('user/login',this.userInfo).then(()=>{
+                        this.subloading = false;
+                        this.dialogVisible = false;
+                        this.$message({
+                            message:'欢迎您登录',
+                            type:'success'
+                        })
+                    }).catch(error=>{
+                        this.subloading = false;
+                        this.$message.error(`${error}`)
+                    })
+                }
+            })
         }
     },
     mounted(){

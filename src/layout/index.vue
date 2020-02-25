@@ -1,8 +1,8 @@
 <template>
     <div >
         <!---导航栏-->
-        <div style="position:fixed;top: 0px;width: 100%;background-color: #fff;z-index: 1000;min-width: 1200px;" >
-            <div style="position: relative;" >
+        <div style="position:fixed;top: 0px;width: 100%;background-color: #fff;z-index: 1000;" >
+            <div style="position: relative;width: 100%;" >
                  <horizontal-menu></horizontal-menu>
             </div>
                 
