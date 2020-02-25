@@ -1,6 +1,6 @@
 import { login,logout } from '@/api/login/login.js'
 import {getToken,setToken,removeToken} from '@/utils/auth.js'
-
+import router,{resetRouter} from '@/router'
 const state = {
     token:getToken(),
     name:'',
@@ -40,6 +40,20 @@ const actions = {
                 commit('SET_LOGIN_STATUE',true)
                 resolve()
             }).catch(error=>{
+                reject(error)
+            })
+        })
+    },
+    logout:({commit})=>{
+        return new Promise((resolve,reject)=>{
+            logout().then(()=>{
+                commit('SET_NAME',"")
+                commit('SET_AVATAR',"")
+                commit('SET_LOGIN_STATUE',false)
+                removeToken()
+                resetRouter()
+                resolve()
+            }).catch(error => {
                 reject(error)
             })
         })

@@ -60,6 +60,7 @@ import NavMenu from './NavMenu'
 import Item from './Item'
 import Logo from './Logo'
 import Login from '@/views/login/login.vue'
+
 export default {
     data(){
         return{
@@ -107,7 +108,19 @@ export default {
       },
       //用户下拉菜单指令
       handleCommand(value){
-
+        switch(value){
+          case 'a':{
+            
+          };break;
+          case 'b':{
+            this.$store.dispatch('user/logout').then(()=>{
+              this.$message({
+                message:'退出成功',
+                type:'success'
+              })
+            })
+          }
+        }
       }
     },
     mounted(){
