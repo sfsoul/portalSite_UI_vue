@@ -54,7 +54,7 @@ service.interceptors.response.use(
       }
     }
     if (code) {
-      if (code === 401) {
+      if (code === 601) {
         MessageBox.confirm(
           '登录状态已过期，您可以继续留在该页面，或者重新登录',
           '系统提示',
