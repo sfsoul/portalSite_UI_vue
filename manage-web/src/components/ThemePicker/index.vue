@@ -14,7 +14,7 @@ const ORIGINAL_THEME = '#409EFF' // default color
 export default {
   data() {
     return {
-      chalk: '', // content of theme-chalk css
+      chalk: '', // verify of theme-chalk css
       theme: ''
     }
   },

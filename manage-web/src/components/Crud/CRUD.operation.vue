@@ -1,7 +1,7 @@
 <template>
   <div class="crud-opts">
     <el-button
-      v-if="crud.optShow.add"
+      v-if="permission.add"
       class="filter-item"
       size="mini"
       type="primary"
@@ -11,7 +11,7 @@
       新增
     </el-button>
     <el-button
-      v-if="crud.optShow.edit"
+      v-if="permission.edit"
       class="filter-item"
       size="mini"
       type="success"
@@ -22,7 +22,7 @@
       修改
     </el-button>
     <el-button
-      v-if="crud.optShow.del"
+      v-if="permission.del"
       slot="reference"
       class="filter-item"
       type="danger"
@@ -35,14 +35,16 @@
       删除
     </el-button>
     <el-button
-      v-if="crud.optShow.refresh"
+      v-if="permission.refresh"
       :disabled="!crud.data.length"
       class="filter-item"
       size="mini"
       type="warning"
-      icon="el-icon-download"
+      icon="el-icon-refresh"
       @click="crud.refresh()"
-    >刷新</el-button>
+    >
+      刷新
+    </el-button>
   </div>
 </template>
 <script>
@@ -57,8 +59,7 @@ export default {
   },
   data() {
     return {
-      allColumnsSelected: true,
-      allColumnsSelectedIndeterminate: false
+
     }
   },
   methods: {

@@ -44,26 +44,82 @@ export const constantRouterMap = [
     }]
   },
   {
-    path: '/news',
+    path: '/publish',
     component: Layout,
-    redirect: '/news',
-    children: [{
-      path: 'news',
-      name: '新闻管理',
-      component: () => import('@/views/news/index'),
-      meta: { title: '新闻管理', icon: 'news', noCache: true }
-    }]
+    redirect: '/publish/news',
+    name: '内容发布',
+    meta: { title: '内容发布', icon: 'publish' },
+    children: [
+      {
+        path: 'news',
+        name: '新闻发布',
+        component: () => import('@/views/publish/news/index'),
+        meta: { title: '新闻发布', icon: 'newspublish', noCache: true }
+      },
+      {
+        path: 'notice',
+        name: '通告发布',
+        component: () => import('@/views/publish/notice/index'),
+        meta: { title: '通告发布', icon: 'noticepublish', noCache: true }
+      },
+      {
+        path: 'train',
+        name: '培训发布',
+        component: () => import('@/views/publish/train/index'),
+        meta: { title: '培训发布', icon: 'trainpublish', noCache: true }
+      },
+      {
+        path: 'institution',
+        name: '制度文档',
+        component: () => import('@/views/publish/institution/index'),
+        meta: { title: '制度文档', icon: 'institution', noCache: true }
+      },
+      {
+        path: 'quality',
+        name: '质量建设',
+        component: () => import('@/views/publish/quality/index'),
+        meta: { title: '质量建设', icon: 'quality', noCache: true }
+      },
+      {
+        path: 'project',
+        name: '项目管理',
+        component: () => import('@/views/publish/project/index'),
+        meta: { title: '项目管理', icon: 'project', noCache: true }
+      },
+      {
+        path: 'honor',
+        name: '荣誉管理',
+        component: () => import('@/views/publish/honor/index'),
+        meta: { title: '荣誉管理', icon: 'honor', noCache: true }
+      }
+    ]
   },
   {
-    path: '/file',
+    path: '/verify',
     component: Layout,
-    redirect: '/file',
-    children: [{
-      path: 'news',
-      name: '文件管理',
-      component: () => import('@/views/file/index'),
-      meta: { title: '文件管理', icon: 'file', noCache: true }
-    }]
+    redirect: '/verify/news',
+    name: '内容审核',
+    meta: { title: '内容审核', icon: 'content' },
+    children: [
+      {
+        path: 'news',
+        name: '新闻审核',
+        component: () => import('@/views/verify/news/index'),
+        meta: { title: '新闻审核', icon: 'newsverify', noCache: true }
+      },
+      {
+        path: 'notice',
+        name: '通告审核',
+        component: () => import('@/views/verify/notice/index'),
+        meta: { title: '通告审核', icon: 'noticeverify', noCache: true }
+      },
+      {
+        path: 'share',
+        name: '分享审核',
+        component: () => import('@/views/verify/share/index'),
+        meta: { title: '分享审核', icon: 'shareverify', noCache: true }
+      }
+    ]
   },
   {
     path: '/system',
@@ -72,6 +128,18 @@ export const constantRouterMap = [
     name: '系统管理',
     meta: { title: '系统管理', icon: 'system' },
     children: [
+      {
+        path: 'newsType',
+        name: '新闻类型',
+        component: () => import('@/views/system/news/index'),
+        meta: { title: '新闻类型', icon: 'news', noCache: true }
+      },
+      {
+        path: 'noticeType',
+        name: '通告类型',
+        component: () => import('@/views/system/notice/index'),
+        meta: { title: '通告类型', icon: 'notice', noCache: true }
+      },
       {
         path: 'user',
         name: '用户管理',
@@ -83,12 +151,6 @@ export const constantRouterMap = [
         name: '角色管理',
         component: () => import('@/views/system/role/index'),
         meta: { title: '角色管理', icon: 'role', noCache: true }
-      },
-      {
-        path: 'permission',
-        name: '权限管理',
-        component: () => import('@/views/system/permission/index'),
-        meta: { title: '权限管理', icon: 'permission', noCache: true }
       }
     ]
   },
