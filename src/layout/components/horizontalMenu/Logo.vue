@@ -31,9 +31,22 @@
         height: 40px;
         line-height: 40px;
         z-index: 1;
-        left: calc(20%) ;
+        left: calc(18%) ;
         top: 10px;
     }
+
+    @media screen and (min-width:1980px) {
+        .horizontal-logo-container {
+        position: absolute;
+        width:140px;
+        height: 40px;
+        line-height: 40px;
+        z-index: 1;
+        left: calc(0%) ;
+        top: 10px;
+        }
+     }
+
     .horizontal-logo {
         vertical-align: middle;
         width: 100%;

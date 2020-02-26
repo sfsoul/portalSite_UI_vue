@@ -7,21 +7,31 @@
 .navbar {
     position: relative;
   
-    .header-login {
-      @include col-xl();
+    .header-content {
+      display: flex;
+      justify-content:space-between ;
       position: absolute;
       right: 1%;
+      width: 18%;
       top: 50%;
       transform: translateY(-50%);
+
+      .header-login {
+     
+      }
+      
+      .header-search {
+        width: 60%;
+        height: 26px;
+        
+      }
+      
+      .el-dropdown-link {
+        cursor: pointer;
+        color: #1b97d1;
+        font-size: 19px;
+      }
     }
     
-    .header-search {
-      position: absolute;
-      right: 6%;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 8%;
-      height: 26px;
-    }
 }
 
