@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-02-26 09:13:48
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\login\login.vue
+ -->
 <template>
     <div>
             <el-dialog :title="dialogTitle"  :visible.sync="dialogVisible" width="400px" :append-to-body="true" top="250px" >
@@ -55,7 +63,7 @@ export default {
         },
         //用户名获取焦点
         usernameGetFouce(e){
-            console.log(e)
+
             this.pawFocus = false
             this.offFocus = false
             this.userFocus =true

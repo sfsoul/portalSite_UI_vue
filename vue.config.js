@@ -1,13 +1,14 @@
 /* 'use strict' */
 const path = require('path')
 
+const defaultSettings = require('./src/setting.js')
 /* const defaultSettings = require('./src/settings.js') */
 
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = "中亚通茂门户网站" // page title
+const name =defaultSettings.documentTitle || "中亚通茂门户网站" // page title
 
 const port = process.env.port || process.env.npm_config_port || 9527 // dev port
 

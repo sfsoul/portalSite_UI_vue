@@ -3,10 +3,11 @@ import store from '@/store'
 import config from '@/config'
 import { Message,MessageBox } from 'element-ui'
 import { getToken } from '@/utils/auth'
-import router from  'vue-router'
+import router,{resetRouter} from  'vue-router'
+import docSetting from '@/setting'
 
 const server = axios.create({
-  timeout: 500000,
+  timeout: docSetting.timeout,
   baseURL: process.env.NODE_ENV === 'production' ? config.baseURL : '/api'
 })
 
@@ -68,16 +69,38 @@ server.interceptors.response.use(
               type: 'warning'
             }
           ).then(() => {
-            /* store.dispatch('user/').then(() => {
-              location.reload() // 为了重新实例化vue-router对象 避免bug
-            }) */
+            store.dispatch('user/logout').then(() => {
+              resetRouter()
+             /*  location.reload() // 为了重新实例化vue-router对象 避免bug */
+
+            })
             Message.info("重新登录")
           })
         };break;
         case '403':{
           router.push('/401')
+        };break;
+        case '404':{
+          Message.error('页面丢失了')
+          router.push('/404')
+        };break;
+        default:{
+          const errmsg = error.response.message;
+          if(errmsg !== undefined){
+            Message({
+              type: 'error',
+              message: errorMsg,
+              duration: 5000
+            })
+          }
         }
       }
+    }else{
+      Message({
+        type: 'error',
+        message: '接口请求失败',
+        duration: 5000
+      })
     }
     
     return Promise.reject(error)
