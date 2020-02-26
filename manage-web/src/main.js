@@ -17,6 +17,7 @@ import router from './router/routers'
 import './assets/icons' // icon
 import './router/index' // permission control
 
+
 Vue.use(Element, {
   size: Cookies.get('size') || 'small' // set element-ui default size
 })
