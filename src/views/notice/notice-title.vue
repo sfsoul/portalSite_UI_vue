@@ -1,6 +1,6 @@
 <template>
         <div  class="modules-titles" >
-                <span>{{titlea}}<span>{{titleb}}</span></span>
+                <span >{{titlea}}<span>{{titleb}}</span></span>
                 <div class="modules-division" ></div>
                 <div>{{english}}</div>
                 <div class="modules-even" v-if="ismany" >

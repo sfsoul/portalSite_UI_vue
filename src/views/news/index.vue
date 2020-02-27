@@ -1,12 +1,20 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-02-27 15:23:40
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\news\index.vue
+ -->
 <template>
     <div style="margin-top: 40px" >
         
-        <news-title titlea="新闻" titleb="动态" english="New Information" ></news-title>
+        <news-title titlea="新闻" titleb="动态" english="New Information" class="animated fadeInDown" ></news-title>
         <el-row :gutter="20" type="flex" justify="space-btween" >
-            <el-col :span="12"  style="max-height: 400px;" >
+            <el-col :span="12"  style="max-height: 400px;" class="animated rollIn" >
                    <news-details :activeInfo="activeInfo" ></news-details>
             </el-col>
-            <el-col :span="12" style="max-height: 400px;" >
+            <el-col :span="12" style="max-height: 400px;" class="animated slideInRight" >
                     <news-item @imageToDetails="receptiomImageInfo" :newsData="newsData" ></news-item>
             </el-col>
         </el-row>

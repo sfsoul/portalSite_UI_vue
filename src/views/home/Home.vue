@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-23 18:16:10
- * @LastEditTime: 2020-02-26 22:16:26
+ * @LastEditTime: 2020-02-27 15:07:02
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\home\Home.vue
@@ -20,7 +20,7 @@
                         </el-col>
                 </el-row>
                 <module-entrance ref="entrance" :class="entranceClass" ></module-entrance>
-                <honor></honor>
+                <honor :class="honorClass"></honor>
         </div>
         
     </div>
@@ -38,7 +38,8 @@ export default {
         return {
             noticeClass:["animated","bounceInLeft"],
             qualityClass:["animated","bounceInRight"],
-            entranceClass:["animated","rotateInDownLeft"]
+            entranceClass:["animated","rotateInDownLeft"],
+            honorClass: ["animated","fadeInLeftBig"]
         }
     },
     components:{
@@ -58,8 +59,10 @@ export default {
     methods: {
         handleScroll(){
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
-            this.handleShow(scrollTop,300,400)
-            this.handleentrance(scrollTop,400,600)
+            this.$store.dispatch('animated/getScrollTop',scrollTop)
+            this.handleShow(scrollTop,200,400)
+            this.handleEntrance(scrollTop,400,600)
+            this.handleHonor(scrollTop,1000,1400)
         },
         handleShow(scrollTop,minTop,maxTop){
             if(scrollTop >= maxTop){
@@ -70,18 +73,31 @@ export default {
                 this.qualityClass=["animated","bounceOutRight"]
             }
         },
-        handleentrance(scrollTop,minTop,maxTop){
+        handleEntrance(scrollTop,minTop,maxTop){
             if(scrollTop >= maxTop){
 
-                this.entranceClass=["animated","rotateInDownLeft"]
+                this.entranceClass=["animated","fadeIn"]
                 
             }else if(scrollTop <= minTop){
 
-                this.entranceClass=["animated","rotateOutDownLeft"]
+                this.entranceClass=["animated","fadeOut"]
+            }
+        },
+        handleHonor(scrollTop,minTop,maxTop){
+            if(scrollTop >= maxTop){
+
+                this.honorClass=["animated","fadeInLeftBig"]
+
+            }else if(scrollTop <= minTop){
+
+                this.honorClass=["animated","fadeOutLeftBig"]
             }
         }
     }
 }
 </script>
 <style>
+    .fadeIn{
+        animate-duration: 2s;
+    }
 </style>
