@@ -142,138 +142,146 @@
 </template>
 
 <script>
-import { getUserList, getUserRoles, bindUserRole, getUserUnRoles, unBindUserRole } from '@/api/system/user'
-import pagination from '@/components/Pagination'
-export default {
-  name: 'User',
-  components: { pagination },
-  data() {
-    return {
-      crud: {
-        loading: false,
-        refreshLoading: false,
-        resetPassLoading: false,
-        data: [],
-        selections: [],
-        listQuery: {
-          current: 1,
-          pageSize: 10
+  import { getUserList, getUserRoles, bindUserRole, getUserUnRoles, unBindUserRole } from '@/api/system/user'
+  import pagination from '@/components/Pagination'
+  export default {
+    name: 'User',
+    components: { pagination },
+    data() {
+      return {
+        crud: {
+          loading: false,
+          refreshLoading: false,
+          resetPassLoading: false,
+          data: [],
+          selections: [],
+          listQuery: {
+            current: 1,
+            pageSize: 10
+          },
+          total: 0,
+          resetPassDialogVisible: false,
+          selectUser: []
         },
-        total: 0,
-        resetPassDialogVisible: false,
-        selectUser: []
-      },
-      roleLoading: false,
-      showButton: true,
-      showFobbidenButton: true,
-      roles: [],
-      unroles: [],
-      checkList: [],
-      unCheckList: [],
-      currentUserid: 0,
-      selectRoleid: null,
-      unseclectid: null,
-      unroleDialog: false,
-      bindLoading: false,
-      currentUserName: null,
-      title: ''
-    }
-  },
-  created() {
-    this.getUserList()
-  },
-  methods: {
-    // 选择改变
-    selectionChangeHandler(val) {
-      this.crud.selections = val
-      this.crud.selectUser = []
-      val.forEach(item => {
-        this.crud.selectUser.push(item.realname)
-      })
+        roleLoading: false,
+        showButton: true,
+        showFobbidenButton: true,
+        roles: [],
+        unroles: [],
+        checkList: [],
+        unCheckList: [],
+        currentUserid: 0,
+        selectRoleid: null,
+        unseclectid: null,
+        unroleDialog: false,
+        bindLoading: false,
+        currentUserName: null,
+        title: ''
+      }
     },
-    checkboxT(row, rowIndex) {
-      return row.id
+    created() {
+      this.getUserList()
     },
-    openUnRole() {
-      this.title = this.currentUserName + '未有角色'
-      this.unroleDialog = true
-      this.getUserUnRoles()
-    },
-    // 触发单选
-    handleCurrentChange(val) {
-      this.unroles = []
-      this.roles = []
-      this.checkList = []
-      this.showButton = false
-      // 保存当前的用户id
-      this.currentUserid = val.id
-      this.currentUserName = val.realname
-      this.getUserRoles()
-    },
-    getUserRoles() {
-      getUserRoles(this.currentUserid).then(res => {
-        this.roles = res
-      })
-    },
-    getUserUnRoles() {
-      getUserUnRoles(this.currentUserid).then(res => {
-        this.unroles = res
-      })
-    },
-    changeChecked(val) {
-      this.checkList = val
-      this.showFobbidenButton = false
-      this.selectRoleid = this.checkList.join(',')
-    },
-    changeUnChecked(val) {
-      this.unCheckList = val
-      this.unseclectid = this.unCheckList.join(',')
-    },
-    unBindSubmit() {
-      this.roleLoading = true
-      unBindUserRole(this.currentUserid, this.selectRoleid).then(res => {
-        this.roleLoading = false
-        this.showFobbidenButton = true
-        this.checkList = []
-        this.getUserRoles()
-      })
-    },
-    bindSubmit() {
-      this.bindLoading = true
-      bindUserRole(this.currentUserid, this.unseclectid).then(res => {
-        this.bindLoading = false
-        this.unroleDialog = false
-        this.showFobbidenButton = true
-        this.unCheckList = []
-        this.getUserRoles()
-      })
-    },
-    getUserList() {
-      this.crud.loading = true
-      getUserList(this.crud.listQuery).then(res => {
-        this.crud.data = res.value
-        this.crud.total = res.page.total
-        this.crud.loading = false
-      }).catch(() => {
-        this.$message({
-          type: 'error',
-          message: '获取用户列表失败'
+    methods: {
+      // 选择改变
+      selectionChangeHandler(val) {
+        this.crud.selections = val
+        this.crud.selectUser = []
+        val.forEach(item => {
+          this.crud.selectUser.push(item.realname)
         })
-        this.crud.loading = false
-      })
-    },
-    refresh() {
-      this.crud.refreshLoading = true
-      this.$nextTick(() => {
-        this.getUserList()
-      })
-      this.crud.refreshLoading = false
-    },
-    resetPass() {
+      },
+      checkboxT(row, rowIndex) {
+        return row.id
+      },
+      openUnRole() {
+        this.title = this.currentUserName + '未有角色'
+        this.unroleDialog = true
+        this.getUserUnRoles()
+      },
+      // 触发单选
+      handleCurrentChange(val) {
+        this.unroles = []
+        this.roles = []
+        this.showButton = false
+        if (this.checkList.length > 0) {
+          this.showFobbidenButton = true
+        }
+        this.$nextTick(() => {
+          this.checkList = []
+        })
+        // 保存当前的用户id
+        this.currentUserid = val.id
+        this.currentUserName = val.realname
+        this.getUserRoles()
+      },
+      getUserRoles() {
+        getUserRoles(this.currentUserid).then(res => {
+          this.roles = res
+        })
+      },
+      getUserUnRoles() {
+        getUserUnRoles(this.currentUserid).then(res => {
+          this.unroles = res
+        })
+      },
+      changeChecked(val) {
+        this.checkList = val
+        this.showFobbidenButton = false
+        if (this.checkList.length === 0) {
+          this.showFobbidenButton = true
+        }
+        this.selectRoleid = this.checkList.join(',')
+      },
+      changeUnChecked(val) {
+        this.unCheckList = val
+        this.unseclectid = this.unCheckList.join(',')
+      },
+      unBindSubmit() {
+        this.roleLoading = true
+        unBindUserRole(this.currentUserid, this.selectRoleid).then(res => {
+          this.roleLoading = false
+          this.showFobbidenButton = true
+          this.checkList = []
+          this.getUserRoles()
+        })
+      },
+      bindSubmit() {
+        this.bindLoading = true
+        bindUserRole(this.currentUserid, this.unseclectid).then(res => {
+          this.bindLoading = false
+          this.unroleDialog = false
+          this.showFobbidenButton = true
+          this.unCheckList = []
+          this.getUserRoles()
+        })
+      },
+      getUserList() {
+        this.crud.loading = true
+        getUserList(this.crud.listQuery).then(res => {
+          this.crud.data = res.value
+          this.crud.total = res.page.total
+          this.crud.loading = false
+        }).catch(() => {
+          this.$message({
+            type: 'error',
+            message: '获取用户列表失败'
+          })
+          this.crud.loading = false
+        })
+      },
+      refresh() {
+        this.crud.refreshLoading = true
+        this.$nextTick(() => {
+          this.getUserList()
+        })
+        this.crud.refreshLoading = false
+      },
+      resetPass() {
 
+      }
     }
   }
-}
 </script>
 
 <style scoped>
