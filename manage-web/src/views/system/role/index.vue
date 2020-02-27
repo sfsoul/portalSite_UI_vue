@@ -70,8 +70,21 @@
               size="mini"
               style="float: right; padding: 6px 9px"
               type="primary"
-            >保存</el-button>
+              @click="saveMenu"
+            >
+              保存
+            </el-button>
           </div>
+          <el-tree
+            ref="menu"
+            :data="menus"
+            :default-checked-keys="menuIds"
+            :props="defaultProps"
+            check-strictly
+            accordion
+            show-checkbox
+            node-key="id"
+          />
         </el-card>
       </el-col>
     </el-row>
@@ -84,6 +97,7 @@ import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import menus from './menu'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '角色', url: '/back/sysRole/lists', crudMethod: { ...crudRoles }})
@@ -109,8 +123,11 @@ export default {
         ]
       },
       defaultProps: { children: 'children', label: 'label' },
+      menus,
+      menuIds: [],
       menuLoading: false,
-      showButton: false
+      showButton: false,
+      currentId: 0
     }
   },
   created() {
@@ -136,10 +153,23 @@ export default {
     },
     // 触发单选
     handleCurrentChange(val) {
-
+      console.log(val)
+      if (val) {
+        // 清空菜单的选中
+        this.$refs.menu.setCheckedKeys([])
+        // 保存当前的角色id
+        this.currentId = val.id
+        this.showButton = true
+        // 初始化
+        this.menuIds = []
+        // 菜单数据需要特殊处理
+      }
     },
     checkboxT(row, rowIndex) {
       return row
+    },
+    saveMenu() {
+      alert('333')
     }
   }
 }
