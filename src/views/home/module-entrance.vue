@@ -152,7 +152,5 @@ export default {
 .module-title:hover+ .module-footer {
     width: 80px;
 }
-.animatedDely {
-    animation-delay: 1s;
-}
+
 </style>

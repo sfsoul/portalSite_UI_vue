@@ -11,7 +11,6 @@ const mutations = {
 const actions = {
     getScrollTop:({commit},scrolltop)=>{
         commit('SET_SCROLL_TOP',scrolltop)
-        console.log(scrolltop)
     }
 }
 

@@ -9,7 +9,7 @@
 <template>
     <div style="margin-top: 40px" >
         
-        <news-title titlea="新闻" titleb="动态" english="New Information" class="animated fadeInDown" ></news-title>
+        <news-title titlea="新闻" titleb="动态" english="New Information"  ></news-title>
         <el-row :gutter="20" type="flex" justify="space-btween" >
             <el-col :span="12"  style="max-height: 400px;" class="animated rollIn" >
                    <news-details :activeInfo="activeInfo" ></news-details>

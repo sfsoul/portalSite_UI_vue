@@ -1,8 +1,8 @@
 <template>
-        <div  class="modules-titles " >
-                <div class="animated rubberBand">
+        <div  class="modules-titles animated fadeInDown" >
+               
                     <span>{{titlea}}<span>{{titleb}}</span></span>
-                </div>
+              
                 <div   class="modules-division" ></div>
                 <div  >{{english}}</div>
                 

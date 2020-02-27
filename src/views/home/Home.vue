@@ -60,8 +60,8 @@ export default {
         handleScroll(){
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
             this.$store.dispatch('animated/getScrollTop',scrollTop)
-            this.handleShow(scrollTop,200,400)
-            this.handleEntrance(scrollTop,400,600)
+            this.handleShow(scrollTop,400,500)
+            this.handleEntrance(scrollTop,500,700)
             this.handleHonor(scrollTop,1000,1400)
         },
         handleShow(scrollTop,minTop,maxTop){
@@ -97,7 +97,4 @@ export default {
 }
 </script>
 <style>
-    .fadeIn{
-        animate-duration: 2s;
-    }
 </style>
