@@ -30,6 +30,52 @@ export function getUserList(params) {
   })
 }
 
+export function getUserRoles(userid) {
+  const params = {
+    userid: userid
+  }
+  return request({
+    url: 'back/user/specUserRoles',
+    method: 'get',
+    params
+  })
+}
+
+export function getUserUnRoles(userid) {
+  const params = {
+    userid: userid
+  }
+  return request({
+    url: 'back/user/specUserUnEnableRoles',
+    method: 'get',
+    params
+  })
+}
+
+export function bindUserRole(userid, roleid) {
+  const data = {
+    userid: userid,
+    roleid: roleid
+  }
+  return request({
+    url: 'back/user/bindSpecUserRole',
+    method: 'post',
+    data: data
+  })
+}
+
+export function unBindUserRole(userid, roleid) {
+  const data = {
+    userid: userid,
+    roleid: roleid
+  }
+  return request({
+    url: 'back/user/unBindSpecUserRole',
+    method: 'post',
+    data: data
+  })
+}
+
 export function adduser(form) {
   const data = {
     username: form.username,
