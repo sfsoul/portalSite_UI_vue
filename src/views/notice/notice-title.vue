@@ -1,5 +1,5 @@
 <template>
-        <div  class="modules-titles" >
+        <div  class="modules-titles animated fadeInDown" >
                 <span >{{titlea}}<span>{{titleb}}</span></span>
                 <div class="modules-division" ></div>
                 <div>{{english}}</div>

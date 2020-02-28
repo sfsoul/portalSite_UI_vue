@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="{name:'news-show'}" style="text-decoration: none;color:#1f1e1e;" >
+    <router-link :to="{name:'news-show',params:{row:row}}" style="text-decoration: none;color:#1f1e1e;" >
             <div class="news-row"  ref="activeItem"  @mouseover="itemActive" >
                     <div class="news-row-date" >
                         <p>{{row.date}}</p>

@@ -1,6 +1,6 @@
 <template>
         <div class="institution" >
-             <sidebar-menu></sidebar-menu>      
+             <sidebar-menu class="animated fadeInLeftBig" ></sidebar-menu>      
             <div style="margin: 100px 18% 40px 18%;position: relative;" >
                     <news-title titlea="制度" titleb="文档" english="System Document" :ismany="false" ></news-title>
 
@@ -9,7 +9,7 @@
                                     <i class="el-icon-search" style="color: #fff" ></i>
                                 </template>
                     </el-input>
-                    <el-row :gutter="20" justify="space-between">
+                    <el-row :gutter="20" justify="space-between" >
                             <el-col :span="24" style="height: 40px;line-height: 20px" v-for="(item,index) in documentList" :key="index" >
                                     <items :row="item" ></items>
                             </el-col>

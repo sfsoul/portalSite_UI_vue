@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20" justify="space-between" >
-            <el-col class="animated fadeInDown" :span="6" v-for="(info,index) in persionInfos" :key="index" style="margin-bottom: 20px;" >
+            <el-col class="animated fadeInUp" :span="6" v-for="(info,index) in persionInfos" :key="index" style="margin-bottom: 20px;" >
                 <item  :info="info" ></item>
             </el-col>
         </el-row>
