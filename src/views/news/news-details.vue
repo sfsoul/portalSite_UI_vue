@@ -1,7 +1,7 @@
 <template>
         <div class="news-details">
-                <img src="../../assets/images/banner.png" alt=""  >
-                <p  v-if="activeInfo" >{{activeInfo.row.title}}</p>
+                <img :src="scrUrl" alt=""  >
+                <p  v-if="activeInfo" >{{activeInfo.titile}}</p>
                     
         </div>
 </template>
@@ -10,13 +10,20 @@
 export default {
         data(){
                 return{
-
+                        scrUrl:null,
                 }
         },
         props:{
                 activeInfo:{
                         type:Object,
                         default:{}
+                }
+        },
+        computed: {
+        },
+        watch: {
+                activeInfo(){
+                        this.scrUrl = `${process.env.VUE_APP_BASE_API}/${this.activeInfo.imageUrl}`
                 }
         }
 }

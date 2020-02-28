@@ -1,11 +1,14 @@
 <template>
-    <router-link :to="{name:'news-show',params:{row:row}}" style="text-decoration: none;color:#1f1e1e;" >
+    <router-link :to="{path:'news-show',query:{newsid:row.id}}" style="text-decoration: none;color:#1f1e1e;" >
             <div class="news-row"  ref="activeItem"  @mouseover="itemActive" >
                     <div class="news-row-date" >
-                        <p>{{row.date}}</p>
+                        <p>{{publishdate}}</p>
                     </div>
+                    <!-- <div class="news-row-type">
+                        <p>{{row.newsTName}}</p>
+                    </div> -->
                     <div class="news-row-content" >
-                        <p>{{row.title}}</p>
+                        <p>{{row.titile}}</p>
                     </div>
                 </div>
     </router-link>
@@ -13,6 +16,7 @@
 </template>
 
 <script>
+import {dateFormat} from '@/utils/commonality'
 export default {
     data(){
         return {
@@ -29,15 +33,23 @@ export default {
             default:''
         }
     },
+    computed: {
+        publishdate(){
+            return dateFormat(this.row.publishdate)
+        }
+    },
     methods:{
         itemActive(){
             this.$emit('itemActive',{index:this.index,row:this.row});
-            let nodeList = [...this.$refs['activeItem'].parentNode.children]
-            let node =  nodeList.filter((value)=>{
-              return  value.className.indexOf('news-row') > -1
-            }).map( item => {
-                item.classList.remove("showItem")
-            })
+            if(this.$refs['activeItem'].parentNode !== undefined){
+                let nodeList = [...this.$refs['activeItem'].parentNode.children]
+                let node =  nodeList.filter((value)=>{
+                   return  value.className.indexOf('news-row') > -1
+                 }).map( item => {
+                   item.classList.remove("showItem")
+               })
+            }
+            
            
            /*  this.$refs['activeItem'].classList.add("showItem") */
         }

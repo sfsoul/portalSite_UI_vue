@@ -60,7 +60,7 @@ export default {
         handleScroll(){
             let scrollTop = document.documentElement.scrollTop || document.body.scrollTop || window.pageYOffset
             this.$store.dispatch('animated/getScrollTop',scrollTop)
-            this.handleShow(scrollTop,400,500)
+            this.handleShow(scrollTop,200,300)
             this.handleEntrance(scrollTop,500,700)
             this.handleHonor(scrollTop,1000,1400)
         },

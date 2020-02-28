@@ -33,7 +33,7 @@ server.interceptors.response.use(
   response => {
     // 响应数据处理
     const [data,code] = [response.data,response.status]
-    console.log("请求的完整数据",response)
+  
     if(code<200 || code >300){
       Message.error(`${response.message}`)
       return Promise.reject(response.message)

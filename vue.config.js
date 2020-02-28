@@ -2,7 +2,7 @@
 const path = require('path')
 
 const defaultSettings = require('./src/setting.js')
-/* const defaultSettings = require('./src/settings.js') */
+
 
 function resolve(dir) {
   return path.join(__dirname, dir)
@@ -30,7 +30,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: process.env.VUE_APP_BASE_API,
-        changeOrigin: true,
+        changeOrigin: true, // 跨越
         pathRewrite: {
           '^/api': ''
         }

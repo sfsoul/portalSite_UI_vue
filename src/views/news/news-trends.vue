@@ -55,11 +55,13 @@ import { getNewList } from '@/api/news'
         methods:{
             // pagesize 变化回调
             handleSizeChange(val){
-
+                this.pageSize = val
+                this.handleGetNewList()
             },
             //current 变化回调
             handleCurrentChange(val){
-
+                this.current = val
+                this.handleGetNewList()
             },
             /**
              * 获取分页新闻列表
@@ -71,6 +73,9 @@ import { getNewList } from '@/api/news'
                     this.current = page.current
                     this.total = page.total
                     this.newsData = response.value
+                    this.newsData.map(item=>{
+                            item.id = BigInt(item.id)
+                        })
                 })
             }
         }

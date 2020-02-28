@@ -15,10 +15,11 @@ export default {
     },
     data(){
         return{
-            activeRow:null,
+            activeRow:null,//选中新闻信息
         }
     },
     props:{
+        //展示的新闻列表信息
         newsData:{
             type:Array,
             default:[]
@@ -28,9 +29,9 @@ export default {
         itemClick(e){
             this.activeRow = e
         },
+        //发送选中的信息
         receptionImage(e){
            this.$emit("imageToDetails",e)
-           
         }
     },
     mounted(){

@@ -30,7 +30,14 @@ export const constantRouter = [
             name:'home',
             component:()=>import('@/views/home/Home'),
             meta:{title:'首页'}
-        }]
+        },
+        {
+            path:'news-show',
+            name:'news-show',
+            component:()=>import('@/views/news/news-show'),
+            meta:{title:'新闻详情'},
+            hidden:true
+           }]
     },
     {
         path:'/news',

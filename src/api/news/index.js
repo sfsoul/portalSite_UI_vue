@@ -10,3 +10,13 @@ export function getNewList(current,pageSize){
         }
     })
 }
+
+export function getNewsDetail(newsid){
+    return request({
+        url:'news/getNewsDetail',
+        method:'get',
+        params:{
+            newsid
+        }
+    })
+}

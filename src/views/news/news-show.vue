@@ -1,27 +1,29 @@
 <template>
-    <div style="margin: 100px 18%" >
+    <div style="margin: 100px 18%" v-if="this.newInfo" >
         <breadcrumd></breadcrumd>
-        <div style="height: 100px;background: #fff;line-height: 40px;min-width: 1000px;" >
+        <el-divider content-position="right">{{newInfo.newsTName}}</el-divider>
+        <div style="background: #fff;line-height: 40px;" >
             <div>
-                <h2 style="text-align: center" >{{newInfo.title}}</h2>
+                <h2 style="text-align: center" >{{newInfo.titile}}</h2>
             </div>
             <div style="text-align: center;" >
-                <span>{{newInfo.date}}</span>
+                <span>{{newInfo.publishdate}}</span>
+                <span style="margin-left: 20px">发布人:{{newInfo.author}}</span>
                 <span style="margin-left: 20px" >浏览量:1250</span>
             </div>
         </div>
         <div>
-
         </div>
     </div>
 </template>
 
 <script>
 import Breadcrumd from '@/components/breadcrumd.vue'
+import { getNewsDetail } from '@/api/news'
 export default {
     data(){
         return {
-            
+            newInfo:null,//新闻详情
         }
     },
     props:{
@@ -31,11 +33,19 @@ export default {
         Breadcrumd
     },
     computed: {
-        newInfo(){
-            return this.$route.params.row
-        }
+    },
+    methods: {
+       handleGetNewsDetail(newsid){
+          getNewsDetail(newsid).then(response => {
+                  console.log(response)
+                  this.newInfo = response
+          })
+       }  
     },
     mounted(){
+       let newsid = BigInt(this.$route.query.newsid) 
+       //获取新闻详情
+       this.handleGetNewsDetail(newsid)
         let routes = [
             {
               name:"新闻动态",

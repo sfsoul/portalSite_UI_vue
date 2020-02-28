@@ -5,15 +5,21 @@
     flex-wrap: nowrap;
 
     & .news-row-date {
+      width: 22%;
+      font-size: 14px;
+    }
+
+    & .news-row-type {
       width: 18%;
+      color: #606160;
+      font-size: 14px;
     }
 
     & .news-row-content {
         margin-left: 30px;
         color: #606160;
         font-size: 14px;
-        margin-top: 4px;
-        width: 76%;
+        width: 56%;
         cursor: pointer;
 
         p {

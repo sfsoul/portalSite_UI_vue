@@ -10,10 +10,10 @@
         </div>
         <div  class="new-item-content" >
             <div class="content-title" >
-                <span v-if="row" >{{row.row.title}}</span>
+                <span v-if="row" >{{row.row.titile}}</span>
             </div>
             <div class="news-item-content" >
-                <span v-if="row" >{{row.row.content}}</span>
+                <span v-if="row" >{{row.row.summary}}</span>
             </div>
         </div>
     </div>
@@ -35,18 +35,23 @@ export default {
                 row:{
                     title:null,
                     content:null,
+                    publishdate:null
                 }
             }
         }
     },
     watch:{
         row(){
-           let date = this.row.row.date.split("/")
-           let len = date.length
-           this.day = date[len - 1]
-           this.year = `${date[1]}.${date[0]}`
-
-           this.$emit("images",this.row)
+              if(this.row.row !== undefined){
+                
+                let date = this.row.row.publishdate.split(" ")
+                date = date[0].split("-")
+                let len = date.length
+                this.day = date[len - 1]
+                this.year = `${date[1]}.${date[0]}`
+              }
+               
+                this.$emit("images",this.row)
         }
     }
 }

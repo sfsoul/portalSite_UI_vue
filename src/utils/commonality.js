@@ -21,3 +21,11 @@ export function debounce(fn,time){
         }, time);
     }
 }
+
+//日期格式化
+export function dateFormat(dateTime){
+    let date = new Date(dateTime)
+    let {year,month,day} = {year:date.getFullYear(),month:date.getMonth()+1,day:date.getDate()}
+
+    return `${year}年${month}月${day}日`
+}
