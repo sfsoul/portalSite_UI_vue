@@ -64,40 +64,77 @@
               <span class="role-span">菜单分配</span>
             </el-tooltip>
             <el-button
-              :disabled="!showButton"
-              :loading="menuLoading"
+              :disabled="showButton"
               icon="el-icon-check"
               size="mini"
-              style="float: right; padding: 6px 9px"
+              style="float: right; padding: 5px 8px"
               type="primary"
-              @click="saveMenu"
+              @click="openUnMenu"
             >
-              保存
+              授权
+            </el-button>
+            <el-button
+              :disabled="showFobbidenButton"
+              :loading="unmenuLoading"
+              icon="el-icon-close"
+              size="mini"
+              style="float: right;padding: 5px 8px;margin-right: 8px;"
+              type="danger"
+              @click="unBindSubmit"
+            >
+              禁权
             </el-button>
           </div>
-          <el-tree
-            ref="menu"
-            :data="menus"
-            :default-checked-keys="menuIds"
-            :props="defaultProps"
-            check-strictly
-            accordion
-            show-checkbox
-            node-key="id"
-          />
+          <el-checkbox-group v-model="checkList" @change="changeChecked">
+            <el-checkbox
+              v-for="item in hasmenus"
+              :key="item.id"
+              :value="item.id"
+              :label="item.id"
+              style="display: block;padding: 2px 0 2px 0"
+            >{{ item.modulename }}</el-checkbox>
+          </el-checkbox-group>
         </el-card>
       </el-col>
     </el-row>
+    <!-- 授权表单 -->
+    <el-dialog
+      append-to-body
+      :close-on-click-modal="false"
+      :visible.sync="menuDialog"
+      title="添加菜单"
+      width="420px"
+      @close="cancelDialog"
+    >
+      <el-tree
+        v-if="showTree"
+        ref="menu"
+        :props="defaultProps"
+        :check-strictly="false"
+        :check-descendants="true"
+        :expand-on-click-node="true"
+        :highlight-current="true"
+        :load="loadNode"
+        lazy
+        accordion
+        show-checkbox
+        node-key="id"
+      />
+      <div slot="footer" class="dialog-footer">
+        <el-button type="text" @click="cancelDialog">取消</el-button>
+        <el-button type="primary" :loading="menuLoading" @click="bindRoleMenu">确认</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import crudRoles from '@/api/system/role'
+import { getRoleUnEnableRootMoudles, getRoleUnEnableChildMoudles, getRoleEnableMoudles, bindRoleMoudle, unBindRoleMoudle } from '@/api/system/role'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import menus from './menu'
 
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '角色', url: '/back/sysRole/lists', crudMethod: { ...crudRoles }})
@@ -122,12 +159,24 @@ export default {
           { required: true, message: '请输入描述信息', trigger: 'blur' }
         ]
       },
-      defaultProps: { children: 'children', label: 'label' },
-      menus,
-      menuIds: [],
+      defaultProps: {
+        children: 'children',
+        label: 'label',
+        isLeaf: 'leaf'
+      },
       menuLoading: false,
-      showButton: false,
-      currentId: 0
+      unmenuLoading: false,
+      showButton: true,
+      showFobbidenButton: true,
+      currentId: 0,
+      menuDialog: false,
+      rootNode: [],
+      childNode: [],
+      checkList: [],
+      hasmenus: [],
+      node: [],
+      resolve: [],
+      showTree: false
     }
   },
   created() {
@@ -151,25 +200,126 @@ export default {
     [CRUD.HOOK.afterEditError](crud) {
 
     },
+    openUnMenu() {
+      this.menuDialog = true
+      this.showTree = true
+      this.node.childNodes = []
+      this.loadNode(this.node, this.resolve)
+    },
+    cancelDialog() {
+      this.menuDialog = false
+      this.$refs.menu.setCheckedNodes([])
+    },
+    loadNode(node, resolve) {
+      if (node.level === 0) {
+        this.rootNode = []
+        this.node = node
+        this.resolve = resolve
+        getRoleUnEnableRootMoudles(this.currentId).then(res => {
+          const data = res
+          data.forEach(item => {
+            if (item.haschild === 0) {
+              this.rootNode.push({
+                label: item.modulename,
+                id: item.id
+                // leaf: true
+              })
+            } else {
+              this.rootNode.push({
+                label: item.modulename,
+                id: item.id
+              })
+            }
+          })
+          return resolve(this.rootNode)
+        })
+      } else if (node.level > 1) {
+        return resolve([])
+      } else if (node.level === 1) {
+        this.getRoleUnEnableChildMoudles(node, resolve)
+      }
+    },
+    getRoleUnEnableChildMoudles(node, resolve) {
+      this.childNode = []
+      getRoleUnEnableChildMoudles(this.currentId, node.data.id).then(res => {
+        const data = res
+        if (data.length > 0) {
+          data.forEach(item => {
+            this.childNode.push({
+              label: item.modulename,
+              id: item.id,
+              leaf: true,
+              parent: item.parent
+            })
+          })
+          /* const tempChildNode = []
+          this.childNode.map(item2 => {
+            if (node.data.id === item2.parent) {
+              tempChildNode.push(item2)
+            }
+          })*/
+          resolve(this.childNode)
+        } else {
+          resolve([])
+        }
+      })
+    },
+    getRoleEnableMoudles() {
+      getRoleEnableMoudles(this.currentId).then(res => {
+        this.hasmenus = res
+      })
+    },
     // 触发单选
     handleCurrentChange(val) {
-      console.log(val)
       if (val) {
-        // 清空菜单的选中
-        this.$refs.menu.setCheckedKeys([])
-        // 保存当前的角色id
+        this.showButton = false
         this.currentId = val.id
-        this.showButton = true
-        // 初始化
-        this.menuIds = []
-        // 菜单数据需要特殊处理
+        this.getRoleEnableMoudles()
       }
+    },
+    bindRoleMenu() {
+      const checkedKeys = this.$refs.menu.getCheckedKeys()
+      // 数组去重,若根模块无子模块,发送根模块Id,否则,只发送子模块Id
+      const moduleParam = checkedKeys.filter(checkId => {
+        return this.rootNode.every(parent => {
+          return parent.id !== checkId
+        })
+      })
+      console.log(moduleParam)
+      if (checkedKeys.length === 0) {
+        this.$message({
+          type: 'warning',
+          message: '请至少选择一项'
+        })
+        return false
+      }
+      this.menuLoading = true
+      bindRoleMoudle(this.currentId, moduleParam.join(',')).then(res => {
+        this.menuLoading = false
+        this.$refs.menu.setCheckedNodes([])
+        this.menuDialog = false
+        this.getRoleEnableMoudles()
+      })
+    },
+    changeChecked(val) {
+      this.checkList = val
+      this.showFobbidenButton = false
+      if (this.checkList.length === 0) {
+        this.showFobbidenButton = true
+      }
+      this.selectRoleid = this.checkList.join(',')
+    },
+    unBindSubmit() {
+      this.unmenuLoading = true
+      unBindRoleMoudle(this.currentId, this.selectRoleid).then(res => {
+        this.unmenuLoading = false
+        this.showFobbidenButton = true
+        this.checkList = []
+        this.getRoleEnableMoudles()
+      })
     },
     checkboxT(row, rowIndex) {
       return row
-    },
-    saveMenu() {
-      alert('333')
     }
   }
 }

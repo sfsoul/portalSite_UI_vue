@@ -54,6 +54,7 @@
           <el-table
             ref="table"
             v-loading="crud.loading"
+            highlight-current-row
             :data="crud.data"
             style="width: 100%;margin-top: 12px;"
             @selection-change="selectionChangeHandler"
@@ -111,10 +112,10 @@
       append-to-body
       :close-on-click-modal="false"
       :visible.sync="unroleDialog"
-      :title=title
+      :title="title"
       width="420px"
     >
-      <el-checkbox-group v-model="unCheckList" @change="changeUnChecked" v-if="unroles.length !== 0">
+      <el-checkbox-group v-if="unroles.length !== 0" v-model="unCheckList" @change="changeUnChecked">
         <el-checkbox
           v-for="item in unroles"
           :key="item.id"
@@ -126,7 +127,7 @@
       <div v-else style="text-align: center">您已拥有所有角色,无需添加</div>
       <div slot="footer" class="dialog-footer">
         <el-button type="text" @click="unroleDialog = false">取消</el-button>
-        <el-button :loading="bindLoading" type="primary" @click="bindSubmit" v-if="unroles.length !== 0">确认</el-button>
+        <el-button v-if="unroles.length !== 0" :loading="bindLoading" type="primary" @click="bindSubmit">确认</el-button>
       </div>
     </el-dialog>
     <!--分页组件-->
@@ -142,146 +143,146 @@
 </template>
 
 <script>
-  import { getUserList, getUserRoles, bindUserRole, getUserUnRoles, unBindUserRole } from '@/api/system/user'
-  import pagination from '@/components/Pagination'
-  export default {
-    name: 'User',
-    components: { pagination },
-    data() {
-      return {
-        crud: {
-          loading: false,
-          refreshLoading: false,
-          resetPassLoading: false,
-          data: [],
-          selections: [],
-          listQuery: {
-            current: 1,
-            pageSize: 10
-          },
-          total: 0,
-          resetPassDialogVisible: false,
-          selectUser: []
+import { getUserList, getUserRoles, bindUserRole, getUserUnRoles, unBindUserRole } from '@/api/system/user'
+import pagination from '@/components/Pagination'
+export default {
+  name: 'User',
+  components: { pagination },
+  data() {
+    return {
+      crud: {
+        loading: false,
+        refreshLoading: false,
+        resetPassLoading: false,
+        data: [],
+        selections: [],
+        listQuery: {
+          current: 1,
+          pageSize: 10
         },
-        roleLoading: false,
-        showButton: true,
-        showFobbidenButton: true,
-        roles: [],
-        unroles: [],
-        checkList: [],
-        unCheckList: [],
-        currentUserid: 0,
-        selectRoleid: null,
-        unseclectid: null,
-        unroleDialog: false,
-        bindLoading: false,
-        currentUserName: null,
-        title: ''
+        total: 0,
+        resetPassDialogVisible: false,
+        selectUser: []
+      },
+      roleLoading: false,
+      showButton: true,
+      showFobbidenButton: true,
+      roles: [],
+      unroles: [],
+      checkList: [],
+      unCheckList: [],
+      currentUserid: 0,
+      selectRoleid: null,
+      unseclectid: null,
+      unroleDialog: false,
+      bindLoading: false,
+      currentUserName: null,
+      title: ''
+    }
+  },
+  created() {
+    this.getUserList()
+  },
+  methods: {
+    // 选择改变
+    selectionChangeHandler(val) {
+      this.crud.selections = val
+      this.crud.selectUser = []
+      val.forEach(item => {
+        this.crud.selectUser.push(item.realname)
+      })
+    },
+    checkboxT(row, rowIndex) {
+      return row.id
+    },
+    openUnRole() {
+      this.title = this.currentUserName + '未有角色'
+      this.unroleDialog = true
+      this.getUserUnRoles()
+    },
+    // 触发单选
+    handleCurrentChange(val) {
+      this.unroles = []
+      this.roles = []
+      this.showButton = false
+      if (this.checkList.length > 0) {
+        this.showFobbidenButton = true
       }
+      this.$nextTick(() => {
+        this.checkList = []
+      })
+      // 保存当前的用户id
+      this.currentUserid = val.id
+      this.currentUserName = val.realname
+      this.getUserRoles()
     },
-    created() {
-      this.getUserList()
+    getUserRoles() {
+      getUserRoles(this.currentUserid).then(res => {
+        this.roles = res
+      })
     },
-    methods: {
-      // 选择改变
-      selectionChangeHandler(val) {
-        this.crud.selections = val
-        this.crud.selectUser = []
-        val.forEach(item => {
-          this.crud.selectUser.push(item.realname)
-        })
-      },
-      checkboxT(row, rowIndex) {
-        return row.id
-      },
-      openUnRole() {
-        this.title = this.currentUserName + '未有角色'
-        this.unroleDialog = true
-        this.getUserUnRoles()
-      },
-      // 触发单选
-      handleCurrentChange(val) {
-        this.unroles = []
-        this.roles = []
-        this.showButton = false
-        if (this.checkList.length > 0) {
-          this.showFobbidenButton = true
-        }
-        this.$nextTick(() => {
-          this.checkList = []
-        })
-        // 保存当前的用户id
-        this.currentUserid = val.id
-        this.currentUserName = val.realname
+    getUserUnRoles() {
+      getUserUnRoles(this.currentUserid).then(res => {
+        this.unroles = res
+      })
+    },
+    changeChecked(val) {
+      this.checkList = val
+      this.showFobbidenButton = false
+      if (this.checkList.length === 0) {
+        this.showFobbidenButton = true
+      }
+      this.selectRoleid = this.checkList.join(',')
+    },
+    changeUnChecked(val) {
+      this.unCheckList = val
+      this.unseclectid = this.unCheckList.join(',')
+    },
+    unBindSubmit() {
+      this.roleLoading = true
+      unBindUserRole(this.currentUserid, this.selectRoleid).then(res => {
+        this.roleLoading = false
+        this.showFobbidenButton = true
+        this.checkList = []
         this.getUserRoles()
-      },
-      getUserRoles() {
-        getUserRoles(this.currentUserid).then(res => {
-          this.roles = res
+      })
+    },
+    bindSubmit() {
+      this.bindLoading = true
+      bindUserRole(this.currentUserid, this.unseclectid).then(res => {
+        this.bindLoading = false
+        this.unroleDialog = false
+        this.showFobbidenButton = true
+        this.unCheckList = []
+        this.getUserRoles()
+      })
+    },
+    getUserList() {
+      this.crud.loading = true
+      getUserList(this.crud.listQuery).then(res => {
+        this.crud.data = res.value
+        this.crud.total = res.page.total
+        this.crud.loading = false
+      }).catch(() => {
+        this.$message({
+          type: 'error',
+          message: '获取用户列表失败'
         })
-      },
-      getUserUnRoles() {
-        getUserUnRoles(this.currentUserid).then(res => {
-          this.unroles = res
-        })
-      },
-      changeChecked(val) {
-        this.checkList = val
-        this.showFobbidenButton = false
-        if (this.checkList.length === 0) {
-          this.showFobbidenButton = true
-        }
-        this.selectRoleid = this.checkList.join(',')
-      },
-      changeUnChecked(val) {
-        this.unCheckList = val
-        this.unseclectid = this.unCheckList.join(',')
-      },
-      unBindSubmit() {
-        this.roleLoading = true
-        unBindUserRole(this.currentUserid, this.selectRoleid).then(res => {
-          this.roleLoading = false
-          this.showFobbidenButton = true
-          this.checkList = []
-          this.getUserRoles()
-        })
-      },
-      bindSubmit() {
-        this.bindLoading = true
-        bindUserRole(this.currentUserid, this.unseclectid).then(res => {
-          this.bindLoading = false
-          this.unroleDialog = false
-          this.showFobbidenButton = true
-          this.unCheckList = []
-          this.getUserRoles()
-        })
-      },
-      getUserList() {
-        this.crud.loading = true
-        getUserList(this.crud.listQuery).then(res => {
-          this.crud.data = res.value
-          this.crud.total = res.page.total
-          this.crud.loading = false
-        }).catch(() => {
-          this.$message({
-            type: 'error',
-            message: '获取用户列表失败'
-          })
-          this.crud.loading = false
-        })
-      },
-      refresh() {
-        this.crud.refreshLoading = true
-        this.$nextTick(() => {
-          this.getUserList()
-        })
-        this.crud.refreshLoading = false
-      },
-      resetPass() {
+        this.crud.loading = false
+      })
+    },
+    refresh() {
+      this.crud.refreshLoading = true
+      this.$nextTick(() => {
+        this.getUserList()
+      })
+      this.crud.refreshLoading = false
+    },
+    resetPass() {
 
-      }
     }
   }
+}
 </script>
 
 <style scoped>
