@@ -7,7 +7,7 @@
         </el-carousel>
         <div style="margin: 18px 18%;background-color: #fff;padding: 20px;" >
             <news-title titlea="新闻" titleb="动态" english="New Information" :ismany="false" ></news-title>
-            <div>
+            <div v-if="isloading">
                 <item v-for="(news,index) in newsData" :row="news" :index="index" :key="index"   ></item>
                 <el-pagination
                    background 
@@ -22,6 +22,9 @@
                   @current-change="handleCurrentChange">
                 </el-pagination>
             </div>
+            <div v-else style="min-height: 400px; position: relative;">
+                <loading></loading>
+            </div>
         </div>
         
     </div>
@@ -31,6 +34,7 @@ import Item from './Item'
 import NewsTitle from './news-title'
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewList } from '@/api/news'
+import Loading from '@/components/loading'
     export default {
         data(){
             return{
@@ -38,7 +42,8 @@ import { getNewList } from '@/api/news'
                 current:1,
                 total:0,
                 pageSizes:[10,20,30,40],
-                newsData:[]
+                newsData:[],
+                isloading:true
             }
         },
         mounted(){
@@ -47,7 +52,8 @@ import { getNewList } from '@/api/news'
         components:{
             NewsTitle,
             Item,
-            Breadcrumd
+            Breadcrumd,
+            Loading
         },
         props:{
                 id: {default:1}

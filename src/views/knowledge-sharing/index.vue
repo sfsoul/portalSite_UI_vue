@@ -2,8 +2,8 @@
         <div style="margin: 100px 18% 40px 18%;position: relative;" >
                     <news-title titlea="知识" titleb="共享" english="Training Center" :ismany="false" ></news-title>      
             <div style="background: #fff;padding: 20px;" >
-                    
-                    <el-input v-model="searchVlaue" placeholder="请输入文档名称"  class="institution-search" >
+                        <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
+                        <el-input v-model="searchVlaue" placeholder="请输入文档名称"  class="institution-search" >
                                     <template slot="append">
                                         <i class="el-icon-search" style="color: #fff" ></i>
                                     </template>
@@ -83,6 +83,10 @@
            //current 变化回调
             handleCurrentChange(val){
     
+            },
+            //去发布界面 
+            goRelease(){
+                    this.$router.push({name:'release'})
             }
         }
     }
@@ -106,6 +110,11 @@
                 width: 20%;
                 position: absolute;
                 top: 1%;
-                right: 2%;
+                right: 0%;
+    }
+    .gorelease-button {
+                position: absolute;
+                top: 1%;
+                right: 30%;
     }
     </style>

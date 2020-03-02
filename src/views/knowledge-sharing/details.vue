@@ -33,7 +33,7 @@
     </template>
     
     <script>
-     import Breadcrumd from '@/components/breadcrumd.vue'      
+import Breadcrumd from '@/components/breadcrumd.vue'      
     export default {
         computed:{
             row(){
@@ -51,8 +51,7 @@
                   path:'/knowledge-sharing/details'
                   }
                 ]
-            console.log(1)
-               this.$store.dispatch('breadcrumd/setBreadcrumd',routes)
+            this.$store.dispatch('breadcrumd/setBreadcrumd',routes)
         },
         components:{
             Breadcrumd

@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-23 18:16:10
- * @LastEditTime: 2020-02-27 15:23:40
+ * @LastEditTime: 2020-02-29 19:09:36
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\news\index.vue
@@ -17,8 +17,8 @@
                     <news-item @imageToDetails="receptiomImageInfo" :newsData="newsData" ></news-item>
             </el-col>
         </el-row>
-        <div v-else style="min-height: 400px;">
-            暂无数据
+        <div v-else style="min-height: 400px;position: relative;">
+            <loading></loading>
         </div>
     </div>
 </template>
@@ -27,6 +27,7 @@ import NewsItem from './news-Item'
 import NewsDetails from './news-details'
 import NewsTitle from './news-title'
 import { getNewList } from '@/api/news'
+import Loading from '@/components/loading'
 export default {
     data(){
         return {
@@ -39,6 +40,7 @@ export default {
         NewsItem,
         NewsDetails,
         NewsTitle,
+        Loading
     },
     props:{
 
