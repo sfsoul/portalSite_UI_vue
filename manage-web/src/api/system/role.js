@@ -9,10 +9,13 @@ export function add(data) {
 }
 
 export function del(id) {
+  const params = {
+    id: id
+  }
   return request({
     url: 'back/sysRole/delete',
     method: 'delete',
-    data: id
+    params
   })
 }
 

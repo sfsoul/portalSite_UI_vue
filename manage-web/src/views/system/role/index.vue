@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--工具栏-->
-    <crudOperation :permission="permission" />
+    <crudOperation />
     <!-- 表单渲染 -->
     <el-dialog
       append-to-body
@@ -34,7 +34,6 @@
           <el-table
             ref="table"
             v-loading="crud.loading"
-            border
             highlight-current-row
             style="width: 100%;"
             :data="crud.data"
@@ -44,13 +43,6 @@
             <el-table-column :selectable="checkboxT" type="selection" align="center" width="55" />
             <el-table-column prop="role" align="center" label="名称" />
             <el-table-column :show-overflow-tooltip="true" align="center" prop="descr" label="描述" />
-            <el-table-column label="操作" width="130px" align="center">
-              <template slot-scope="scope">
-                <udOperation
-                  :data="scope.row"
-                />
-              </template>
-            </el-table-column>
           </el-table>
           <!--分页组件-->
           <pagination />
@@ -133,7 +125,6 @@ import crudRoles from '@/api/system/role'
 import { getRoleUnEnableRootMoudles, getRoleUnEnableChildMoudles, getRoleEnableMoudles, bindRoleMoudle, unBindRoleMoudle } from '@/api/system/role'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
-import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
 // crud交由presenter持有
@@ -141,16 +132,10 @@ const defaultCrud = CRUD({ title: '角色', url: '/back/sysRole/lists', crudMeth
 const defaultForm = { role: null, descr: null }
 export default {
   name: 'Role',
-  components: { pagination, crudOperation, udOperation },
+  components: { pagination, crudOperation },
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
   data() {
     return {
-      permission: {
-        add: true,
-        edit: false,
-        del: true,
-        refresh: true
-      },
       rules: {
         role: [
           { required: true, message: '请输入名称', trigger: 'blur' }
@@ -180,7 +165,7 @@ export default {
     }
   },
   created() {
-
+    this.crud.optShow.edit = false
   },
   methods: {
     [CRUD.HOOK.afterRefresh]() {
@@ -274,6 +259,12 @@ export default {
       if (val) {
         this.showButton = false
         this.currentId = val.id
+        if (this.checkList.length > 0) {
+          this.showFobbidenButton = true
+        }
+        this.$nextTick(() => {
+          this.checkList = []
+        })
         this.getRoleEnableMoudles()
       }
     },

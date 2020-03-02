@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--工具栏-->
-    <crudOperation :permission="permission" />
+    <crudOperation />
     <!--表单组件-->
     <el-dialog
       append-to-body
@@ -55,18 +55,15 @@ export default {
       accountList: [],
       accountMap: {},
       loading: false,
-      permission: {
-        add: true,
-        edit: true,
-        del: false,
-        refresh: true
-      },
       rules: {
-        newsTName: [
+        atName: [
           { required: true, message: '请输入名称', trigger: 'blur' }
         ]
       }
     }
+  },
+  created() {
+    this.crud.optShow.del = false
   },
   methods: {
 

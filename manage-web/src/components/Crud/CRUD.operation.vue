@@ -1,7 +1,7 @@
 <template>
   <div class="crud-opts">
     <el-button
-      v-if="permission.add"
+      v-if="crud.optShow.add"
       class="filter-item"
       size="mini"
       type="primary"
@@ -11,7 +11,7 @@
       新增
     </el-button>
     <el-button
-      v-if="permission.edit"
+      v-if="crud.optShow.edit"
       class="filter-item"
       size="mini"
       type="success"
@@ -22,20 +22,20 @@
       修改
     </el-button>
     <el-button
-      v-if="permission.del"
+      v-if="crud.optShow.del"
       slot="reference"
       class="filter-item"
       type="danger"
       icon="el-icon-delete"
       size="mini"
       :loading="crud.delAllLoading"
-      :disabled="crud.selections.length === 0"
+      :disabled="crud.selections.length !== 1"
       @click="toDelete(crud.selections)"
     >
       删除
     </el-button>
     <el-button
-      v-if="permission.refresh"
+      v-if="crud.optShow.refresh"
       :disabled="!crud.data.length"
       class="filter-item"
       size="mini"
