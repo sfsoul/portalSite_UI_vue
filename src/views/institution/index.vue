@@ -107,12 +107,6 @@
     .train-col-content:hover {
        transform: scale(1.1)
     }
-    .institution-search {
-            width: 20%;
-            position: absolute;
-            top: 1%;
-            right: 2%;
-    }
     .institution {
          position: relative;
          min-width: 1200px;

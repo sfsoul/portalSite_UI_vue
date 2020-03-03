@@ -33,7 +33,6 @@ export const constantRouter = [
         },
         {
             path:'news-show',
-            name:'news-show',
             component:()=>import('@/views/news/news-show'),
             meta:{title:'新闻详情'},
             hidden:true
@@ -148,7 +147,6 @@ export const constantRouter = [
         path:'/institution',
         component:Layout,
         redirect:'/institution/index',
-        name:'institution',
         children:[
             {
             path:'index',
@@ -183,7 +181,8 @@ export const constantRouter = [
         path:'/knowledge-sharing',
         component:Layout,
         redirect:'/knowledge-sharing/index',
-        name:'knowledge-sharing',
+        name:'knowledge',
+        meta:{title:'工作交流'},
         children:[
             {
             path:'index',
@@ -195,7 +194,14 @@ export const constantRouter = [
                 path:'details',
                 name:'knowledge-details',
                 component:()=>import('@/views/knowledge-sharing/details'),
-                meta:{title:'知识共享'},
+                meta:{title:'知识详情'},
+                hidden:true
+            },
+            {
+                path:'release',
+                name:'release',
+                component:()=>import('@/views/knowledge-sharing/release'),
+                meta:{title:'发布经验'},
                 hidden:true
             }
         ]

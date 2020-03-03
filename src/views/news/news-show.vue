@@ -1,18 +1,34 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-03-02 11:45:53
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\news\news-show.vue
+ -->
 <template>
-    <div style="margin: 100px 18%" v-if="this.newInfo" >
+    <div style="margin: 100px 18%">
         <breadcrumd></breadcrumd>
-        <el-divider content-position="right">{{newInfo.newsTName}}</el-divider>
-        <div style="background: #fff;line-height: 40px;" >
-            <div>
-                <h2 style="text-align: center" >{{newInfo.titile}}</h2>
+        <div v-if="newInfo">
+            <el-divider content-position="right">{{newInfo.newsTName}}</el-divider>
+            <div style="background: #fff;line-height: 40px;" >
+                <div>
+                    <h2 style="text-align: center" >{{newInfo.titile}}</h2>
+                </div>
+                <div style="text-align: center;" >
+                    <span>{{newInfo.publishdate}}</span>
+                    <span style="margin-left: 20px">发布人:{{newInfo.author}}</span>
+                    <span style="margin-left: 20px" >浏览量:1250</span>
+                </div>
             </div>
-            <div style="text-align: center;" >
-                <span>{{newInfo.publishdate}}</span>
-                <span style="margin-left: 20px">发布人:{{newInfo.author}}</span>
-                <span style="margin-left: 20px" >浏览量:1250</span>
+            <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
+                <span v-html="newInfo.contentStr" ></span>
+            </div>
+            <div>
             </div>
         </div>
-        <div>
+        <div v-else style="min-height: 400px; position: relative;">
+            <loading></loading>
         </div>
     </div>
 </template>
@@ -20,6 +36,7 @@
 <script>
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewsDetail } from '@/api/news'
+import Loading from '@/components/loading'
 export default {
     data(){
         return {
@@ -30,15 +47,16 @@ export default {
         
     },
     components:{
-        Breadcrumd
+        Breadcrumd,
+        Loading
     },
     computed: {
     },
     methods: {
        handleGetNewsDetail(newsid){
           getNewsDetail(newsid).then(response => {
-                  console.log(response)
                   this.newInfo = response
+                  console.log(this.newInfo)
           })
        }  
     },

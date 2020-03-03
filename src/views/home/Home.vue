@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-23 18:16:10
- * @LastEditTime: 2020-02-27 15:07:02
+ * @LastEditTime: 2020-03-02 11:41:49
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\home\Home.vue
@@ -76,11 +76,11 @@ export default {
         handleEntrance(scrollTop,minTop,maxTop){
             if(scrollTop >= maxTop){
 
-                this.entranceClass=["animated","fadeIn"]
+                this.entranceClass=["animated","fadeInUp"]
                 
             }else if(scrollTop <= minTop){
 
-                this.entranceClass=["animated","fadeOut"]
+                this.entranceClass=["animated","fadeOutDown"]
             }
         },
         handleHonor(scrollTop,minTop,maxTop){
