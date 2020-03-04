@@ -3,7 +3,7 @@ import Long from 'long'
 
 export function add(data) {
   return request({
-    url: 'news/addNews',
+    url: 'notice/addNotice',
     method: 'post',
     data: data
   })
@@ -11,7 +11,7 @@ export function add(data) {
 
 export function edit(data) {
   return request({
-    url: 'news/updateNews',
+    url: 'notice/updateNotice',
     method: 'post',
     data
   })
@@ -22,7 +22,7 @@ export function del(id) {
     id: (Long.fromValue(id)).toString()
   }
   return request({
-    url: 'news/deleteNews',
+    url: 'notice/deleteNotice',
     method: 'post',
     data: data
   })
@@ -33,18 +33,7 @@ export function isExistTitle(title) {
     title: title
   }
   return request({
-    url: 'news/existTitle',
-    method: 'get',
-    params
-  })
-}
-
-export function getNewsDetail(id) {
-  const params = {
-    newsid: id
-  }
-  return request({
-    url: 'news/getReviewInfo',
+    url: 'notice/existTitle',
     method: 'get',
     params
   })

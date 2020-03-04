@@ -12,8 +12,8 @@
       width="470px"
     >
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="110px">
-        <el-form-item label="通告类型" prop="atName">
-          <el-input v-model="form.atName" style="width: 230px" />
+        <el-form-item label="通告类型" prop="noticeTName">
+          <el-input v-model="form.noticeTName" style="width: 230px" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -31,7 +31,7 @@
       @selection-change="crud.selectionChangeHandler"
     >
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column prop="atName" label="通告类型" align="center" />
+      <el-table-column prop="noticeTName" label="通告类型" align="center" />
     </el-table>
     <!--分页组件-->
     <pagination />
@@ -45,7 +45,7 @@ import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 // crud交由presenter持有
 const defaultCrud = CRUD({ title: '通告类型', requestType: 'post', url: 'back/settings/noticeType/getTypes', crudMethod: { ...crudNoticeType }})
-const defaultForm = { atName: null }
+const defaultForm = { noticeTName: null }
 export default {
   name: 'NewsType',
   components: { pagination, crudOperation },
@@ -56,7 +56,7 @@ export default {
       accountMap: {},
       loading: false,
       rules: {
-        atName: [
+        noticeTName: [
           { required: true, message: '请输入名称', trigger: 'blur' }
         ]
       }
