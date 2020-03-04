@@ -8,7 +8,7 @@
       style="width: 100%;"
       @selection-change="crud.selectionChangeHandler"
     >
-      <el-table-column prop="titile" align="center" label="标题" />
+      <el-table-column prop="title" align="center" label="标题" />
       <el-table-column :show-overflow-tooltip="true" align="center" prop="summary" label="摘要" />
       <el-table-column prop="newsTName" label="新闻类型" align="center" />
       <el-table-column prop="author" label="作者" align="center" />
