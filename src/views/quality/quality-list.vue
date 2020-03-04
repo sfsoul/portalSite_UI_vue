@@ -1,6 +1,6 @@
 <template>
         <div style="margin: 100px 18% 40px 18%;background: #fff;padding: 20px;" >
-                <quality-title titlea="质量" titleb="信息" english="Quality Information" :ismany="false" ></quality-title>
+                <quality-title :title="title" english="Quality Information" :ismany="false" ></quality-title>
             <quality-item></quality-item>
             <el-pagination
                        background 
@@ -18,7 +18,8 @@
     </template>
     
     <script>
-    import {QualityTitle,QualityItem} from '../quality'
+    import {QualityItem} from '../quality'
+    import QualityTitle from '@/components/title'
     export default {
         components:{
             QualityTitle,
@@ -30,6 +31,10 @@
                 current:1,
                 total:120,
                 pageSizes:[10,20,30,40],
+                title:{
+                    nameLeft:"质量",
+                    nameRight:"信息"
+                }
             }
         },
         methods:{

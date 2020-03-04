@@ -24,31 +24,15 @@ export default {
     components:{
         Item
     },
+    props:{
+        noticeData:{
+            type:Array,
+            default:[]
+        }
+    },
     data(){
         return{
-            noticeData:[
-                {
-                    title:"成都中亚通茂股份有限公司",
-                    issuer:'张三',
-                    date:'2019/12/12'
-                },{
-                    title:"成都中亚通茂股份有限公司,成都中亚通茂股份有限公司",
-                    issuer:'张三',
-                    date:'2019/12/12'
-                },{
-                    title:"成都中亚通茂股份有限公司",
-                    issuer:'张三',
-                    date:'2019/12/12'
-                },{
-                    title:"成都中亚通茂股份有限公司",
-                    issuer:'张三',
-                    date:'2019/12/12'
-                },{
-                    title:"成都中亚通茂股份有限公司",
-                    issuer:'张三',
-                    date:'2019/12/12'
-                },
-            ]
+    
         }
     }
 }

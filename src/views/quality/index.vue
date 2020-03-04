@@ -1,12 +1,13 @@
 <template>
     <div style="width: 100%;" >
-        <quality-title titlea="质量" titleb="信息" english="Quality Information" ></quality-title>
+        <quality-title :title="title" english="Quality Information" :isSearch="false" routeSkip="quality-list"  ></quality-title>
         <quality-item></quality-item>
     </div>
 </template>
 
 <script>
-import { QualityTitle,QualityItem } from '../quality'
+import { QualityItem } from '../quality'
+import QualityTitle from '@/components/title'
 export default {
     components:{
         QualityItem,
@@ -14,6 +15,14 @@ export default {
     },
     mounted(){
        
+    },
+    data(){
+        return {
+            title:{
+                nameLeft:"质量",
+                nameRight:"信息"
+            }
+        }
     }
 }
 

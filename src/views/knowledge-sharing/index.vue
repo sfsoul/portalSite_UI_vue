@@ -1,18 +1,13 @@
 <template>
         <div style="margin: 100px 18% 40px 18%;position: relative;" >
-                    <news-title titlea="知识" titleb="共享" english="Training Center" :ismany="false" ></news-title>      
-            <div style="background: #fff;padding: 20px;" >
+                 <!--头部标题-->
+                    <knowledag-title :title="title" english="Training Center" :ismany="false"  ></knowledag-title>   
+
+                 <div style="background: #fff;padding: 20px;" >
                         <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
-                        <el-input v-model="searchVlaue" placeholder="请输入文档名称"  class="institution-search" >
-                                    <template slot="append">
-                                        <i class="el-icon-search" style="color: #fff" ></i>
-                                    </template>
-                        </el-input>
-                       <!--  <el-row :gutter="20" justify="space-between"> -->
                                 <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
                                         <items :row="item" ></items>
                                 </div>
-                       <!--  </el-row> -->
                     <el-pagination
                        background 
                       :page-size="pageSize"
@@ -33,11 +28,11 @@
     <script>
 /*     import Item from './Item' */
     import Items from './Items'
-    import NewsTitle from '../news/news-title'
+    import KnowledagTitle from '@/components/title'
     export default {
         components:{
         /*     Item, */
-            NewsTitle,
+            KnowledagTitle,
             Items
         },
         data(){
@@ -46,7 +41,10 @@
                 current:1,
                 total:120,
                 pageSizes:[8,16,32],
-                searchVlaue:null,
+                title:{
+                        nameLeft:"知识",
+                        nameRight:'共享'
+                },
                 documentList:[
                             {
                                     title:'如何高效的学习.doc',

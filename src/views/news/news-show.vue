@@ -13,7 +13,7 @@
             <el-divider content-position="right">{{newInfo.newsTName}}</el-divider>
             <div style="background: #fff;line-height: 40px;" >
                 <div>
-                    <h2 style="text-align: center" >{{newInfo.titile}}</h2>
+                    <h2 style="text-align: center" >{{newInfo.title}}</h2>
                 </div>
                 <div style="text-align: center;" >
                     <span>{{newInfo.publishdate}}</span>
@@ -23,8 +23,6 @@
             </div>
             <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
                 <span v-html="newInfo.contentStr" ></span>
-            </div>
-            <div>
             </div>
         </div>
         <div v-else style="min-height: 400px; position: relative;">

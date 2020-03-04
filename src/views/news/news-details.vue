@@ -1,7 +1,7 @@
 <template>
         <div class="news-details">
                 <img :src="scrUrl" alt=""  >
-                <p  v-if="activeInfo" >{{activeInfo.titile}}</p>
+                <p  v-if="activeInfo" >{{activeInfo.title}}</p>
                     
         </div>
 </template>

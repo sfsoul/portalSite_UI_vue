@@ -72,7 +72,7 @@ export const constantRouter = [
             meta:{title:'通知公告'}
            },
            {
-               path:'notice-show',
+               path:'notice-show/:noticeid',
                name:'notice-show',
                component:()=>import('@/views/notice/notice-show'),
                meta:{title:'公告详情'},

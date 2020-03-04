@@ -10,7 +10,7 @@
         </div>
         <div  class="new-item-content" >
             <div class="content-title" >
-                <span v-if="row" >{{row.row.titile}}</span>
+                <span v-if="row" >{{row.row.title}}</span>
             </div>
             <div class="news-item-content" >
                 <span v-if="row" >{{row.row.summary}}</span>

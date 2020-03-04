@@ -22,10 +22,16 @@ export function debounce(fn,time){
     }
 }
 
-//日期格式化
-export function dateFormat(dateTime){
-    let date = new Date(dateTime)
+//日期格式化 
+export function dateFormat(dateTime,dateStyle){
+    const date = new Date(dateTime)
+    const len = dateStyle.length
     let {year,month,day} = {year:date.getFullYear(),month:date.getMonth()+1,day:date.getDate()}
-
-    return `${year}年${month}月${day}日`
+    if(len === 3){
+        return `${year}${dateStyle[0]}${month}${dateStyle[1]}${day}${dateStyle[2]}`
+    }
+    if(len === 2){
+        return `${year}${dateStyle[0]}${month}${dateStyle[1]}${day}`
+    }
+    
 }

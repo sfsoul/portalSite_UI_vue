@@ -2,7 +2,9 @@
     <div>
                
         <div style="margin: 60px 18% 40px 18%" >
-                <news-title titlea="项目" titleb="进度" english="Project Plan" :ismany="false" ></news-title>
+            <!--头部标题-->
+                <project-title :title="title" english="Project Plan" :ismany="false" ></project-title>
+               <!--头部搜索-->
                 <div  class="filter-container" >
                         <el-select v-model="filtrateQuery.branch" placeholder="部门名称" clearable style="width: 130px" class="filter-item">
                              <el-option v-for="item in branchOptions" :key="item" :label="item" :value="item" />
@@ -64,11 +66,11 @@
 
 <script>
 /* import Item from './Item' */
-import NewsTitle from '../news/news-title'
+import ProjectTitle from '@/components/title'
 export default {
     components:{
     /*     Item, */
-        NewsTitle
+       ProjectTitle
     },
     data(){
         return {
@@ -77,6 +79,10 @@ export default {
             total:120,
             pageSizes:[8,16,32],
             listLoading:false,
+            title:{
+                nameLeft:"项目",
+                nameRight:"进度"
+            },
             branchOptions:[ //部门集合
             "软件部","系统部","技术服务中心","总经办"
             ],
@@ -108,7 +114,7 @@ export default {
                 }
             ],
             tableKey:0,
-            pickerOptions:{
+            pickerOptions:{ // 时间配置
                 shortcuts:[
                     {
                         text:"最近一周",
