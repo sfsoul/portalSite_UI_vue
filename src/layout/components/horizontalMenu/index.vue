@@ -10,17 +10,20 @@
     <div class="navbar" >
       <logo></logo>
       <!------------导航菜单---------------->
+     
         <el-menu
-           mode="horizontal"
-           background-color="#fff"
-           text-color="#000"
-           active-text-color="#49aff3"
-           :unique-opened="true"
-           :default-active="activeMenu"
-           router
-        >
-        <nav-menu v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" ></nav-menu>
-     </el-menu>
+        mode="horizontal"
+        background-color="#fff"
+        text-color="#000"
+        active-text-color="#49aff3"
+        :unique-opened="true"
+        :default-active="activeMenu"
+        router
+      >
+         <nav-menu v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" ></nav-menu>
+        </el-menu>
+    
+        
     
     <div class="header-content" >
       <!--搜索框--->

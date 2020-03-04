@@ -9,7 +9,7 @@
   
     .header-content {
       display: flex;
-      justify-content:space-between ;
+      justify-content:flex-end;
       position: absolute;
       right: 1%;
       width: 18%;
@@ -17,11 +17,11 @@
       transform: translateY(-50%);
 
       .header-login {
-     
+        margin-left: 10px;
       }
       
       .header-search {
-        width: 60%;
+        width: 50%;
         height: 26px;
         
       }
