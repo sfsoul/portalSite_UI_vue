@@ -1,13 +1,9 @@
 <template>
     <div style="margin: 100px 18% 40px 18%;position: relative;" >
-                <news-title titlea="培训" titleb="专栏" english="Training Center" :ismany="false" ></news-title>      
+                <train-title :title="title" english="Training Center" :ismany="false" ></train-title>      
         <div style="background: #fff;padding: 20px;" >
                 
-                <el-input v-model="searchVlaue" placeholder="请输入文档名称"  class="institution-search" >
-                                <template slot="append">
-                                    <i class="el-icon-search" style="color: #fff" ></i>
-                                </template>
-                    </el-input>
+
                    <!--  <el-row :gutter="20" justify="space-between"> -->
                             <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
                                     <items :row="item" ></items>
@@ -33,11 +29,11 @@
 <script>
 import Item from './Item'
 import Items from './Items'
-import NewsTitle from '../news/news-title'
+import TrainTitle from '@/components/title'
 export default {
     components:{
         Item,
-        NewsTitle,
+        TrainTitle,
         Items
     },
     data(){
@@ -46,7 +42,10 @@ export default {
             current:1,
             total:120,
             pageSizes:[8,16,32],
-            searchVlaue:null,
+            title:{
+                nameLeft:"培训",
+                nameRight:"专栏"
+            },
             documentList:[
                         {
                                 title:'如何高效的学习.doc',
@@ -101,11 +100,5 @@ export default {
 }
 .train-col-content:hover {
    transform: scale(1.1)
-}
-.institution-search {
-            width: 20%;
-            position: absolute;
-            top: 1%;
-            right: 2%;
 }
 </style>

@@ -8,7 +8,7 @@
                         <p>{{row.newsTName}}</p>
                     </div> -->
                     <div class="news-row-content" >
-                        <p>{{row.titile}}</p>
+                        <p>{{row.title}}</p>
                     </div>
                 </div>
     </router-link>
@@ -21,6 +21,7 @@ export default {
     data(){
         return {
             showItem:true,
+            dateStyle:["年","月","日"],
         }
     },
     props:{
@@ -35,7 +36,7 @@ export default {
     },
     computed: {
         publishdate(){
-            return dateFormat(this.row.publishdate)
+            return dateFormat(this.row.publishdate,this.dateStyle)
         }
     },
     methods:{

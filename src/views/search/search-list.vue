@@ -1,8 +1,16 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-03-03 17:58:13
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\search\search-list.vue
+ -->
 <template>
     <div  class="search" >
         <search-menu></search-menu>
         <div class="search-content">
-            <news-title titlea="搜索" titleb="结果" english="Search Result" :ismany="false" ></news-title>
+            <search-title :title="title" english="Search Result" :ismany="false" ></search-title>
            <item></item> 
 
            <el-pagination
@@ -24,7 +32,7 @@
 <script>
 import SearchMenu from './search-menu'
 import Item from './Item'
-import NewsTitle from '../news/news-title'
+import SearchTitle from '@/components/title'
 export default {
     data(){
         return {
@@ -32,12 +40,16 @@ export default {
             current:1,
             total:120,
             pageSizes:[8,16,32],
+            title:{
+                nameLeft:"搜索",
+                nameRight:"结果"
+            }
         }
     },
     components:{
         SearchMenu,
         Item,
-        NewsTitle
+        SearchTitle
     },
     methods:{
         // pagesize 变化回调

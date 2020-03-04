@@ -5,20 +5,21 @@
         </div>
        
         <div style="width: 30%; overflow: hidden;white-space: nowrap;text-overflow: ellipsis;text-align: center" >
-                <router-link :to="{name:'notice-show'}" style="text-decoration: none;color: #222;" >
+                <router-link :to="{name:'notice-show',params:{noticeid:notice.id}}" style="text-decoration: none;color: #222;" >
                         <span>{{notice.title}}</span>
                 </router-link>
               
         </div>
         <div style="width: 30%;text-align: center" >
-                <span>{{notice.issuer}}</span>
+                <span>{{notice.author}}</span>
         </div>
         <div style="width: 30%;text-align: center" >
-                <span>{{notice.date}}</span>
+                <span>{{notice.publishdate}}</span>
         </div>
     </div>
 </template>
 <script>
+import {dateFormat} from '@/utils/commonality'
 export default {
     props:{
         notice:{
@@ -28,6 +29,14 @@ export default {
         index:{
             type:Number,
             default:''
+        }
+    },
+    mounted () {
+         this.notice.publishdate = dateFormat( this.notice.publishdate,this.dateStyle)
+    },
+    data(){
+        return{
+            dateStyle:["/","/"],
         }
     }
 }

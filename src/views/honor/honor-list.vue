@@ -1,6 +1,6 @@
 <template>
     <div  style="margin: 100px 18% 40px 18%">
-            <honor-title titlea="荣誉" titleb="中亚" english="Company Honors" :ismany="false" ></honor-title>
+            <honor-title :title="title" english="Company Honors"  :ismany="false"  ></honor-title>
             <honor-item></honor-item>
             <el-pagination
                    background 
@@ -17,7 +17,8 @@
     </div>
 </template>
 <script>
-import { HonorTitle,HonorItem } from './index'
+import {HonorItem } from './index'
+import HonorTitle from '@/components/title'
 export default {
     data(){
         return {
@@ -25,6 +26,10 @@ export default {
             current:1,
             total:120,
             pageSizes:[8,16,32],
+            title:{
+                nameLeft:'荣誉',
+                nameRight:'中亚'
+            }
         }
     },
     methods:{

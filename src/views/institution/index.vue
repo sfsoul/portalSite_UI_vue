@@ -2,13 +2,10 @@
         <div class="institution" >
              <sidebar-menu class="animated fadeInLeftBig" ></sidebar-menu>      
             <div style="margin: 100px 18% 40px 18%;position: relative;" >
-                    <news-title titlea="制度" titleb="文档" english="System Document" :ismany="false" ></news-title>
+                 <!--头部标题-->
+                    <institution-title :title="title" english="System Document" :ismany="false"  ></institution-title>
 
-                    <el-input v-model="searchVlaue" placeholder="请输入文档名称"  class="institution-search" >
-                                <template slot="append">
-                                    <i class="el-icon-search" style="color: #fff" ></i>
-                                </template>
-                    </el-input>
+
                     <el-row :gutter="20" justify="space-between" >
                             <el-col :span="24" style="height: 40px;line-height: 20px" v-for="(item,index) in documentList" :key="index" >
                                     <items :row="item" ></items>
@@ -34,13 +31,13 @@
     
     <script>
     import Item from './Item'
-    import NewsTitle from '../news/news-title'
+    import InstitutionTitle from '@/components/title'
     import SidebarMenu from './sidebar-menu'
     import Items from './Items'
     export default {
         components:{
             Item,
-            NewsTitle,
+            InstitutionTitle,
             SidebarMenu,
             Items,
            
@@ -51,7 +48,10 @@
                 current:1,
                 total:120,
                 pageSizes:[8,16,32],
-                searchVlaue:null,
+                title:{
+                   nameLeft:'制度',
+                   nameRight:'文档'
+                },
                 documentList:[
                         {
                                 title:'如何高效的学习.doc',

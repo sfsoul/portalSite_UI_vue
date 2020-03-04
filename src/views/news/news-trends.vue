@@ -6,7 +6,7 @@
             </el-carousel-item>
         </el-carousel>
         <div style="margin: 18px 18%;background-color: #fff;padding: 20px;" >
-            <news-title titlea="新闻" titleb="动态" english="New Information" :ismany="false" ></news-title>
+            <news-title :title="title" english="New Information" :ismany="false" :callback="handleSearch" ></news-title>
             <div v-if="isloading">
                 <item v-for="(news,index) in newsData" :row="news" :index="index" :key="index"   ></item>
                 <el-pagination
@@ -31,7 +31,7 @@
 </template>
 <script>
 import Item from './Item'
-import NewsTitle from './news-title'
+import NewsTitle from '@/components/title'
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewList } from '@/api/news'
 import Loading from '@/components/loading'
@@ -42,8 +42,12 @@ import Loading from '@/components/loading'
                 current:1,
                 total:0,
                 pageSizes:[10,20,30,40],
-                newsData:[],
-                isloading:true
+                newsData:[],//新闻列表数据
+                isloading:false,//是否加载成功
+                title:{
+                    nameLeft:'新闻',
+                    nameRight:'动态'
+                }
             }
         },
         mounted(){
@@ -75,14 +79,17 @@ import Loading from '@/components/loading'
             handleGetNewList({current=this.current,pageSize=this.pageSize}={}){
                 getNewList(current,pageSize).then(response=>{
                     let page = response.page
-                    this.pageSize = page.pageSize
-                    this.current = page.current
+                    console.log(response)
+                    this.isloading = true
                     this.total = page.total
                     this.newsData = response.value
                     this.newsData.map(item=>{
                             item.id = BigInt(item.id)
                         })
                 })
+            },
+            handleSearch(name){
+                console.log(`这是名称`,name)
             }
         }
     }
