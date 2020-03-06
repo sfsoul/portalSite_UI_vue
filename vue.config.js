@@ -13,7 +13,6 @@ const name =defaultSettings.documentTitle || "中亚通茂门户网站" // page 
 const port = process.env.port || process.env.npm_config_port || 9527 // dev port
 
 module.exports = {
-
   publicPath: '/',
   outputDir: 'dist',
   assetsDir: 'static',
@@ -30,7 +29,7 @@ module.exports = {
     proxy: {
       '/api': {
         target: process.env.VUE_APP_BASE_API,
-        changeOrigin: true, // 跨越
+        changeOrigin: true, // 跨域
         pathRewrite: {
           '^/api': ''
         }

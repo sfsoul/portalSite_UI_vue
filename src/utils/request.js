@@ -2,7 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import config from '@/config'
 import { Message,MessageBox } from 'element-ui'
-import { getToken } from '@/utils/auth'
+import { getToken,removeToken } from '@/utils/auth'
 import router,{resetRouter} from  'vue-router'
 import docSetting from '@/setting'
 
@@ -12,7 +12,6 @@ const server = axios.create({
 })
 
 // 添加请求拦截
-
 server.interceptors.request.use(
   config => {
    
@@ -59,7 +58,7 @@ server.interceptors.response.use(
     }
     if(code){
       switch(code){
-        case '401':{
+        case '601':{
           MessageBox.confirm(
             '登录状态已过期，您可以继续留在该页面，或者重新登录',
             '系统提示',

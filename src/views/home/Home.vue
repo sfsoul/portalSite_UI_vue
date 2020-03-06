@@ -6,6 +6,7 @@
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\home\Home.vue
  -->
+
 <template>
     <div>
         <carousel></carousel>
@@ -62,15 +63,15 @@ export default {
             this.$store.dispatch('animated/getScrollTop',scrollTop)
             this.handleShow(scrollTop,200,300)
             this.handleEntrance(scrollTop,500,700)
-            this.handleHonor(scrollTop,1000,1400)
+            this.handleHonor(scrollTop,800,1100)
         },
         handleShow(scrollTop,minTop,maxTop){
             if(scrollTop >= maxTop){
-                this.noticeClass=["animated","bounceInLeft"]
-                this.qualityClass=["animated","bounceInRight"]
+                this.noticeClass=["animated","fadeInUp"]
+                this.qualityClass=["animated","fadeInUp"]
             }else if(scrollTop <= minTop){
-                this.noticeClass=["animated","bounceOutLeft"]
-                this.qualityClass=["animated","bounceOutRight"]
+                this.noticeClass=["animated","fadeOutDown"]
+                this.qualityClass=["animated","fadeOutDown"]
             }
         },
         handleEntrance(scrollTop,minTop,maxTop){
@@ -86,7 +87,7 @@ export default {
         handleHonor(scrollTop,minTop,maxTop){
             if(scrollTop >= maxTop){
 
-                this.honorClass=["animated","fadeInLeftBig"]
+                this.honorClass=["animated","fadeInUp"]
 
             }else if(scrollTop <= minTop){
 

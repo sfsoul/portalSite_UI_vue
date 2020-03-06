@@ -29,6 +29,7 @@
 /*     import Item from './Item' */
     import Items from './Items'
     import KnowledagTitle from '@/components/title'
+    import { mapGetters } from 'vuex'
     export default {
         components:{
         /*     Item, */
@@ -73,6 +74,11 @@
                     ]
             }
         },
+        computed: {
+                ...mapGetters([
+                        "token"
+                ])
+        },
         methods:{
             // pagesize 变化回调
             handleSizeChange(val){
@@ -84,7 +90,16 @@
             },
             //去发布界面 
             goRelease(){
-                    this.$router.push({name:'release'})
+                    console.log("qweqweqwe",this.token)
+                    if(this.token && this.token!==undefined){
+                        this.$router.push({name:'release'})
+                    }else{
+                            this.$message({
+                                    message:"请先登录后操作",
+                                    type:'warning'
+                            })
+                    }
+                   
             }
         }
     }
@@ -112,7 +127,7 @@
     }
     .gorelease-button {
                 position: absolute;
-                top: 1%;
-                right: 30%;
+                top: 0%;
+                right: 25%;
     }
     </style>

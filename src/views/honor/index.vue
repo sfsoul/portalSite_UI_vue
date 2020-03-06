@@ -8,7 +8,7 @@
  -->
 <template>
     <div>
-        <honor-title :title="title" english="Company Honors" :isSearch="true" routeSkip="honor-list"  ></honor-title>
+        <honor-title :title="title" english="Company Honors" :isSearch="false" routeSkip="honor-list"  ></honor-title>
         <honor-item></honor-item>
     </div>
 </template>

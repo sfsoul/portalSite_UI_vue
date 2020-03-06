@@ -163,7 +163,7 @@ export const constantRouter = [
             }
         ]
     },
-    {
+    /* {
         path:'/project',
         component:Layout,
         redirect:'/project/index',
@@ -176,7 +176,7 @@ export const constantRouter = [
             meta:{title:'项目进度'}
             }
         ]
-    },
+    }, */
     {
         path:'/knowledge-sharing',
         component:Layout,
