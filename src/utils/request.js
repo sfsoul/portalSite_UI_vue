@@ -45,7 +45,8 @@ server.interceptors.response.use(
     //错误处理
     let code = null
     try {
-      code = error.response.states
+      code = error.response.status
+     
     }catch(e){
       if (e.toString().indexOf('Error: timeout') !== -1) {
       Message({
@@ -57,8 +58,10 @@ server.interceptors.response.use(
       }
     }
     if(code){
+     
       switch(code){
         case '601':{
+          console.log(code)
           MessageBox.confirm(
             '登录状态已过期，您可以继续留在该页面，或者重新登录',
             '系统提示',
@@ -70,8 +73,6 @@ server.interceptors.response.use(
           ).then(() => {
             store.dispatch('user/logout').then(() => {
               resetRouter()
-             /*  location.reload() // 为了重新实例化vue-router对象 避免bug */
-
             })
             Message.info("重新登录")
           })

@@ -39,7 +39,7 @@
            </div>
      </div>
      <!--登录下拉菜单-->
-     <div v-show="loginStatue">
+     <div v-show="loginStatue" style="margin-left: 10px;">
       <el-dropdown @command="handleCommand" trigger="click">
         <span class="el-dropdown-link">
              {{user_name}}<i class="el-icon-arrow-down el-icon--right"></i>
