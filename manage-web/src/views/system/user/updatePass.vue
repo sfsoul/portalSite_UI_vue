@@ -80,8 +80,8 @@ export default {
             } else {
               updatePass(this.form).then(res => {
                 this.resetForm()
-                this.$notify({
-                  title: '密码修改成功，请重新登录',
+                this.$message({
+                  message: '密码修改成功，请重新登录',
                   type: 'success',
                   duration: 1500
                 })

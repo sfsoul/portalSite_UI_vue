@@ -8,7 +8,12 @@
       </app-link>
     </template>
 
-    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+    <el-submenu
+      v-else
+      ref="subMenu"
+      :index="resolvePath(item.path)"
+      popper-append-to-body
+    >
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
@@ -30,6 +35,7 @@ import { isExternal } from '@/utils/validate'
 import Item from './Item'
 import AppLink from './Link'
 import FixiOSBug from './FixiOSBug'
+import { getUserEnableChildrenMenuByPid } from '@/api/sidebar/sidebar'
 
 export default {
   name: 'SidebarItem',
@@ -54,9 +60,30 @@ export default {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
     this.onlyOneChild = null
-    return {}
+    return {
+      // childRoutes: []
+    }
   },
   methods: {
+    getChildModule(id) {
+      this.childRoutes = []
+      getUserEnableChildrenMenuByPid(id).then(res => {
+        console.log(res)
+        res.forEach(item => {
+          this.childRoutes.push({
+            modulename: item.modulename
+          })
+        })
+      })
+    },
+    matchSecondModule(childTitle) {
+      for (let j = 0; j < this.childRoutes.length; j++) {
+        if (this.childRoutes[j].modulename === childTitle) {
+          return true
+        }
+      }
+      return false
+    },
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
         if (item.hidden) {

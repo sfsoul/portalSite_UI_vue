@@ -39,4 +39,26 @@ export function isExistTitle(title) {
   })
 }
 
+export function getNoticeDetail(id) {
+  const params = {
+    noticeid: id
+  }
+  return request({
+    url: 'notice/getReviewInfo',
+    method: 'get',
+    params
+  })
+}
+
+export function getNoticesContent(id) {
+  const params = {
+    noticeid: id
+  }
+  return request({
+    url: 'notice/getNoticeDetail',
+    method: 'get',
+    params
+  })
+}
+
 export default { add, edit, del }

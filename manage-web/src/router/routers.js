@@ -81,12 +81,6 @@ export const constantRouterMap = [
         meta: { title: '质量建设', icon: 'quality', noCache: true }
       },
       {
-        path: 'project',
-        name: '项目管理',
-        component: () => import('@/views/publish/project/index'),
-        meta: { title: '项目管理', icon: 'project', noCache: true }
-      },
-      {
         path: 'honor',
         name: '荣誉管理',
         component: () => import('@/views/publish/honor/index'),
@@ -118,6 +112,12 @@ export const constantRouterMap = [
         name: '分享审核',
         component: () => import('@/views/verify/share/index'),
         meta: { title: '分享审核', icon: 'shareverify', noCache: true }
+      },
+      {
+        path: 'comment',
+        name: '评论审核',
+        component: () => import('@/views/verify/comment/index'),
+        meta: { title: '评论审核', icon: 'comment', noCache: true }
       }
     ]
   },

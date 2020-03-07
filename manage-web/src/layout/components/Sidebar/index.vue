@@ -20,6 +20,7 @@
 
 <script>
 import { getUserEnableRootMenu, getUserEnableChildrenMenuByPid } from '@/api/sidebar/sidebar'
+// import { getUserEnableRootMenu } from '@/api/sidebar/sidebar'
 import { mapGetters } from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
@@ -29,7 +30,8 @@ export default {
   components: { SidebarItem, Logo },
   data() {
     return {
-      permission_routes: []
+      permission_routes: [],
+      rootMenu: []
     }
   },
   computed: {
@@ -37,6 +39,23 @@ export default {
       'permission_routers',
       'sidebar'
     ]),
+    routes() {
+      const permissionRoute = []
+      this.$router.options.routes.filter(route => {
+        if (!route.hidden && route.path !== '/') {
+          for (let j = 0; j < this.rootMenu.length; j++) {
+            if (this.rootMenu[j].modulename === route.name) {
+              permissionRoute.push(route)
+            }
+          }
+        }
+        if (route.path === '/') {
+          permissionRoute.unshift(route)
+        }
+      })
+      return permissionRoute
+      // return this.$router.options.routes
+    },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -106,6 +125,20 @@ export default {
         }
       })
     }
+    /* getUserEnableRootMenu() {
+      getUserEnableRootMenu().then(res => {
+        res.forEach(item => {
+          this.rootMenu.push({
+            modulename: item.modulename
+          })
+          this.$router.options.routes.filter(route => {
+            if (route.name === item.modulename) {
+              route['moduleid'] = item.id
+            }
+          })
+        })
+      })
+    }*/
   }
 }
 </script>

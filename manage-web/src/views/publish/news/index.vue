@@ -51,13 +51,14 @@
             </el-select>
           </el-form-item>
           <el-form-item label="新闻内容" prop="contentStr">
-            <Editor v-model="form.contentStr" @editorContent="getEditorContent" />
+            <Editor v-model="form.contentStr" :is-clear="isClear" @change="getEditorContent" />
           </el-form-item>
           <el-form-item label="新闻图片" prop="imageid">
             <el-upload
               id="pictureUpload"
               v-model="form.imageid"
               :limit="1"
+              :file-list="pictureList"
               :on-preview="handlePictureCardPreview"
               :http-request="httpRequest"
               :before-remove="handleBeforeRemove"
@@ -133,7 +134,8 @@
       :title="detail.title"
       :visible.sync="showdetail"
       direction="rtl"
-      size="30%">
+      size="30%"
+    >
       <div>
         <div class="drawer-item" style="margin-top: -30px;">
           <span style="margin-left: 22px;">审核状态:</span>
@@ -163,7 +165,7 @@ import Long from 'long'
 import { fileUpload, fileDelete } from '@/api/file'
 import { getNewsType } from '@/api/system/newsType'
 import crudNewsPublish from '@/api/publish/newsPublish'
-import { isExistTitle, getNewsDetail } from '@/api/publish/newsPublish'
+import { isExistTitle, getNewsDetail, getNewsContent } from '@/api/publish/newsPublish'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import CRUD, { presenter, header, crud } from '@crud/crud'
@@ -186,6 +188,7 @@ export default {
         create: '发布新闻'
       },
       form: {
+        id: null,
         title: null,
         ntid: null,
         contentStr: null,
@@ -215,9 +218,11 @@ export default {
       imageUrl: '',
       pictureResult: {},
       fileList: [],
+      pictureList: [],
       showdetail: false,
       detail: {},
-      detailsList: {}
+      detailsList: {},
+      isClear: false
     }
   },
   computed: {
@@ -237,15 +242,26 @@ export default {
       this.showdetail = true
       this.detailsList = {}
       getNewsDetail((Long.fromValue(row.id)).toString()).then(res => {
-        console.log(res)
         this.detailsList = res
       })
     },
+    getNewsContent(row) {
+      getNewsContent((Long.fromValue(row.id)).toString()).then(res => {
+        this.form.contentStr = res.contentStr
+      })
+    },
+    getEditorContent(data) {
+      this.form.contentStr = data
+    },
     cancelCU() {
       this.dialogFormVisible = false
+      this.isClear = true
+      this.form.contentStr = ''
+      this.pictureList = []
     },
     resetForm() {
       this.form = {
+        id: null,
         title: null,
         ntid: null,
         contentStr: null,
@@ -255,6 +271,7 @@ export default {
     },
     handleCreate() {
       this.resetForm()
+      this.isClear = true
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -262,7 +279,16 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.form = Object.assign({}, row)
+      this.getNewsContent(row)
+      this.form.id = (Long.fromValue(row.id)).toString()
+      this.form.title = row.title
+      this.form.ntid = row.ntid
+      this.form.imageid = (Long.fromValue(row.imageid)).toString()
+      this.form.annexes = row.annexes
+      // const imageUrl = this.baseApi + row.imageUrl
+      /* this.pictureList.push({
+        'url': imageUrl
+      })*/
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -294,8 +320,14 @@ export default {
                 this.submitLoading = false
                 this.dialogFormVisible = false
                 this.crud.refresh()
+              }).catch(() => {
+                this.submitLoading = false
+                this.dialogFormVisible = false
               })
             }
+          }).catch(() => {
+            this.submitLoading = false
+            this.dialogFormVisible = false
           })
         }
       })
@@ -303,17 +335,45 @@ export default {
     updateData() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          this.crudMethod.edit(this.form).then(() => {
+          this.submitLoading = true
+          isExistTitle(this.form.title).then(resp => {
+            if (resp === true) {
+              this.$message({
+                type: 'error',
+                message: '新闻标题已经存在,请更换后再试'
+              })
+              this.submitLoading = false
+              return false
+            } else if (!this.form.contentStr) {
+              this.$message({
+                message: '新闻内容不能为空',
+                type: 'warning'
+              })
+              this.submitLoading = false
+              return false
+            } else {
+              this.crud.crudMethod.edit(JSON.stringify(this.form)).then(res => {
+                this.$message({
+                  type: 'success',
+                  message: '修改成功!'
+                })
+                this.submitLoading = false
+                this.dialogFormVisible = false
+                this.crud.refresh()
+              }).catch(() => {
+                this.submitLoading = false
+                this.dialogFormVisible = false
+              })
+            }
+          }).catch(() => {
+            this.submitLoading = false
             this.dialogFormVisible = false
           })
         }
       })
     },
-    getEditorContent(data) {
-      this.form.contentStr = data
-    },
     changeNewsType(val) {
-
+      this.form.ntid = val
     },
     getNewsType() {
       getNewsType(this.listQuery).then(res => {
@@ -343,7 +403,7 @@ export default {
       formdata.append('myfile', options.file)
       fileUpload(formdata).then(res => {
         this.pictureResult = res
-        this.crud.form.imageid = (Long.fromValue(res.fid)).toString()
+        this.form.imageid = (Long.fromValue(res.fid)).toString()
       })
       pictureDom.style.display = 'none'
     },
@@ -354,7 +414,7 @@ export default {
       const pictureDom = document.getElementById('pictureUpload')
         .getElementsByClassName('el-upload--picture-card')[0]
       fileDelete(this.pictureResult).then(res => {
-        this.crud.form.imageid = 0
+        this.form.imageid = 0
       })
       pictureDom.style.display = 'block'
     },
@@ -372,7 +432,7 @@ export default {
           'name': res.name,
           'path': res.path
         })
-        this.crud.form.annexes.push({
+        this.form.annexes.push({
           'fid': (Long.fromValue(res.fid)).toString()
         })
       })
@@ -381,9 +441,9 @@ export default {
       for (let i = 0; i < this.fileList.length; i++) {
         if (this.fileList[i].name === file.name) {
           fileDelete(this.fileList[i]).then(res => {
-            this.crud.form.annexes.some((item, index) => {
+            this.form.annexes.some((item, index) => {
               if (item.fid === this.fileList[i].fid) {
-                this.crud.form.annexes.splice(index, 1)
+                this.form.annexes.splice(index, 1)
                 return true
               }
             })

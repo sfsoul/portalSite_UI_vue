@@ -17,7 +17,7 @@
         label="操作"
       >
         <template slot-scope="scope">
-          <el-button slot="reference" type="text" size="mini" @click="handleClick(scope.row)">审核</el-button>
+          <el-button slot="reference" type="primary" size="mini" @click="handleClick(scope.row)">审核</el-button>
         </template>
       </el-table-column>
     </el-table>
