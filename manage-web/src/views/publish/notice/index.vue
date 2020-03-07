@@ -8,22 +8,30 @@
         type="primary"
         icon="el-icon-upload"
         style="float:left;margin: -8px 10px 0 0;"
-        @click="crud.toAdd"
+        @click="handleCreate"
       >发布
+      </el-button>
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="success"
+        icon="el-icon-edit"
+        style="float:left;margin: -8px 10px 0 0;"
+        :disabled="crud.selections.length !== 1"
+        @click="handleUpdate(crud.selections[0])"
+      >修改
       </el-button>
       <crudOperation style="float:left" />
     </div>
     <!--表单组件-->
     <el-dialog
       append-to-body
-      :close-on-click-modal="false"
-      :before-close="crud.cancelCU"
-      :visible.sync="crud.status.cu > 0"
-      :title="crud.status.title"
+      :visible.sync="dialogFormVisible"
+      :title="textMap[dialogStatus]"
       width="70%"
     >
       <div class="el-dialog-div">
-        <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="100px">
+        <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="100px" @close="cancelCU">
           <el-form-item label="通告标题" prop="title">
             <el-input v-model="form.title" />
           </el-form-item>
@@ -35,19 +43,20 @@
               @change="changeNewsType"
             >
               <el-option
-                v-for="item in newsTypeOptions"
+                v-for="item in noticesTypeOptions"
                 :key="item.ntid"
-                :label="item.newsTName"
+                :label="item.noticeTName"
                 :value="item.ntid"
               />
             </el-select>
           </el-form-item>
           <el-form-item label="通告内容" prop="contentStr">
-            <Editor @editorContent="getEditorContent" />
+            <Editor v-model="form.contentStr" :is-clear="isClear" @change="getEditorContent" />
           </el-form-item>
           <el-form-item label="上传附件" prop="annexes">
             <el-upload
               ref="upload"
+              v-model="form.annexes"
               multiple
               :headers="headers"
               :http-request="httpRequestFile"
@@ -62,8 +71,8 @@
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer" style="float: right;">
-          <el-button type="text" @click="crud.cancelCU">取消</el-button>
-          <el-button :loading="crud.status.cu === 2" type="primary" @click="crud.submitCU">确认</el-button>
+          <el-button type="text" @click="cancelCU">取消</el-button>
+          <el-button :loading="submitLoading" type="primary" @click="dialogStatus==='create'?createData():updateData()">确认</el-button>
         </div>
       </div>
     </el-dialog>
@@ -80,7 +89,39 @@
       <el-table-column prop="author" label="作者" align="center" />
       <el-table-column width="135" prop="publishdate" align="center" label="发布日期" />
       <el-table-column prop="reviewstatusStr" align="center" label="审核状态" />
+      <el-table-column
+        label="审核详情"
+      >
+        <template slot-scope="scope">
+          <el-button slot="reference" type="primary" size="mini" @click="handleClick(scope.row)">详情</el-button>
+        </template>
+      </el-table-column>
     </el-table>
+    <el-drawer
+      :title="detail.title"
+      :visible.sync="showdetail"
+      direction="rtl"
+      size="30%"
+    >
+      <div>
+        <div class="drawer-item" style="margin-top: -30px;">
+          <span style="margin-left: 22px;">审核状态:</span>
+          <span>{{ detailsList.reviewstatusStr }}</span>
+        </div>
+        <div class="drawer-item" style="margin-top: -10px;">
+          <span style="margin-left: 22px;">审核意见:</span>
+          <span>{{ detailsList.reviewComment }}</span>
+        </div>
+        <div class="drawer-item" style="margin-top: -10px;">
+          <span style="margin-left: 22px;">审核人:</span>
+          <span>{{ detailsList.reviewer }}</span>
+        </div>
+        <div class="drawer-item" style="margin-top: -10px;">
+          <span style="margin-left: 22px;">审核日期:</span>
+          <span>{{ detailsList.reviewdate }}</span>
+        </div>
+      </div>
+    </el-drawer>
     <!--分页组件-->
     <pagination />
   </div>
@@ -89,25 +130,39 @@
 <script>
 import Long from 'long'
 import { fileUpload, fileDelete } from '@/api/file'
-import { getNewsType } from '@/api/system/newsType'
-import crudNoticePublish from '@/api/publish/noticesPublish'
+import { getNoticesType } from '@/api/system/noticeType'
+import crudNoticesPublish from '@/api/publish/noticesPublish'
+import { isExistTitle, getNoticeDetail, getNoticesContent } from '@/api/publish/noticesPublish'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
-import CRUD, { presenter, header, form, crud } from '@crud/crud'
+import CRUD, { presenter, header, crud } from '@crud/crud'
 import crudOperation from '@crud/CRUD.operation'
 import pagination from '@crud/Pagination'
 import Editor from '@/views/components/Editor'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ title: '通告', requestType: 'post', url: 'notice/getPublishNotices', crudMethod: { ...crudNoticePublish }})
-const defaultForm = { title: null, ntid: null, contentStr: null, imageid: 0, annexes: [] }
+const defaultCrud = CRUD({ requestType: 'post', url: 'notice/getPublishNotices', crudMethod: { ...crudNoticesPublish }})
 export default {
   name: 'Pictures',
   components: { crudOperation, pagination, Editor },
-  mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
+  mixins: [presenter(defaultCrud), header(), crud()],
   data() {
     return {
-      newsTypeOptions: [],
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: '修改通告',
+        create: '发布通告'
+      },
+      form: {
+        id: null,
+        title: null,
+        ntid: null,
+        contentStr: null,
+        annexes: []
+      },
+      submitLoading: false,
+      noticesTypeOptions: [],
       listQuery: {
         current: 1,
         pageSize: 10
@@ -121,14 +176,18 @@ export default {
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
         ntid: [
-          { required: true, message: '请选择新闻类型', trigger: 'change' }
+          { required: true, message: '请选择通告类型', trigger: 'change' }
         ]
       },
       dialogImageUrl: '',
       dialogVisible: false,
       imageUrl: '',
       pictureResult: {},
-      fileList: []
+      fileList: [],
+      showdetail: false,
+      detail: {},
+      detailsList: {},
+      isClear: false
     }
   },
   computed: {
@@ -138,41 +197,189 @@ export default {
     ])
   },
   created() {
+    this.getNoticesType()
     this.crud.optShow.add = false
+    this.crud.optShow.edit = false
   },
   methods: {
-    // 新增与编辑前做的操作
-    [CRUD.HOOK.afterToCU](crud, form) {
-      this.getNewsType()
+    handleClick(row) {
+      this.detail = row
+      this.showdetail = true
+      this.detailsList = {}
+      getNoticeDetail((Long.fromValue(row.id)).toString()).then(res => {
+        console.log(res)
+        this.detailsList = res
+      })
     },
-    // 打开编辑弹窗前做的操作
-    [CRUD.HOOK.beforeToEdit](crud, form) {
-
+    getNoticesContent(row) {
+      getNoticesContent((Long.fromValue(row.id)).toString()).then(res => {
+        this.form.contentStr = res.contentStr
+      })
     },
-    // 提交前做的操作
-    [CRUD.HOOK.afterValidateCU](crud) {
-      if (!crud.form.contentStr) {
-        this.$message({
-          message: '新闻内容不能为空',
-          type: 'warning'
-        })
-        return false
+    cancelCU() {
+      this.dialogFormVisible = false
+      this.isClear = true
+      this.form.contentStr = ''
+    },
+    resetForm() {
+      this.form = {
+        id: null,
+        title: null,
+        ntid: null,
+        contentStr: null,
+        annexes: []
       }
-      return true
+    },
+    handleCreate() {
+      this.resetForm()
+      this.isClear = true
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['form'].clearValidate()
+      })
+    },
+    handleUpdate(row) {
+      this.getNoticesContent(row)
+      this.form.id = (Long.fromValue(row.id)).toString()
+      this.form.title = row.title
+      this.form.ntid = row.ntid
+      this.form.annexes = row.annexes
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['form'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.submitLoading = true
+          isExistTitle(this.form.title).then(resp => {
+            if (resp === true) {
+              this.$message({
+                type: 'error',
+                message: '通告标题已经存在,请更换后再试'
+              })
+              this.submitLoading = false
+              return false
+            } else if (!this.form.contentStr) {
+              this.$message({
+                message: '新闻内容不能为空',
+                type: 'warning'
+              })
+              this.submitLoading = false
+              return false
+            } else {
+              this.crud.crudMethod.add(JSON.stringify(this.form)).then(res => {
+                console.log(res)
+                this.submitLoading = false
+                this.dialogFormVisible = false
+                this.crud.refresh()
+              }).catch(() => {
+                this.submitLoading = false
+                this.dialogFormVisible = false
+              })
+            }
+          }).catch(() => {
+            this.submitLoading = false
+            this.dialogFormVisible = false
+          })
+        }
+      })
+    },
+    updateData() {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          this.submitLoading = true
+          isExistTitle(this.form.title).then(resp => {
+            if (resp === true) {
+              this.$message({
+                type: 'error',
+                message: '通告标题已经存在,请更换后再试'
+              })
+              this.submitLoading = false
+              return false
+            } else if (!this.form.contentStr) {
+              this.$message({
+                message: '通告内容不能为空',
+                type: 'warning'
+              })
+              this.submitLoading = false
+              return false
+            } else {
+              this.crud.crudMethod.edit(JSON.stringify(this.form)).then(res => {
+                this.$message({
+                  type: 'success',
+                  message: '修改成功!'
+                })
+                this.submitLoading = false
+                this.dialogFormVisible = false
+                this.crud.refresh()
+              }).catch(() => {
+                this.submitLoading = false
+                this.dialogFormVisible = false
+              })
+            }
+          }).catch(() => {
+            this.submitLoading = false
+            this.dialogFormVisible = false
+          })
+        }
+      })
     },
     getEditorContent(data) {
-      this.crud.form.contentStr = data
+      this.form.contentStr = data
     },
     changeNewsType(val) {
-
+      this.form.ntid = val
     },
-    getNewsType() {
-      getNewsType(this.listQuery).then(res => {
-        this.newsTypeOptions = res.value
+    getNoticesType() {
+      getNoticesType(this.listQuery).then(res => {
+        this.noticesTypeOptions = res.value
       })
+    },
+    parseUrl(imgUrl) {
+      return this.baseApi + imgUrl
     },
     checkboxT(row, rowIndex) {
       return row
+    },
+    // 监听上传失败
+    handleError(e, file, fileList) {
+      const msg = JSON.parse(e.message)
+      this.message({
+        type: 'error',
+        message: msg.message,
+        duration: 2500
+      })
+    },
+    // 图片上传
+    httpRequest(options) {
+      const pictureDom = document.getElementById('pictureUpload')
+        .getElementsByClassName('el-upload--picture-card')[0]
+      const formdata = new FormData()
+      formdata.append('myfile', options.file)
+      fileUpload(formdata).then(res => {
+        this.pictureResult = res
+        this.crud.form.imageid = (Long.fromValue(res.fid)).toString()
+      })
+      pictureDom.style.display = 'none'
+    },
+    handleSuccess(response, file, fileList) {
+
+    },
+    handleBeforeRemove() {
+      const pictureDom = document.getElementById('pictureUpload')
+        .getElementsByClassName('el-upload--picture-card')[0]
+      fileDelete(this.pictureResult).then(res => {
+        this.crud.form.imageid = 0
+      })
+      pictureDom.style.display = 'block'
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     },
     // 文件上传
     httpRequestFile(options) {
@@ -229,6 +436,11 @@ export default {
   .el-dialog-div {
     height: 60vh;
     overflow: auto;
+  }
+
+  .drawer-item {
+    font-size: 14px;
+    padding: 12px 0;
   }
 
 </style>

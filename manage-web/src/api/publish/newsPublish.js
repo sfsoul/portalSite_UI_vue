@@ -50,4 +50,15 @@ export function getNewsDetail(id) {
   })
 }
 
+export function getNewsContent(id) {
+  const params = {
+    newsid: id
+  }
+  return request({
+    url: 'news/getNewsDetail',
+    method: 'get',
+    params
+  })
+}
+
 export default { add, edit, del }
