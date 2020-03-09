@@ -31,6 +31,7 @@
     import Items from './Items'
     import KnowledagTitle from '@/components/title'
     import { mapGetters } from 'vuex'
+    import {getCurrentUserShares,getKnlgeShares } from "@/api/knowledge-sharing"
     export default {
         components:{
         /*     Item, */
@@ -91,7 +92,6 @@
             },
             //去发布界面 
             goRelease(){
-                    console.log("qweqweqwe",this.token)
                     if(this.token && this.token!==undefined){
                         this.$router.push({name:'release'})
                     }else{
@@ -104,7 +104,7 @@
             },
             //我的文章
             handleMyKnowledge(){
-                    
+
             }
         }
     }

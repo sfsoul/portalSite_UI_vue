@@ -45,7 +45,7 @@ export default {
       text-align: left;
       margin-left: 160px;
     }
-    /deep/ .w-e-text-container {
+   .w-e-text-container {
       height: 200px !important;
     }
 </style>
