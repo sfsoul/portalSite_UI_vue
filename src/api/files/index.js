@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-// import Long from 'long'
 
 export function fileUpload(data) {
   return request({
@@ -15,7 +14,7 @@ export function fileDelete(picture) {
     method: 'post',
     data: {
         path: picture.path,
-       name: picture.name
+        name: picture.name
     }
   })
 }

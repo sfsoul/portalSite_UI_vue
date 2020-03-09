@@ -33,6 +33,7 @@
                       :http-request="httpRequestFiles"
                       :before-remove="beforeRemoveFiles"
                       :action="actionApi"
+                      :on-error="handleUploadFileError"
                     >
                       <div class="eladmin-upload"><i class="el-icon-upload" /> 添加文件</div>
                       <div slot="tip" class="el-upload__tip">可上传任意格式文件，且不超过100M</div>
@@ -53,7 +54,7 @@ import Breadcrumd from '@/components/breadcrumd.vue'
 import Editor from "@/components/editor"
 import { getToken } from '@/utils/auth'
 import { fileUpload, fileDelete } from '@/api/files'
-import { addKnlgeShare } from '@/api/knowledge-sharing'
+import { addKnlgeShare,isExistTitle } from '@/api/knowledge-sharing'
 import Long from 'long'
     export default {
         data(){
@@ -71,7 +72,7 @@ import Long from 'long'
                 headers: {
                    'Authorization': getToken()
                  },
-                actionApi:`${process.env.VUE_APP_BASE_API}/api/files/upload`,
+                actionApi:`${process.env.VUE_APP_BASE_API}/api/files/upload`,//文件上传地址
                 fileList:[],//已上传文件列表
                 submitLoading:false,
 
@@ -94,6 +95,12 @@ import Long from 'long'
             //新闻内容
           handleEditorContent(value){
               this.knowledgeObject.contentStr = value
+          },
+          //检验标题是否重复
+          handleRepetitionTitle({title=this.knowledgeObject.title}={}){
+            isExistTitle(title).then(response=>{
+                console.log(response)
+            })
           },
           //自定义上传文件
           httpRequestFiles(value){
@@ -123,6 +130,7 @@ import Long from 'long'
         // 发布
         submitKnowledge(){
             this.$refs.knowledgeForm.validate(valid => {
+                this.handleRepetitionTitle()
                 this.submitLoading = true
                 if(valid){
                     this.knowledgeObject.annexes = this.fileList
@@ -133,6 +141,7 @@ import Long from 'long'
 
                     addKnlgeShare(this.knowledgeObject).then(response => {
                         this.submitLoading = false
+                        this.fileList = []
                         this.$confirm('您发布的文章正在审核中,是否返回知识分享界面', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
@@ -142,7 +151,6 @@ import Long from 'long'
                                this.$router.push({name:"knowledge-sharing"})
                             });
                            })
-                      /*   this.fileList = [] */
 
                      
                 }
@@ -152,6 +160,16 @@ import Long from 'long'
                 }
             })
            
+        },
+        //监听文件上传错误
+        handleUploadFileError(err,file,filelist){
+            const msg = JSON.parse(err.message)
+            this.$notify({
+                title:"文件上传错误",
+                message:msg.message,
+                type:'error',
+                duration:2500
+            })
         }
         },
         components:{
