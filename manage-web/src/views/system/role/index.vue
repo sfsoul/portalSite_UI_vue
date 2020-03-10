@@ -168,23 +168,6 @@ export default {
     this.crud.optShow.edit = false
   },
   methods: {
-    [CRUD.HOOK.afterRefresh]() {
-
-    },
-    // 编辑前
-    [CRUD.HOOK.beforeToEdit](crud, form) {
-
-    },
-    // 提交前做的操作
-    [CRUD.HOOK.afterValidateCU](crud) {
-
-    },
-    [CRUD.HOOK.afterAddError](crud) {
-
-    },
-    [CRUD.HOOK.afterEditError](crud) {
-
-    },
     openUnMenu() {
       this.menuDialog = true
       this.showTree = true

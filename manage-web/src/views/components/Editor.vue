@@ -81,11 +81,11 @@ export default {
 
 <style scoped>
   .text {
-    width: 100%;
+    width: 120%;
     text-align: left;
   }
 
   /deep/ .w-e-text-container {
-    height: 200px !important;
+    height: 600px !important;
   }
 </style>
