@@ -52,8 +52,6 @@ export default {
   mixins: [presenter(defaultCrud), header(), form(defaultForm), crud()],
   data() {
     return {
-      accountList: [],
-      accountMap: {},
       loading: false,
       rules: {
         noticeTName: [

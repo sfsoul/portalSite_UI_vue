@@ -57,6 +57,20 @@ export const constantRouterMap = [
         meta: { title: '新闻发布', icon: 'newspublish', noCache: true }
       },
       {
+        path: 'create',
+        component: () => import('@/views/publish/news/create'),
+        name: '创建新闻',
+        meta: { title: '创建新闻', noCache: true, activeMenu: '/publish/news' },
+        hidden: true
+      },
+      {
+        path: 'edit/:id(\\d+)',
+        component: () => import('@/views/publish/news/edit'),
+        name: '编辑文章',
+        meta: { title: '编辑文章', noCache: true, activeMenu: '/publish/news' },
+        hidden: true
+      },
+      {
         path: 'notice',
         name: '通告发布',
         component: () => import('@/views/publish/notice/index'),

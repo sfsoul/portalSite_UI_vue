@@ -2,15 +2,17 @@
   <div class="app-container">
     <!--工具栏-->
     <div>
-      <el-button
-        class="filter-item"
-        size="mini"
-        type="primary"
-        icon="el-icon-upload"
-        style="float:left;margin: -8px 10px 0 0;"
-        @click="handleCreate"
-      >发布
-      </el-button>
+      <router-link :to="'/publish/create/'">
+        <el-button
+          class="filter-item"
+          size="mini"
+          type="primary"
+          icon="el-icon-upload"
+          style="float:left;margin: -8px 10px 0 0;"
+          @click="handleCreate"
+        >发布
+        </el-button>
+      </router-link>
       <el-button
         class="filter-item"
         size="mini"
