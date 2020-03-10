@@ -2,7 +2,7 @@
     <div >
         <notice-title :title="title"  english="Top Notices" :isSearch="false" routeSkip="notice-trends" ></notice-title>
         <notice-item v-if="isNotice" :noticeData="noticeData"></notice-item>
-        <div v-else style="min-height: 400px;position: relative;">
+        <div v-else style="min-height: 250px;position: relative;">
             <loading></loading>
         </div>
     </div>

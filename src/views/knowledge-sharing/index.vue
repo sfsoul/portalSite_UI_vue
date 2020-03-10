@@ -4,6 +4,7 @@
                     <knowledag-title :title="title" english="Training Center" :ismany="false"  ></knowledag-title>   
 
                  <div style="background: #fff;padding: 20px;" >
+                        <el-button class="my-knowledge" type="primary" @click="handleMyKnowledge">我的文章<i class="el-icon-video-play"></i></el-button>
                         <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
                                 <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
                                         <items :row="item" ></items>
@@ -100,6 +101,10 @@
                             })
                     }
                    
+            },
+            //我的文章
+            handleMyKnowledge(){
+                    
             }
         }
     }
@@ -129,5 +134,10 @@
                 position: absolute;
                 top: 0%;
                 right: 25%;
+    }
+    .my-knowledge {
+        position: absolute;
+        top: 0%;
+        right: 35%;
     }
     </style>
