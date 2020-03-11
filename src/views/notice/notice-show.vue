@@ -1,19 +1,22 @@
 <template>
         <div style="margin: 100px 18%" >
             <breadcrumd></breadcrumd>
-            <div v-if="isNotice" style="height: 100px;background: #fff;line-height: 40px;min-width: 1000px;" >
-                <div>
-                    <h2 style="text-align: center" >{{noticeDetail.title}}</h2>
+            <div v-if="isNotice">
+                <div style="background: #fff;line-height: 40px;min-width: 1000px;">
+                    <div>
+                        <h2 style="text-align: center" >{{noticeDetail.title}}</h2>
+                    </div>
+                    <div style="text-align: center;" >
+                        <span>{{noticeDetail.reviewdate}}</span>
+                        <span style="margin-left: 20px" >发布人:{{noticeDetail.author}}</span>
+                    </div>
                 </div>
-                <div style="text-align: center;" >
-                    <span>{{noticeDetail.reviewdate}}</span>
-                    <span style="margin-left: 20px" >发布人:{{noticeDetail.author}}</span>
-                    <span style="margin-left: 20px" >浏览量:1250</span>
-                </div>
-                <div style="width: 100%;background: #fff;border-top: 1px solid #666;" >
+                
+                <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
                     <span v-html="noticeDetail.contentStr" ></span>
                 </div>
             </div>
+           
             <div v-else style="min-height: 400px; position: relative;">
                 <loading></loading>
             </div>

@@ -191,14 +191,14 @@ export const constantRouter = [
             meta:{title:'知识共享'}
             },
             {
-                path:'details',
+                path:'details/:articleid',
                 name:'knowledge-details',
                 component:()=>import('@/views/knowledge-sharing/details'),
                 meta:{title:'知识详情'},
                 hidden:true
             },
             {
-                path:'release',
+                path:'release/:row',
                 name:'release',
                 component:()=>import('@/views/knowledge-sharing/release'),
                 meta:{title:'发布经验'},

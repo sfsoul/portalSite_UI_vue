@@ -21,7 +21,7 @@
                 <div style="width: 160px;text-align: right;height: 40px;position: absolute;box-sizing: border-box;color:#606266;font-size:14px" >
                     <span style="margin-right: 10px;" >文章内容:</span>
                 </div>
-               
+
                 <editor @editorContent="handleEditorContent" ></editor>
             </div>
             <div style="width: 46%;">
@@ -54,14 +54,14 @@ import Breadcrumd from '@/components/breadcrumd.vue'
 import Editor from "@/components/editor"
 import { getToken } from '@/utils/auth'
 import { fileUpload, fileDelete } from '@/api/files'
-import { addKnlgeShare,isExistTitle } from '@/api/knowledge-sharing'
+import { addKnlgeShare,isExistTitle,getKnlgeShareDetail } from '@/api/knowledge-sharing'
 import Long from 'long'
     export default {
         data(){
             return {
                 knowledgeObject:{
                     title:null,
-                    contentStr:null,
+                    contentStr:"",
                     annexes:[]
                 },
                 knowledgeRules:{
@@ -78,7 +78,13 @@ import Long from 'long'
 
             }
         },
+        computed: {
+            updateId(){
+                return this.$route.params.row
+            }
+        },
         mounted () {
+           
             let routes = [
                 {
                   name:"知识共享",
@@ -99,14 +105,22 @@ import Long from 'long'
           //检验标题是否重复
           handleRepetitionTitle({title=this.knowledgeObject.title}={}){
             isExistTitle(title).then(response=>{
-                console.log(response)
+                  return response
             })
+          },
+          //获取分享详情
+          handleGetKnlgeShareDetail(){
+              const data = {
+                   articleid:this.updateId,
+                   type:0
+              }
           },
           //自定义上传文件
           httpRequestFiles(value){
               const formdata = new FormData()
               formdata.append("myfile",value.file)
               fileUpload(formdata).then(response=>{
+                console.log(response)
                   this.fileList.push(
                       {
                           fid:(Long.fromValue(response.fid)).toString(),
@@ -115,9 +129,10 @@ import Long from 'long'
                       }
                   )
               })
+             
           },
           //删除文件之前
-          beforeRemoveFiles(file,filelist){
+        beforeRemoveFiles(file,filelist){
               this.fileList.forEach((item,index) =>{
                   if(item.name === file.name){
                     fileDelete(item).then(response=>{
@@ -130,10 +145,17 @@ import Long from 'long'
         // 发布
         submitKnowledge(){
             this.$refs.knowledgeForm.validate(valid => {
-                this.handleRepetitionTitle()
+               if(this.handleRepetitionTitle()){
+                    this.$notify({
+                        message:"标题重复",
+                        type:"warning"
+                    })
+                    return 
+               } 
                 this.submitLoading = true
                 if(valid){
                     this.knowledgeObject.annexes = this.fileList
+
                     this.knowledgeObject.annexes.forEach(item=>{
                         delete(item.name)
                         delete(item.path)
@@ -150,9 +172,7 @@ import Long from 'long'
                            }).then(() => {
                                this.$router.push({name:"knowledge-sharing"})
                             });
-                           })
-
-                     
+                        })
                 }
                 else{
                     this.$message.error("请按规则填写")

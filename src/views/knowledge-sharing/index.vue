@@ -7,7 +7,7 @@
                         <el-button class="my-knowledge" type="primary" @click="handleMyKnowledge">我的文章<i class="el-icon-video-play"></i></el-button>
                         <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
                                 <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
-                                        <items :row="item" ></items>
+                                        <items :row="item" :isMyKnow="isMyKnow" :getMyKnowledge="handleMyKnowledge" ></items>
                                 </div>
                     <el-pagination
                        background 
@@ -32,6 +32,7 @@
     import KnowledagTitle from '@/components/title'
     import { mapGetters } from 'vuex'
     import {getCurrentUserShares,getKnlgeShares } from "@/api/knowledge-sharing"
+    import { isLogin } from "@/utils/validate"
     export default {
         components:{
         /*     Item, */
@@ -42,44 +43,17 @@
             return {
                 pageSize:10,
                 current:1,
-                total:120,
+                total:0,
                 pageSizes:[8,16,32],
+                isMyKnow:false,
                 title:{
                         nameLeft:"知识",
                         nameRight:'共享'
                 },
-                documentList:[
-                            {
-                                    title:'如何高效的学习.doc',
-                                    date:'2019/12/15',
-                                    description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                            },
-                            {
-                                    title:'如何高效的学习.doc',
-                                    date:'2019/12/15',
-                                    description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                            },
-                            {
-                                    title:'如何高效的学习.doc',
-                                    date:'2019/12/15',
-                                    description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                            },
-                            {
-                                    title:'如何高效的学习.doc',
-                                    date:'2019/12/15',
-                                    description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                            },{
-                                    title:'如何高效的学习.doc',
-                                    date:'2019/12/15',
-                                    description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                            }
-                    ]
+                documentList:[]
             }
         },
         computed: {
-                ...mapGetters([
-                        "token"
-                ])
         },
         methods:{
             // pagesize 变化回调
@@ -92,7 +66,7 @@
             },
             //去发布界面 
             goRelease(){
-                    if(this.token && this.token!==undefined){
+                    if(isLogin()){
                         this.$router.push({name:'release'})
                     }else{
                             this.$message({
@@ -102,10 +76,42 @@
                     }
                    
             },
+            //分页获取所有的文章列表
+            handleGetKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
+                getKnlgeShares({current,pageSize}).then(response=>{
+                        let page = response.page
+                        this.total  = page.total
+                        this.documentList = response.value.map(item => {
+                              item.id = BigInt(item.id)
+                              return item 
+                            })
+                       
+                
+                })
+            },
             //我的文章
-            handleMyKnowledge(){
-
+            handleMyKnowledge({current=this.current,pageSize=this.pageSize}={}){
+                    if(isLogin()){
+                        getCurrentUserShares({current,pageSize}).then(response => {
+                                this.isMyKnow = true
+                                let page = response.page
+                                this.total  = page.total
+                                this.documentList = response.value.map(item => {
+                                    item.id = BigInt(item.id)
+                                    return item
+                                })
+                                console.log(this.documentList) 
+                        })
+                    }else {
+                            this.$message({
+                                    message:"请先登录后操作",
+                                    type:"warning"
+                            })
+                    }
             }
+        },
+        mounted () {
+            this.handleGetKnlgeShares()
         }
     }
     </script>
@@ -133,11 +139,11 @@
     .gorelease-button {
                 position: absolute;
                 top: 0%;
-                right: 25%;
+                right: 24%;
     }
     .my-knowledge {
         position: absolute;
         top: 0%;
-        right: 35%;
+        right: 36%;
     }
     </style>

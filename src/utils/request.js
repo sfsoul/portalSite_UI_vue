@@ -58,9 +58,8 @@ server.interceptors.response.use(
       }
     }
     if(code){
-     
       switch(code){
-        case '601':{
+        case 601:{
           console.log(code)
           MessageBox.confirm(
             '登录状态已过期，您可以继续留在该页面，或者重新登录',
@@ -77,10 +76,10 @@ server.interceptors.response.use(
             Message.info("重新登录")
           })
         };break;
-        case '403':{
+        case 403:{
           router.push('/401')
         };break;
-        case '404':{
+        case 404:{
           Message.error('页面丢失了')
           router.push('/404')
         };break;

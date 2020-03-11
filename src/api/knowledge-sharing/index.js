@@ -21,11 +21,13 @@ export function updateKnlgeShare(data){
     })
 }
 //删除单个
-export function deleteKnlgeShare(){
+export function deleteKnlgeShare(id){
     return request({
         url:"knowledgeShare/deleteKnlgeShare",
         method:"post",
-        data
+        data:{
+            id
+        }
     })
 }
 //标题是否重复
@@ -59,6 +61,17 @@ export function getKnlgeShares({current,pageSize}){
         data:{
             current,
             pageSize
+        }
+    })
+}
+//获取分享详情
+export function getKnlgeShareDetail({articleid,type}){
+    return request({
+        url:"knowledgeShare/getKnlgeShareDetail",
+        method:"get",
+        params:{
+            articleid,
+            type
         }
     })
 }
