@@ -1,29 +1,32 @@
 <template>
   <div class="el-dialog-div">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="90px">
-      <el-form-item label="新闻标题" prop="title">
+      <el-form-item label="荣誉标题" prop="title">
         <el-input v-model="form.title" style="width: 30%;" />
       </el-form-item>
-      <el-form-item label="新闻类型" prop="ntid">
-        <el-select
-          v-model="form.ntid"
+      <el-form-item label="表彰人" prop="pepole">
+        <el-autocomplete
+          v-model="form.pepole"
           style="width: 15%;"
-          filter
-          placeholder="请选择"
-          @change="changeNewsType"
-        >
-          <el-option
-            v-for="item in newsTypeOptions"
-            :key="item.ntid"
-            :label="item.newsTName"
-            :value="item.ntid"
-          />
-        </el-select>
+          :fetch-suggestions="querySearchAsync"
+          placeholder="请输入表彰人名字"
+          @select="handleSelect"
+        />
       </el-form-item>
-      <el-form-item label="新闻内容" prop="contentStr">
+      <el-form-item label="荣誉简介" prop="honortitle">
+        <el-input
+          v-model="form.honortitle"
+          style="width: 60%;"
+          type="textarea"
+          placeholder="请输入荣誉简介"
+          maxlength="200"
+          show-word-limit
+        />
+      </el-form-item>
+      <el-form-item label="表彰内容" prop="contentStr">
         <Editor v-model="form.contentStr" :is-clear="isClear" @change="getEditorContent" />
       </el-form-item>
-      <el-form-item label="新闻图片" prop="imageid">
+      <el-form-item label="表彰图片" prop="imageid">
         <el-upload
           id="pictureUpload"
           v-model="form.imageid"
@@ -61,7 +64,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item size="medium" style="text-align: left;margin-bottom: 45px;">
-        <el-button @click="$router.push('/publish/news')">返回</el-button>
+        <el-button @click="$router.push('/publish/honor')">返回</el-button>
         <el-button :loading="submitLoading" type="primary" @click="isEdit===false?createData():updateData()">发布</el-button>
       </el-form-item>
     </el-form>
@@ -71,16 +74,16 @@
 <script>
 import Long from 'long'
 import { fileUpload, fileDelete } from '@/api/file'
-import { getNewsType } from '@/api/system/newsType'
-import crudNewsPublish from '@/api/publish/newsPublish'
-import { isExistTitle, getNewsContent } from '@/api/publish/newsPublish'
+import crudHonourPublish from '@/api/publish/honourPublish'
+import { isExistTitle, getHonourContent } from '@/api/publish/honourPublish'
+import { getUserList } from '@/api/system/user'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import CRUD, { presenter, header, crud } from '@crud/crud'
 import Editor from '@/views/components/Editor'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ requestType: 'post', url: 'news/getPublishNews', crudMethod: { ...crudNewsPublish }})
+const defaultCrud = CRUD({ requestType: 'post', url: 'honour/getHonours', crudMethod: { ...crudHonourPublish }})
 export default {
   name: 'Pictures',
   components: { Editor },
@@ -95,14 +98,14 @@ export default {
     return {
       form: {
         id: null,
+        pepole: null,
+        honortitle: null,
         title: null,
-        ntid: null,
         contentStr: null,
         imageid: 0,
         annexes: []
       },
       submitLoading: false,
-      newsTypeOptions: [],
       listQuery: {
         current: 1,
         pageSize: 10
@@ -115,8 +118,11 @@ export default {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        ntid: [
-          { required: true, message: '请选择新闻类型', trigger: 'change' }
+        pepole: [
+          { required: true, message: '请输入表彰人名字', trigger: ['blur', 'change'] }
+        ],
+        honortitle: [
+          { required: true, message: '请输入荣誉简介', trigger: 'blur' }
         ]
       },
       dialogImageUrl: '',
@@ -125,7 +131,9 @@ export default {
       pictureResult: {},
       fileList: [],
       pictureList: [],
-      isClear: false
+      isClear: false,
+      userList: [],
+      timeout: null
     }
   },
   computed: {
@@ -135,10 +143,10 @@ export default {
     ])
   },
   created() {
-    this.getNewsType()
+    this.getUserList()
     if (this.isEdit) {
       const row = this.$route.query.row
-      this.getNewsContent(row)
+      this.getHonourContent(row)
       this.handleUpdate(row)
     }
   },
@@ -146,7 +154,8 @@ export default {
     handleUpdate(row) {
       this.form.id = (Long.fromValue(row.id)).toString()
       this.form.title = row.title
-      this.form.ntid = row.ntid
+      this.form.pepole = row.pepole
+      this.form.honortitle = row.honortitle
       this.form.imageid = (Long.fromValue(row.imageid)).toString()
       this.form.annexes = row.annexes
       // const imageUrl = this.baseApi + row.imageUrl
@@ -157,8 +166,8 @@ export default {
         this.$refs['form'].clearValidate()
       })
     },
-    getNewsContent(row) {
-      getNewsContent((Long.fromValue(row.id)).toString()).then(res => {
+    getHonourContent(row) {
+      getHonourContent((Long.fromValue(row.id)).toString()).then(res => {
         this.form.contentStr = res.contentStr
       })
     },
@@ -168,12 +177,39 @@ export default {
     resetForm() {
       this.form = {
         id: null,
+        pepole: null,
+        honortitle: null,
         title: null,
-        ntid: null,
         contentStr: null,
         imageid: 0,
         annexes: []
       }
+    },
+    querySearchAsync(queryString, cb) {
+      const userList = this.userList
+      const results = queryString ? userList.filter(this.createStateFilter(queryString)) : userList
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 600 * Math.random())
+    },
+    createStateFilter(queryString) {
+      return (houseNumber) => {
+        return (houseNumber.value.toLowerCase().indexOf(queryString.toLowerCase()) !== -1)
+      }
+    },
+    handleSelect(val) {
+      this.form.pepole = val.value
+    },
+    getUserList() {
+      const params = { current: 0, pageSize: 10 }
+      getUserList(params).then(res => {
+        this.userList = []
+        for (let i = 0; i < res.value.length; i++) {
+          this.userList.push({ 'value': res.value[i].realname })
+        }
+        return this.userList
+      })
     },
     createData() {
       this.$refs['form'].validate((valid) => {
@@ -183,13 +219,13 @@ export default {
             if (resp === true) {
               this.$message({
                 type: 'error',
-                message: '新闻标题已经存在,请更换后再试'
+                message: '荣誉标题已经存在,请更换后再试'
               })
               this.submitLoading = false
               return false
             } else if (!this.form.contentStr) {
               this.$message({
-                message: '新闻内容不能为空',
+                message: '荣誉内容不能为空',
                 type: 'warning'
               })
               this.submitLoading = false
@@ -201,7 +237,7 @@ export default {
                   message: '添加成功!'
                 })
                 this.submitLoading = false
-                this.$router.push('/publish/news')
+                this.$router.push('/publish/honor')
                 this.crud.refresh()
               }).catch(() => {
                 this.submitLoading = false
@@ -221,13 +257,13 @@ export default {
             if (resp === true) {
               this.$message({
                 type: 'error',
-                message: '新闻标题已经存在,请更换后再试'
+                message: '荣誉标题已经存在,请更换后再试'
               })
               this.submitLoading = false
               return false
             } else if (!this.form.contentStr) {
               this.$message({
-                message: '新闻内容不能为空',
+                message: '荣誉内容不能为空',
                 type: 'warning'
               })
               this.submitLoading = false
@@ -239,7 +275,7 @@ export default {
                   message: '修改成功!'
                 })
                 this.submitLoading = false
-                this.$router.push('/publish/news')
+                this.$router.push('/publish/honor')
                 this.crud.refresh()
               }).catch(() => {
                 this.submitLoading = false
@@ -249,14 +285,6 @@ export default {
             this.submitLoading = false
           })
         }
-      })
-    },
-    changeNewsType(val) {
-      this.form.ntid = val
-    },
-    getNewsType() {
-      getNewsType(this.listQuery).then(res => {
-        this.newsTypeOptions = res.value
       })
     },
     parseUrl(imgUrl) {

@@ -27,6 +27,7 @@
       <el-table-column prop="reviewstatusStr" align="center" label="审核状态" />
       <el-table-column
         label="操作"
+        align="center"
       >
         <template slot-scope="scope">
           <el-button slot="reference" type="warning" size="mini" @click="handleClick(scope.row)">审核</el-button>

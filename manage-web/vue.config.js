@@ -12,7 +12,7 @@ const port = 8888 // 端口配置
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
-  publicPath: '/',
+  publicPath: '/portalSiteManage/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -25,11 +25,11 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {
+      '/portalSite': {
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true,
         pathRewrite: {
-          '^/api': ''
+          '^/portalSite': ''
         }
       }
     }

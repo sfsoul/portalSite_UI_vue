@@ -57,16 +57,16 @@ export const constantRouterMap = [
         meta: { title: '新闻发布', icon: 'newspublish', noCache: true }
       },
       {
-        path: 'create',
+        path: 'news/create',
         component: () => import('@/views/publish/news/create'),
         name: '创建新闻',
         meta: { title: '创建新闻', noCache: true, activeMenu: '/publish/news' },
         hidden: true
       },
       {
-        path: 'edit/:id(\\d+)',
+        path: 'news/edit',
         component: () => import('@/views/publish/news/edit'),
-        name: '编辑文章',
+        name: '编辑新闻',
         meta: { title: '编辑文章', noCache: true, activeMenu: '/publish/news' },
         hidden: true
       },
@@ -77,10 +77,38 @@ export const constantRouterMap = [
         meta: { title: '通告发布', icon: 'noticepublish', noCache: true }
       },
       {
+        path: 'notice/create',
+        component: () => import('@/views/publish/notice/create'),
+        name: '创建通告',
+        meta: { title: '创建通告', noCache: true, activeMenu: '/publish/notice' },
+        hidden: true
+      },
+      {
+        path: 'notice/edit',
+        component: () => import('@/views/publish/notice/edit'),
+        name: '编辑通告',
+        meta: { title: '编辑通告', noCache: true, activeMenu: '/publish/notice' },
+        hidden: true
+      },
+      {
         path: 'train',
         name: '培训发布',
         component: () => import('@/views/publish/train/index'),
         meta: { title: '培训发布', icon: 'trainpublish', noCache: true }
+      },
+      {
+        path: 'train/create',
+        component: () => import('@/views/publish/train/create'),
+        name: '创建培训文档',
+        meta: { title: '创建培训文档', noCache: true, activeMenu: '/publish/train' },
+        hidden: true
+      },
+      {
+        path: 'train/edit',
+        component: () => import('@/views/publish/train/edit'),
+        name: '编辑培训文档',
+        meta: { title: '编辑培训文档', noCache: true, activeMenu: '/publish/train' },
+        hidden: true
       },
       {
         path: 'institution',
@@ -89,16 +117,58 @@ export const constantRouterMap = [
         meta: { title: '制度文档', icon: 'institution', noCache: true }
       },
       {
+        path: 'institution/create',
+        component: () => import('@/views/publish/institution/create'),
+        name: '创建制度文档',
+        meta: { title: '创建制度文档', noCache: true, activeMenu: '/publish/institution' },
+        hidden: true
+      },
+      {
+        path: 'institution/edit',
+        component: () => import('@/views/publish/institution/edit'),
+        name: '编辑制度文档',
+        meta: { title: '编辑制度文档', noCache: true, activeMenu: '/publish/institution' },
+        hidden: true
+      },
+      {
         path: 'quality',
         name: '质量建设',
         component: () => import('@/views/publish/quality/index'),
         meta: { title: '质量建设', icon: 'quality', noCache: true }
       },
       {
+        path: 'quality/create',
+        component: () => import('@/views/publish/quality/create'),
+        name: '创建质量文档',
+        meta: { title: '创建质量文档', noCache: true, activeMenu: '/publish/quality' },
+        hidden: true
+      },
+      {
+        path: 'quality/edit',
+        component: () => import('@/views/publish/quality/edit'),
+        name: '编辑质量文档',
+        meta: { title: '编辑质量文档', noCache: true, activeMenu: '/publish/quality' },
+        hidden: true
+      },
+      {
         path: 'honor',
         name: '荣誉管理',
         component: () => import('@/views/publish/honor/index'),
         meta: { title: '荣誉管理', icon: 'honor', noCache: true }
+      },
+      {
+        path: 'honor/create',
+        component: () => import('@/views/publish/honor/create'),
+        name: '创建荣誉',
+        meta: { title: '创建荣誉', noCache: true, activeMenu: '/publish/honor' },
+        hidden: true
+      },
+      {
+        path: 'honor/edit',
+        component: () => import('@/views/publish/honor/edit'),
+        name: '编辑荣誉',
+        meta: { title: '编辑荣誉', noCache: true, activeMenu: '/publish/honor' },
+        hidden: true
       }
     ]
   },
@@ -173,7 +243,8 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
+  base: '/portalSiteManage/',
   routes: constantRouterMap
 })
