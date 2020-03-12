@@ -3,12 +3,12 @@
                 <div >
                         <breadcrumd  ></breadcrumd>
                 </div>
-                <div style="background: #fff;padding: 20px;margin-top: 40px;" v-if="row" >
+                <div  style="background: #fff;padding: 20px;margin-top: 40px;" = >
                         <div style="text-align: center;" >
-                            <h2>{{row.title}}</h2>
+                            <h2>标题</h2>
                         </div>
                         <div style="line-height: 26px;" >
-                            <span>{{row.description}}</span>
+                            <span>描述</span>
                         </div>
                         <div style="cursor: pointer;" >
                                 <div style="height: 40px;background: #f3f1f1;line-height: 40px;" >
@@ -33,14 +33,31 @@
     </template>
     
     <script>
-import Breadcrumd from '@/components/breadcrumd.vue'      
+import Breadcrumd from '@/components/breadcrumd.vue'
+import { getKnlgeShareDetail } from "@/api/knowledge-sharing"    
     export default {
         computed:{
-            row(){
-                return this.$route.params.row
+            articleId(){
+                return this.$route.params.articleid
             }
         },
+        methods:{
+            //获取分享详情
+            handleGetKnlgeShareDetail(){
+              const data = {
+                   articleid:this.articleId,
+                   type:0
+                 
+              }
+              getKnlgeShareDetail(data).then(response=>{
+                  if(response !== undefined && response){
+                     console.log(response)
+                    }
+              })
+            },
+        },
         mounted(){
+            this.handleGetKnlgeShareDetail()
             let routes = [
                 {
                   name:"知识共享",

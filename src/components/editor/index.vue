@@ -10,14 +10,21 @@ export default {
     data () {
         return {
             editorContent:null,
+            editor:null,
+        }
+    },
+    props:{
+        contentHtml:{
+            type:String,
+            default:null
         }
     },
     mounted () {
-        const editor = new Editor(this.$refs.editor)
-
+        this.editor = new Editor(this.$refs.editor)
+       
          // 自定义菜单配置
-         editor.customConfig.zIndex = 10
-         editor.customConfig.customUploadImg = function(files, insert){
+         this.editor.customConfig.zIndex = 10
+         this.editor.customConfig.customUploadImg = function(files, insert){
              // files 是 input 中选中的文件列表
             // insert 是获取图片 url 后，插入到编辑器的方法
 
@@ -31,11 +38,22 @@ export default {
                 
             })
            }
-           editor.customConfig.onchange = (html) => {
+           this.editor.customConfig.onchange = (html) => {
                 this.editorContent = html
                 this.$emit('editorContent', this.editorContent)
             }
-          editor.create()
+            this.editor.create()
+
+          //修改
+          
+          
+    },
+    watch:{
+        contentHtml(){
+            if(this.contentHtml !== null){
+             this.editor.txt.html(this.contentHtml)
+            }
+        }
     }
 }
 </script>

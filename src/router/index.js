@@ -198,7 +198,7 @@ export const constantRouter = [
                 hidden:true
             },
             {
-                path:'release/:row',
+                path:'release/:id/:isupdate',
                 name:'release',
                 component:()=>import('@/views/knowledge-sharing/release'),
                 meta:{title:'发布经验'},
@@ -226,6 +226,7 @@ export const asyncRoutes = []
 
 const createRouter = () => new Router({
     mode:'history',
+    base:"/portalSiteTourist/",
     scrollBehavior:() =>({y:0}),
     routes:constantRouter
 })

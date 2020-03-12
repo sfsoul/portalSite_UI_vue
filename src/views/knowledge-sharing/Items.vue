@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-23 18:16:10
- * @LastEditTime: 2020-03-11 12:06:38
+ * @LastEditTime: 2020-03-11 17:17:18
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\knowledge-sharing\Items.vue
@@ -77,7 +77,7 @@
                                 this.$message.warning("审核通过,不能修改")
                                 return ;
                         }
-                        this.$router.push({name:"release",params:{row:row.id}})    
+                        this.$router.push({name:"release",params:{id:row.id,isupdate:true}})    
                 },
                 handleDelete(row){
                         if(row.reviewstatus){

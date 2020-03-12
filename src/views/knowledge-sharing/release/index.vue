@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-03-02 17:41:06
- * @LastEditTime: 2020-03-02 17:41:51
+ * @LastEditTime: 2020-03-11 17:14:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\knowledge-sharing\release\index.vue
@@ -22,7 +22,7 @@
                     <span style="margin-right: 10px;" >文章内容:</span>
                 </div>
 
-                <editor @editorContent="handleEditorContent" ></editor>
+                <editor @editorContent="handleEditorContent" :contentHtml="knowledgeObject.contentStr" ></editor>
             </div>
             <div style="width: 46%;">
                 <el-form-item label="上传附件" prop="annexes" >
@@ -41,7 +41,7 @@
                   </el-form-item>
             </div>
             <div style="text-align: center;">
-                <el-button :loading="submitLoading" type="primary" size="medium" @click="submitKnowledge">发布</el-button>
+                <el-button :loading="submitLoading" type="primary" size="medium" @click="isUpdate ? handleUpdateKnlgeShare() : submitKnowledge()">发布</el-button>
             </div>
             
         </el-form>
@@ -54,7 +54,7 @@ import Breadcrumd from '@/components/breadcrumd.vue'
 import Editor from "@/components/editor"
 import { getToken } from '@/utils/auth'
 import { fileUpload, fileDelete } from '@/api/files'
-import { addKnlgeShare,isExistTitle,getKnlgeShareDetail } from '@/api/knowledge-sharing'
+import { addKnlgeShare,isExistTitle,getKnlgeShareDetail,updateKnlgeShare } from '@/api/knowledge-sharing'
 import Long from 'long'
     export default {
         data(){
@@ -62,7 +62,7 @@ import Long from 'long'
                 knowledgeObject:{
                     title:null,
                     contentStr:"",
-                    annexes:[]
+                    annexes:""
                 },
                 knowledgeRules:{
                     title:[
@@ -75,16 +75,23 @@ import Long from 'long'
                 actionApi:`${process.env.VUE_APP_BASE_API}/api/files/upload`,//文件上传地址
                 fileList:[],//已上传文件列表
                 submitLoading:false,
-
+                isExistTitle:null,
+                knowledgeDetail:null,//单个分享详情
+                firstTitle:null,
             }
         },
         computed: {
             updateId(){
-                return this.$route.params.row
+                return this.$route.params.id
+            },
+            isUpdate(){
+                return this.$route.params.isupdate
             }
         },
         mounted () {
-           
+           if(this.isUpdate){
+               this.handleGetKnlgeShareDetail()
+           }
             let routes = [
                 {
                   name:"知识共享",
@@ -103,10 +110,13 @@ import Long from 'long'
               this.knowledgeObject.contentStr = value
           },
           //检验标题是否重复
-          handleRepetitionTitle({title=this.knowledgeObject.title}={}){
-            isExistTitle(title).then(response=>{
-                  return response
-            })
+         async handleRepetitionTitle({title=this.knowledgeObject.title}={}){
+           let isTitle = null
+           await  isExistTitle(title).then(response=>{
+            isTitle  = response
+              })
+
+              return isTitle
           },
           //获取分享详情
           handleGetKnlgeShareDetail(){
@@ -114,9 +124,15 @@ import Long from 'long'
                    articleid:this.updateId,
                    type:0
               }
+              getKnlgeShareDetail(data).then(response=>{
+                  if(response !== undefined && response){
+                      this.knowledgeObject = {title:response.title,contentStr:response.contentStr,annexes:response.annexes}
+                      this.firstTitle = response.title
+                    }
+              })
           },
           //自定义上传文件
-          httpRequestFiles(value){
+        httpRequestFiles(value){
               const formdata = new FormData()
               formdata.append("myfile",value.file)
               fileUpload(formdata).then(response=>{
@@ -143,24 +159,26 @@ import Long from 'long'
               return true;
           },
         // 发布
-        submitKnowledge(){
-            this.$refs.knowledgeForm.validate(valid => {
-               if(this.handleRepetitionTitle()){
-                    this.$notify({
+        async submitKnowledge(){
+         let isExistTitle = await this.handleRepetitionTitle()
+          this.$refs.knowledgeForm.validate(valid => {
+               if(isExistTitle){
+                    this.$message({
                         message:"标题重复",
                         type:"warning"
                     })
-                    return 
+                    return ;
                } 
                 this.submitLoading = true
                 if(valid){
+                
                     this.knowledgeObject.annexes = this.fileList
-
+/* 
                     this.knowledgeObject.annexes.forEach(item=>{
                         delete(item.name)
                         delete(item.path)
                     })
-
+ */
                     addKnlgeShare(this.knowledgeObject).then(response => {
                         this.submitLoading = false
                         this.fileList = []
@@ -180,6 +198,47 @@ import Long from 'long'
                 }
             })
            
+        },
+        //修改文章
+        async handleUpdateKnlgeShare(){
+        let isExistTitle = await this.handleRepetitionTitle()
+          this.$refs.knowledgeForm.validate(valid => {
+               if(isExistTitle && this.knowledgeObject.title!==this.firstTitle){
+                    this.$message({
+                        message:"标题重复",
+                        type:"warning"
+                    })
+                    return ;
+               } 
+                this.submitLoading = true
+                if(valid){
+                
+                    this.knowledgeObject.annexes = this.fileList
+
+                    const data = {
+                         id:this.updateId,
+                         ...this.knowledgeObject
+                   }
+               updateKnlgeShare(data).then(response => {
+
+                this.$confirm('您修改的文章正在审核中,是否返回知识分享界面', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'info',
+                            center: true
+                           }).then(() => {
+                               this.$router.push({name:"knowledge-sharing"})
+                      });
+                  })
+
+                }
+                else{
+                    this.$message.error("请按规则填写")
+                    this.submitLoading = false
+                }
+                
+          })
+            
         },
         //监听文件上传错误
         handleUploadFileError(err,file,filelist){

@@ -75,3 +75,15 @@ export function getKnlgeShareDetail({articleid,type}){
         }
     })
 }
+
+//获取精华帖列表
+export function getGoodKnlgeShares({current,pageSize}){
+    return request({
+        url:"knowledgeShare/getGoodKnlgeShares",
+        method:"post",
+        data:{
+            current,
+            pageSize
+        }
+    })
+}

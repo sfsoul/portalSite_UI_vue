@@ -10,10 +10,10 @@ function resolve(dir) {
 
 const name =defaultSettings.documentTitle || "中亚通茂门户网站" // page title
 
-const port = process.env.port || process.env.npm_config_port || 9527 // dev port
+const port = process.env.port || process.env.npm_config_port || 8888 // dev port
 
 module.exports = {
-  publicPath: '/',
+  publicPath: '/portalSiteTourist/',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -27,11 +27,11 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/api': {
+      '/portalSite/': {
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true, // 跨域
         pathRewrite: {
-          '^/api': ''
+          '^/portalSite/': ''
         }
       }
     },
@@ -44,7 +44,7 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test

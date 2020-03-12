@@ -8,7 +8,7 @@ import docSetting from '@/setting'
 
 const server = axios.create({
   timeout: docSetting.timeout,
-  baseURL: process.env.NODE_ENV === 'production' ? config.baseURL : '/api'
+  baseURL: process.env.NODE_ENV === 'production' ? config.baseURL : '/portalSite/'
 })
 
 // 添加请求拦截

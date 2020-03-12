@@ -4,6 +4,7 @@
                     <knowledag-title :title="title" english="Training Center" :ismany="false"  ></knowledag-title>   
 
                  <div style="background: #fff;padding: 20px;" >
+                    <el-button class="all-knowledge" type="primary" @click="handleGetKnlgeShares">所有文章<i class="el-icon-video-play"></i></el-button>
                         <el-button class="my-knowledge" type="primary" @click="handleMyKnowledge">我的文章<i class="el-icon-video-play"></i></el-button>
                         <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
                                 <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
@@ -31,6 +32,7 @@
     import Items from './Items'
     import KnowledagTitle from '@/components/title'
     import { mapGetters } from 'vuex'
+    import Long from "long"
     import {getCurrentUserShares,getKnlgeShares } from "@/api/knowledge-sharing"
     import { isLogin } from "@/utils/validate"
     export default {
@@ -41,10 +43,10 @@
         },
         data(){
             return {
-                pageSize:10,
+                pageSize:50,
                 current:1,
                 total:0,
-                pageSizes:[8,16,32],
+                pageSizes:[5,10,20,40],
                 isMyKnow:false,
                 title:{
                         nameLeft:"知识",
@@ -79,13 +81,13 @@
             //分页获取所有的文章列表
             handleGetKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
                 getKnlgeShares({current,pageSize}).then(response=>{
+                        this.isMyKnow = false;//游客
                         let page = response.page
                         this.total  = page.total
                         this.documentList = response.value.map(item => {
-                              item.id = BigInt(item.id)
+                              item.id = (Long.fromValue(item.id)).toString()
                               return item 
                             })
-                       
                 
                 })
             },
@@ -93,14 +95,13 @@
             handleMyKnowledge({current=this.current,pageSize=this.pageSize}={}){
                     if(isLogin()){
                         getCurrentUserShares({current,pageSize}).then(response => {
-                                this.isMyKnow = true
+                                this.isMyKnow = true //用户
                                 let page = response.page
                                 this.total  = page.total
                                 this.documentList = response.value.map(item => {
-                                    item.id = BigInt(item.id)
+                                    item.id = (Long.fromValue(item.id)).toString()
                                     return item
                                 })
-                                console.log(this.documentList) 
                         })
                     }else {
                             this.$message({
@@ -108,7 +109,8 @@
                                     type:"warning"
                             })
                     }
-            }
+            },
+         
         },
         mounted () {
             this.handleGetKnlgeShares()
@@ -145,5 +147,10 @@
         position: absolute;
         top: 0%;
         right: 36%;
+    }
+    .all-knowledge {
+        position: absolute;
+        top: 0%;
+        right: 46%;
     }
     </style>
