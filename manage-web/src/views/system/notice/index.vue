@@ -25,7 +25,6 @@
     <el-table
       ref="table"
       v-loading="crud.loading"
-      border
       :data="crud.data"
       style="width: 100%;margin-top: 12px;"
       @selection-change="crud.selectionChangeHandler"

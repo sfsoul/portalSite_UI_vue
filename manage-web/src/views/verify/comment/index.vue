@@ -10,18 +10,20 @@
       @selection-change="crud.selectionChangeHandler"
     >
       <el-table-column type="selection" align="center" width="55" />
+      <el-table-column prop="articleTitle" label="文章标题" align="center" />
       <el-table-column prop="content" label="评论内容" align="center" />
       <el-table-column prop="ip" label="评论IP" align="center" />
       <el-table-column prop="author" label="作者" align="center" />
-      <el-table-column width="135" prop="publishtime" align="center" label="评论时间" />
+      <el-table-column prop="publishdate" width="160" align="center" label="发布时间" />
       <el-table-column prop="reviewstatusStr" align="center" label="审核状态" />
       <el-table-column
+        width="180"
         label="操作"
         align="center"
       >
         <template slot-scope="scope">
-          <el-button slot="reference" type="warning" size="mini" @click="handleClick(scope.row)">审核</el-button>
-          <el-button slot="reference" type="primary" size="mini" @click="handleClickDetail(scope.row)">详情</el-button>
+          <el-button type="warning" size="mini" @click="handleClick(scope.row)">审核</el-button>
+          <el-button type="primary" size="mini" @click="handleClickDetail(scope.row)">详情</el-button>
         </template>
       </el-table-column>
     </el-table>

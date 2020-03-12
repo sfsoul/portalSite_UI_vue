@@ -1,49 +1,28 @@
 <template>
   <div class="el-dialog-div">
     <el-form ref="form" :model="form" :rules="rules" size="small" label-width="90px">
-      <el-form-item label="新闻标题" prop="title">
+      <el-form-item label="制度标题" prop="title">
         <el-input v-model="form.title" style="width: 30%;" />
       </el-form-item>
-      <el-form-item label="新闻类型" prop="ntid">
+      <el-form-item label="部门" prop="dptid">
         <el-select
-          v-model="form.ntid"
+          v-model="form.dptid"
           style="width: 15%;"
           filter
           placeholder="请选择"
-          @change="changeNewsType"
+          @change="changeDept"
         >
           <el-option
-            v-for="item in newsTypeOptions"
-            :key="item.ntid"
-            :label="item.newsTName"
-            :value="item.ntid"
+            v-for="item in deptOptions"
+            :key="item.dptid"
+            :label="item.dptname"
+            :value="item.dptid"
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="新闻内容" prop="contentStr">
+      <el-form-item label="制度内容" prop="contentStr">
         <Editor v-model="form.contentStr" :is-clear="isClear" @change="getEditorContent" />
       </el-form-item>
-      <el-form-item label="新闻图片" prop="imageid">
-        <el-upload
-          id="pictureUpload"
-          v-model="form.imageid"
-          :limit="1"
-          :file-list="pictureList"
-          :on-preview="handlePictureCardPreview"
-          :http-request="httpRequest"
-          :before-remove="handleBeforeRemove"
-          :on-success="handleSuccess"
-          :on-error="handleError"
-          :headers="headers"
-          :action="imagesUploadApi"
-          list-type="picture-card"
-        >
-          <i class="el-icon-plus" />
-        </el-upload>
-      </el-form-item>
-      <el-dialog append-to-body :visible.sync="dialogVisible">
-        <img :src="dialogImageUrl" width="100%" alt="">
-      </el-dialog>
       <el-form-item label="上传附件" prop="annexes">
         <el-upload
           ref="upload"
@@ -61,7 +40,7 @@
         </el-upload>
       </el-form-item>
       <el-form-item size="medium" style="text-align: left;margin-bottom: 45px;">
-        <el-button @click="$router.push('/publish/news')">返回</el-button>
+        <el-button @click="$router.push('/publish/notice')">返回</el-button>
         <el-button :loading="submitLoading" type="primary" @click="isEdit===false?createData():updateData()">发布</el-button>
       </el-form-item>
     </el-form>
@@ -71,16 +50,15 @@
 <script>
 import Long from 'long'
 import { fileUpload, fileDelete } from '@/api/file'
-import { getNewsType } from '@/api/system/newsType'
-import crudNewsPublish from '@/api/publish/newsPublish'
-import { isExistTitle, getNewsContent } from '@/api/publish/newsPublish'
+import crudInstitutionPublish from '@/api/publish/institutionPublish'
+import { isExistTitle, getInstitutionContent, getDeptList } from '@/api/publish/institutionPublish'
 import { getToken } from '@/utils/auth'
 import { mapGetters } from 'vuex'
 import CRUD, { presenter, header, crud } from '@crud/crud'
 import Editor from '@/views/components/Editor'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ requestType: 'post', url: 'news/getPublishNews', crudMethod: { ...crudNewsPublish }})
+const defaultCrud = CRUD({ requestType: 'post', url: 'regulations/getRegulations', crudMethod: { ...crudInstitutionPublish }})
 export default {
   name: 'Pictures',
   components: { Editor },
@@ -96,17 +74,12 @@ export default {
       form: {
         id: null,
         title: null,
-        ntid: null,
+        dptid: null,
         contentStr: null,
-        imageid: 0,
         annexes: []
       },
       submitLoading: false,
-      newsTypeOptions: [],
-      listQuery: {
-        current: 1,
-        pageSize: 10
-      },
+      deptOptions: [],
       headers: {
         'Authorization': getToken()
       },
@@ -115,13 +88,10 @@ export default {
         title: [
           { required: true, message: '请输入标题', trigger: 'blur' }
         ],
-        ntid: [
-          { required: true, message: '请选择新闻类型', trigger: 'change' }
+        dptid: [
+          { required: true, message: '请选择部门', trigger: 'change' }
         ]
       },
-      dialogImageUrl: '',
-      dialogVisible: false,
-      imageUrl: '',
       pictureResult: {},
       fileList: [],
       pictureList: [],
@@ -135,10 +105,10 @@ export default {
     ])
   },
   created() {
-    this.getNewsType()
+    this.getDeptList()
     if (this.isEdit) {
       const row = this.$route.query.row
-      this.getNewsContent(row)
+      this.getInstitutionContent(row)
       this.handleUpdate(row)
     }
   },
@@ -146,19 +116,14 @@ export default {
     handleUpdate(row) {
       this.form.id = (Long.fromValue(row.id)).toString()
       this.form.title = row.title
-      this.form.ntid = row.ntid
-      this.form.imageid = (Long.fromValue(row.imageid)).toString()
+      this.form.dptid = row.dptid
       this.form.annexes = row.annexes
-      // const imageUrl = this.baseApi + row.imageUrl
-      /* this.pictureList.push({
-        'url': imageUrl
-      })*/
       this.$nextTick(() => {
         this.$refs['form'].clearValidate()
       })
     },
-    getNewsContent(row) {
-      getNewsContent((Long.fromValue(row.id)).toString()).then(res => {
+    getInstitutionContent(row) {
+      getInstitutionContent((Long.fromValue(row.id)).toString()).then(res => {
         this.form.contentStr = res.contentStr
       })
     },
@@ -169,9 +134,8 @@ export default {
       this.form = {
         id: null,
         title: null,
-        ntid: null,
+        dptid: null,
         contentStr: null,
-        imageid: 0,
         annexes: []
       }
     },
@@ -183,13 +147,13 @@ export default {
             if (resp === true) {
               this.$message({
                 type: 'error',
-                message: '新闻标题已经存在,请更换后再试'
+                message: '制度文档标题已经存在,请更换后再试'
               })
               this.submitLoading = false
               return false
             } else if (!this.form.contentStr) {
               this.$message({
-                message: '新闻内容不能为空',
+                message: '制度文档内容不能为空',
                 type: 'warning'
               })
               this.submitLoading = false
@@ -201,7 +165,7 @@ export default {
                   message: '添加成功!'
                 })
                 this.submitLoading = false
-                this.$router.push('/publish/news')
+                this.$router.push('/publish/institution')
                 this.crud.refresh()
               }).catch(() => {
                 this.submitLoading = false
@@ -221,13 +185,13 @@ export default {
             if (resp === true) {
               this.$message({
                 type: 'error',
-                message: '新闻标题已经存在,请更换后再试'
+                message: '制度文档标题已经存在,请更换后再试'
               })
               this.submitLoading = false
               return false
             } else if (!this.form.contentStr) {
               this.$message({
-                message: '新闻内容不能为空',
+                message: '制度文档内容不能为空',
                 type: 'warning'
               })
               this.submitLoading = false
@@ -239,7 +203,7 @@ export default {
                   message: '修改成功!'
                 })
                 this.submitLoading = false
-                this.$router.push('/publish/news')
+                this.$router.push('/publish/institution')
                 this.crud.refresh()
               }).catch(() => {
                 this.submitLoading = false
@@ -251,55 +215,16 @@ export default {
         }
       })
     },
-    changeNewsType(val) {
-      this.form.ntid = val
+    changeDept(val) {
+      this.form.dptid = val
     },
-    getNewsType() {
-      getNewsType(this.listQuery).then(res => {
-        this.newsTypeOptions = res.value
+    getDeptList() {
+      getDeptList().then(res => {
+        this.deptOptions = res
       })
-    },
-    parseUrl(imgUrl) {
-      return this.baseApi + imgUrl
     },
     checkboxT(row, rowIndex) {
       return row
-    },
-    // 监听上传失败
-    handleError(e, file, fileList) {
-      const msg = JSON.parse(e.message)
-      this.message({
-        type: 'error',
-        message: msg.message,
-        duration: 2500
-      })
-    },
-    // 图片上传
-    httpRequest(options) {
-      const pictureDom = document.getElementById('pictureUpload')
-        .getElementsByClassName('el-upload--picture-card')[0]
-      const formdata = new FormData()
-      formdata.append('myfile', options.file)
-      fileUpload(formdata).then(res => {
-        this.pictureResult = res
-        this.form.imageid = (Long.fromValue(res.fid)).toString()
-      })
-      pictureDom.style.display = 'none'
-    },
-    handleSuccess(response, file, fileList) {
-
-    },
-    handleBeforeRemove() {
-      const pictureDom = document.getElementById('pictureUpload')
-        .getElementsByClassName('el-upload--picture-card')[0]
-      fileDelete(this.pictureResult).then(res => {
-        this.form.imageid = 0
-      })
-      pictureDom.style.display = 'block'
-    },
-    handlePictureCardPreview(file) {
-      this.dialogImageUrl = file.url
-      this.dialogVisible = true
     },
     // 文件上传
     httpRequestFile(options) {

@@ -9,10 +9,9 @@
       @selection-change="crud.selectionChangeHandler"
     >
       <el-table-column type="selection" align="center" width="55" />
-      <el-table-column prop="content" label="评论内容" align="center" />
-      <el-table-column prop="ip" label="评论IP" align="center" />
+      <el-table-column prop="title" label="知识分享标题" align="center" />
       <el-table-column prop="author" label="作者" align="center" />
-      <el-table-column width="135" prop="publishtime" align="center" label="评论时间" />
+      <el-table-column width="135" prop="publishdate" align="center" label="发布时间" />
       <el-table-column prop="reviewstatusStr" align="center" label="审核状态" />
       <el-table-column
         label="操作"
@@ -82,13 +81,13 @@
 <script>
 import Long from 'long'
 import { mapGetters } from 'vuex'
-import { reviewComment, getVerifyDetail } from '@/api/verify/verifyComment'
-import crudComment from '@/api/verify/verifyComment'
+import { reviewShare, getVerifyDetail } from '@/api/verify/verifyShare'
+import crudShare from '@/api/verify/verifyShare'
 import CRUD, { presenter, header, crud } from '@crud/crud'
 import pagination from '@crud/Pagination'
 
 // crud交由presenter持有
-const defaultCrud = CRUD({ requestType: 'post', url: 'knowledgeShare/getPublishShares', crudMethod: { ...crudComment }})
+const defaultCrud = CRUD({ requestType: 'post', url: 'knowledgeShare/getPublishShares', crudMethod: { ...crudShare }})
 export default {
   name: 'NewsVerify',
   components: { pagination },
@@ -126,7 +125,7 @@ export default {
       this.detail = row
       this.showdetail = true
       this.detailsList = {}
-      getVerifyDetail(row.id).then(res => {
+      getVerifyDetail((Long.fromValue(row.id)).toString()).then(res => {
         this.detailsList = res
       })
     },
@@ -147,7 +146,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.verifyLoading = true
-          reviewComment(this.selectRowId, this.form).then(res => {
+          reviewShare(this.selectRowId, this.form).then(res => {
             this.verifyLoading = false
             this.verifyDialog = false
             this.crud.refresh()

@@ -1,5 +1,8 @@
 <template>
-  <div ref="editor" class="text" />
+  <div class="editor">
+    <div ref="toolbar" class="toolbar" />
+    <div ref="editor" class="text" />
+  </div>
 </template>
 
 <script>
@@ -7,7 +10,7 @@ import { fileUpload } from '@/api/file'
 import { mapGetters } from 'vuex'
 import E from 'wangeditor'
 export default {
-  name: 'Editor',
+  name: 'Editoritem',
   model: {
     prop: 'value',
     event: 'change'
@@ -24,6 +27,7 @@ export default {
   },
   data() {
     return {
+      // uploadPath,
       editor: null,
       info_: null
     }
@@ -36,6 +40,7 @@ export default {
   },
   watch: {
     isClear(val) {
+      // 触发清除文本域内容
       if (val) {
         this.editor.txt.clear()
         this.info_ = null
@@ -55,7 +60,31 @@ export default {
   methods: {
     seteditor() {
       const _this = this
-      this.editor = new E(this.$refs.editor)
+      this.editor = new E(this.$refs.toolbar, this.$refs.editor)
+      // 配置菜单
+      this.editor.customConfig.menus = [
+        'head', // 标题
+        'bold', // 粗体
+        'fontSize', // 字号
+        'fontName', // 字体
+        'italic', // 斜体
+        'underline', // 下划线
+        'strikeThrough', // 删除线
+        'foreColor', // 文字颜色
+        'backColor', // 背景颜色
+        'link', // 插入链接
+        'list', // 列表
+        'justify', // 对齐方式
+        'quote', // 引用
+        'emoticon', // 表情
+        'image', // 插入图片
+        'table', // 表格
+        'video', // 插入视频
+        'code', // 插入代码
+        'undo', // 撤销
+        'redo', // 重复
+        'fullscreen' // 全屏
+      ]
       // 文件上传
       this.editor.customConfig.customUploadImg = function(files, insert) {
         // files 是 input 中选中的文件列表
@@ -80,12 +109,17 @@ export default {
 </script>
 
 <style scoped>
-  .text {
-    width: 120%;
+  .editor {
+    width: 98%;
     text-align: left;
+    position: relative;
+    z-index: 0;
   }
-
-  /deep/ .w-e-text-container {
-    height: 600px !important;
+  .toolbar {
+    border: 1px solid #ccc;
+  }
+  .text {
+    border: 1px solid #ccc;
+    min-height: 500px;
   }
 </style>
