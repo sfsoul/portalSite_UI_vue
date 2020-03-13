@@ -24,7 +24,7 @@
 
                 <editor @editorContent="handleEditorContent" :contentHtml="knowledgeObject.contentStr" ></editor>
             </div>
-            <div style="width: 46%;">
+            <div style="width: 46%;margin-top: 10px;">
                 <el-form-item label="上传附件" prop="annexes" >
                     <el-upload
                       ref="upload"

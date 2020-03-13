@@ -5,6 +5,9 @@
         <div v-else style="min-height: 250px;position: relative;">
             <loading></loading>
         </div>
+        <div v-if="!isNoData&&isNotice" style="min-height: 250px;position: relative;">
+            <no-data></no-data>
+       </div>
     </div>
 </template>
 
@@ -13,11 +16,13 @@ import { NoticeItem } from '../notice'
 import NoticeTitle from '@/components/title'
 import { getNoticeList } from '@/api/notice'
 import Loading from '@/components/loading'
+import NoData from '@/components/noData'
 export default {
     components:{
         NoticeTitle,
         NoticeItem,
-        Loading
+        Loading,
+        NoData
     },
     data(){
         return {
@@ -27,6 +32,7 @@ export default {
             },
             noticeData:null,
             isNotice:false,
+            isNoData:false,
         }
     },
     methods: {

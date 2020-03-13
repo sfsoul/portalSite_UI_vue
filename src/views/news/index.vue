@@ -17,9 +17,13 @@
                     <news-item @imageToDetails="receptiomImageInfo" :newsData="newsData" ></news-item>
             </el-col>
         </el-row>
-        <div v-else style="min-height: 400px;position: relative;">
+        <div v-if="!isNew" style="min-height: 400px;position: relative;">
             <loading></loading>
         </div>
+        <div v-if="!isNoData&&isNew" style="min-height: 400px;position: relative;">
+              <no-data></no-data>
+        </div>
+
     </div>
 </template>
 <script>
@@ -28,6 +32,7 @@ import NewsDetails from './news-details'
 import NewsTitle from '@/components/title'
 import { getNewList } from '@/api/news'
 import Loading from '@/components/loading'
+import NoData from '@/components/noData'
 export default {
     data(){
         return {
@@ -37,14 +42,16 @@ export default {
             title:{
                 nameLeft:"新闻",
                 nameRight:"动态"
-            }
+            },
+            isNoData:false,
         }
     },
     components:{
         NewsItem,
         NewsDetails,
         NewsTitle,
-        Loading
+        Loading,
+        NoData
     },
     props:{
 
@@ -61,12 +68,15 @@ export default {
         handleGetNewList(current,pageSize){
                 getNewList(current,pageSize).then(response=>{
                        
-                    if(response.value && response.value.length > 0){
+                    if(response.value){
                         this.isNew = true
                         this.newsData = response.value.slice(0,6);
                         this.newsData.map(item=>{
                             item.id = BigInt(item.id)
                         })
+                    }
+                    if(response.value.length>0){
+                        this.isNoData = true
                     }
                 })
         }

@@ -87,20 +87,21 @@
                               item.id = (Long.fromValue(item.id)).toString()
                               return item 
                             })
-                            console.log("精华",this.goodKnlgeShares)        
+                          
                 })
             },
             //分页获取所有的文章列表
-            handleGetKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
+           async handleGetKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
+               await this.handleGetGoodKnlgeShares()
                 getKnlgeShares({current,pageSize}).then(response=>{
                         this.isMyKnow = false;//游客
-                        let page = response.page
-                       
+                        let page = response.page    
                         this.total  = page.total + (this.goodKnlgeShares.length)
                         this.documentList = response.value.map(item => {
                               item.id = (Long.fromValue(item.id)).toString()
                               return item 
                             })
+                            console.log(this.goodKnlgeShares)
                         this.documentList=[...this.goodKnlgeShares,...this.documentList]
                 
                 })
@@ -126,9 +127,9 @@
             },
          
         },
-       async mounted () {
-           await this.handleGetGoodKnlgeShares()
-            this.handleGetKnlgeShares()
+        async mounted () {
+            await this.handleGetGoodKnlgeShares()
+              this.handleGetKnlgeShares()
         }
     }
     </script>

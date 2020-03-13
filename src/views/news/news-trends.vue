@@ -25,6 +25,9 @@
             <div v-else style="min-height: 400px; position: relative;">
                 <loading></loading>
             </div>
+            <div v-if="!isNoData&&isNew" style="min-height: 400px;position: relative;">
+                <no-data></no-data>
+             </div>
         </div>
         
     </div>
@@ -35,6 +38,7 @@ import NewsTitle from '@/components/title'
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewList } from '@/api/news'
 import Loading from '@/components/loading'
+import NoData from '@/components/noData'
     export default {
         data(){
             return{
@@ -47,7 +51,8 @@ import Loading from '@/components/loading'
                 title:{
                     nameLeft:'新闻',
                     nameRight:'动态'
-                }
+                },
+                isNoData:false,
             }
         },
         mounted(){
@@ -57,7 +62,8 @@ import Loading from '@/components/loading'
             NewsTitle,
             Item,
             Breadcrumd,
-            Loading
+            Loading,
+            NoData
         },
         props:{
                 id: {default:1}
@@ -78,8 +84,10 @@ import Loading from '@/components/loading'
              */
             handleGetNewList({current=this.current,pageSize=this.pageSize}={}){
                 getNewList(current,pageSize).then(response=>{
+                    if(response.value.length>0){
+                        this.isNoData = true
+                    }
                     let page = response.page
-                    console.log(response)
                     this.isloading = true
                     this.total = page.total
                     this.newsData = response.value

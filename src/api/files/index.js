@@ -18,3 +18,11 @@ export function fileDelete(picture) {
     }
   })
 }
+
+export function fileDownload(data){
+  return request({
+    url:"files/download",
+    method:"post",
+    data
+  })
+}

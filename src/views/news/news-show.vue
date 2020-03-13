@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
-                <span v-html="newInfo.contentStr" ></span>
+                <span v-html="newInfo.content" ></span>
             </div>
         </div>
         <div v-else style="min-height: 400px; position: relative;">

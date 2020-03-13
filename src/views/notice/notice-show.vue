@@ -14,7 +14,7 @@
                 </div>
                 
                 <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
-                    <span v-html="noticeDetail.contentStr" ></span>
+                    <span v-html="noticeDetail.content" ></span>
                 </div>
             </div>
            
