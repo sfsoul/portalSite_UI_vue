@@ -8,7 +8,8 @@
                 <span>{{year}}</span>
             </div>
         </div>
-        <div  class="new-item-content" >
+
+        <div  class="new-item-content" @click="handleGoDetail">
             <div class="content-title" >
                 <span v-if="row" >{{row.row.title}}</span>
             </div>
@@ -40,8 +41,14 @@ export default {
             }
         }
     },
+    methods: {
+        handleGoDetail(){
+            this.$router.push({path:'news-show',query:{newsid:this.row.row.id}})
+        }
+    },
     watch:{
-        row(){
+        row(value){
+             
               if(this.row.row !== undefined){
                 
                 let date = this.row.row.publishdate.split(" ")

@@ -225,7 +225,7 @@ export const constantRouter = [
 export const asyncRoutes = []
 
 const createRouter = () => new Router({
-    mode:'history',
+   /*  mode:'history', */
     base:"/portalSiteTourist/",
     scrollBehavior:() =>({y:0}),
     routes:constantRouter

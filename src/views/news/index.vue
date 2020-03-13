@@ -10,8 +10,8 @@
     <div style="margin-top: 40px" >  
         <news-title :title="title" english="New Information" :isSearch="false" routeSkip="news-trends"  ></news-title>
         <el-row :gutter="20" type="flex" justify="space-btween" v-if="isNew" >
-            <el-col :span="12"  style="max-height: 400px;min-height: 398px;" class="animated rollIn" >
-                   <news-details :activeInfo="activeInfo" ></news-details>
+            <el-col :span="12"  style="height: 400px" class="animated rollIn" >
+                    <news-details :activeInfo="activeInfo" ></news-details>
             </el-col>
             <el-col :span="12" style="max-height: 400px;" class="animated slideInRight" >
                     <news-item @imageToDetails="receptiomImageInfo" :newsData="newsData" ></news-item>

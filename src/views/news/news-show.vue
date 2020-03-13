@@ -18,7 +18,7 @@
                 <div style="text-align: center;" >
                     <span>{{newInfo.publishdate}}</span>
                     <span style="margin-left: 20px">发布人:{{newInfo.author}}</span>
-                    <span style="margin-left: 20px" >浏览量:1250</span>
+                    <span style="margin-left: 20px" >浏览量:{{newInfo.pageview}}</span>
                 </div>
             </div>
             <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >

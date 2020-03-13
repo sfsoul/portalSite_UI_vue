@@ -3,9 +3,9 @@
                 <div >
                         <breadcrumd  ></breadcrumd>
                 </div>
-                <div  style="background: #fff;padding: 20px;margin-top: 40px;" = >
+                <div v-if="detailsData"  style="background: #fff;padding: 20px;margin-top: 40px;">
                         <div style="text-align: center;" >
-                            <h2>标题</h2>
+                            <h2>{{detailsData.title}}</h2>
                         </div>
                         <div style="line-height: 26px;" >
                             <span>描述</span>
@@ -36,6 +36,11 @@
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getKnlgeShareDetail } from "@/api/knowledge-sharing"    
     export default {
+        data(){
+            return{
+                detailsData:null,
+            }
+        },
         computed:{
             articleId(){
                 return this.$route.params.articleid
@@ -51,7 +56,8 @@ import { getKnlgeShareDetail } from "@/api/knowledge-sharing"
               }
               getKnlgeShareDetail(data).then(response=>{
                   if(response !== undefined && response){
-                     console.log(response)
+                       this.detailsData = response
+                       console.log(this.detailsData)
                     }
               })
             },

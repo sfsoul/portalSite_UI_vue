@@ -10,18 +10,22 @@
         <div v-if="row" >
                
                          <div v-if="!isMyKnow" style="display: flex;justify-content: space-between;flex-wrap: nowrap;margin: 20px 0px;font-size: 14px;cursor: pointer;" >
-                                <router-link :to="{name:'knowledge-details',params:{articleid:row.id}}" style="text-decoration: none;width: 70%;" >
-                                <div style="width: 100%;line-height:34px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;color: #535151;" >
+                                <div  style="width: 10%;color: #146499;font-weight: 600;">
+                                        <span v-if="row.type">精选</span>
+                                </div>
+                                <router-link :to="{name:'knowledge-details',params:{articleid:row.id}}" style="text-decoration: none;width: 50%;" >
+                                <div style="width: 100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;color: #535151;" >
                                         <span>{{row.title}}</span>
                                 </div>
                               </router-link>
-                                <div style="font-weight: 700;" >
+                                <div style="font-weight: 700;text-align: center;width: 10%;" >
                                         <span>{{row.author}}</span>   
                                 </div>
                               
-                                <div>
+                                <div style="text-align: center;width: 20%;">
                                         <span>{{row.publishdate}}</span>
                                 </div>
+                               
                           </div>
                           <div v-else style="display: flex;justify-content: space-between;flex-wrap: nowrap;margin: 20px 0px;font-size: 14px;cursor: pointer;color: #535151;">
                                 <router-link :to="{name:'knowledge-details',params:{articleid:row.id}}" style="text-decoration: none;width:40% ;" >

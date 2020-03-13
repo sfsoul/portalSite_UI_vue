@@ -1,18 +1,22 @@
 //单行新闻
+
 .news-row {
     display: flex;
     justify-content: flex-start;
     flex-wrap: nowrap;
 
     & .news-row-date {
-      width: 22%;
+      width: 25%;
       font-size: 14px;
+      text-align: center;
     }
 
     & .news-row-type {
-      width: 18%;
-      color: #606160;
+      width: 25%;
+      color: #1e69f5;
       font-size: 14px;
+      text-align: center;
+      font-weight: 700;
     }
 
     & .news-row-content {
@@ -21,6 +25,7 @@
         font-size: 14px;
         width: 56%;
         cursor: pointer;
+        text-align: center;
 
         p {
             white-space: nowrap;
@@ -82,6 +87,7 @@
 .news-details {
   width: 100%;
   height: 100%;
+  position: relative;
 
   img {
     width: 100%;

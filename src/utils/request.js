@@ -8,7 +8,7 @@ import docSetting from '@/setting'
 
 const server = axios.create({
   timeout: docSetting.timeout,
-  baseURL: process.env.NODE_ENV === 'production' ? config.baseURL : '/portalSite/'
+  baseURL:'/portalSite'
 })
 
 // 添加请求拦截
@@ -76,6 +76,9 @@ server.interceptors.response.use(
             Message.info("重新登录")
           })
         };break;
+        case 602:{
+            console.log(error)
+        };break;
         case 403:{
           router.push('/401')
         };break;
@@ -84,7 +87,7 @@ server.interceptors.response.use(
           router.push('/404')
         };break;
         default:{
-          const errmsg = error.response.message;
+          const errmsg = error.response;
           if(errmsg !== undefined){
             Message({
               type: 'error',

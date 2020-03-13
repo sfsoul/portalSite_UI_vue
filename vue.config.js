@@ -20,18 +20,18 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
-    open: false,
+    open: true,
     /* host:'192.168.8.247', */
     overlay: {
       warnings: false,
       errors: true
     },
     proxy: {
-      '/portalSite/': {
+      '/portalSite': {
         target: process.env.VUE_APP_BASE_API,
         changeOrigin: true, // 跨域
         pathRewrite: {
-          '^/portalSite/': ''
+          '^/portalSite': ''
         }
       }
     },

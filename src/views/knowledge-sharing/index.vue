@@ -8,7 +8,7 @@
                         <el-button class="my-knowledge" type="primary" @click="handleMyKnowledge">我的文章<i class="el-icon-video-play"></i></el-button>
                         <el-button class="gorelease-button" type="primary" @click="goRelease">分享我的经验<i class="el-icon-video-play"></i></el-button>
                                 <div  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
-                                        <items :row="item" :isMyKnow="isMyKnow" :getMyKnowledge="handleMyKnowledge" ></items>
+                                        <items :row="item" :isMyKnow="isMyKnow" :getMyKnowledge="handleMyKnowledge"  ></items>
                                 </div>
                     <el-pagination
                        background 
@@ -33,7 +33,7 @@
     import KnowledagTitle from '@/components/title'
     import { mapGetters } from 'vuex'
     import Long from "long"
-    import {getCurrentUserShares,getKnlgeShares } from "@/api/knowledge-sharing"
+    import {getCurrentUserShares,getKnlgeShares,getGoodKnlgeShares } from "@/api/knowledge-sharing"
     import { isLogin } from "@/utils/validate"
     export default {
         components:{
@@ -52,7 +52,8 @@
                         nameLeft:"知识",
                         nameRight:'共享'
                 },
-                documentList:[]
+                documentList:[],
+                goodKnlgeShares:[]
             }
         },
         computed: {
@@ -78,16 +79,29 @@
                     }
                    
             },
+            //获取精华帖
+            handleGetGoodKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
+                getGoodKnlgeShares({current,pageSize}).then(response=>{
+                    console.log()
+                    this.goodKnlgeShares = response.value.map(item => {
+                              item.id = (Long.fromValue(item.id)).toString()
+                              return item 
+                            })
+                            console.log("精华",this.goodKnlgeShares)        
+                })
+            },
             //分页获取所有的文章列表
             handleGetKnlgeShares({current=this.current,pageSize=this.pageSize}={}){
                 getKnlgeShares({current,pageSize}).then(response=>{
                         this.isMyKnow = false;//游客
                         let page = response.page
-                        this.total  = page.total
+                       
+                        this.total  = page.total + (this.goodKnlgeShares.length)
                         this.documentList = response.value.map(item => {
                               item.id = (Long.fromValue(item.id)).toString()
                               return item 
                             })
+                        this.documentList=[...this.goodKnlgeShares,...this.documentList]
                 
                 })
             },
@@ -112,7 +126,8 @@
             },
          
         },
-        mounted () {
+       async mounted () {
+           await this.handleGetGoodKnlgeShares()
             this.handleGetKnlgeShares()
         }
     }

@@ -4,11 +4,12 @@
                     <div class="news-row-date" >
                         <p>{{publishdate}}</p>
                     </div>
-                    <!-- <div class="news-row-type">
-                        <p>{{row.newsTName}}</p>
-                    </div> -->
+                   
                     <div class="news-row-content" >
                         <p>{{row.title}}</p>
+                    </div>
+                    <div class="news-row-type">
+                        <p>{{row.newsTName}}</p>
                     </div>
                 </div>
     </router-link>

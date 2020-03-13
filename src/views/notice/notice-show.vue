@@ -9,6 +9,7 @@
                     <div style="text-align: center;" >
                         <span>{{noticeDetail.reviewdate}}</span>
                         <span style="margin-left: 20px" >发布人:{{noticeDetail.author}}</span>
+                        <span style="margin-left: 20px" >浏览量:{{noticeDetail.pageview}}</span>
                     </div>
                 </div>
                 
