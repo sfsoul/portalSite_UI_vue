@@ -77,7 +77,7 @@ server.interceptors.response.use(
           })
         };break;
         case 602:{
-            console.log(error)
+            Message.error(error.response.data)
         };break;
         case 403:{
           router.push('/401')

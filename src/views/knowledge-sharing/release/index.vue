@@ -22,7 +22,7 @@
                     <span style="margin-right: 10px;" >文章内容:</span>
                 </div>
 
-                <editor @editorContent="handleEditorContent" :contentHtml="knowledgeObject.contentStr" ></editor>
+                <editor @editorContent="handleEditorContent" :contentHtml="knowledgeObject.content" ></editor>
             </div>
             <div style="width: 46%;margin-top: 10px;">
                 <el-form-item label="上传附件" prop="annexes" >
@@ -61,7 +61,7 @@ import Long from 'long'
             return {
                 knowledgeObject:{
                     title:null,
-                    contentStr:"",
+                    content:"",
                     annexes:""
                 },
                 knowledgeRules:{
@@ -107,7 +107,7 @@ import Long from 'long'
         methods: {
             //新闻内容
           handleEditorContent(value){
-              this.knowledgeObject.contentStr = value
+              this.knowledgeObject.content = value
           },
           //检验标题是否重复
          async handleRepetitionTitle({title=this.knowledgeObject.title}={}){
@@ -126,7 +126,7 @@ import Long from 'long'
               }
               getKnlgeShareDetail(data).then(response=>{
                   if(response !== undefined && response){
-                      this.knowledgeObject = {title:response.title,contentStr:response.contentStr,annexes:response.annexes}
+                      this.knowledgeObject = {title:response.title,content:response.content,annexes:response.annexes}
                       this.firstTitle = response.title
                     }
               })

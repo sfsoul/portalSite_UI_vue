@@ -23,6 +23,7 @@ export function fileDownload(data){
   return request({
     url:"files/download",
     method:"post",
-    data
+    data,
+    responseType:'blob'
   })
 }

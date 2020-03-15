@@ -1,13 +1,13 @@
 import request from "@/utils/request"
 
 //新增
-export function addKnlgeShare({title,contentStr,annexes}){
+export function addKnlgeShare({title,content,annexes}){
     return request({
         url:"knowledgeShare/addKnlgeShare",
         method:"post",
         data:{
             title,
-            contentStr,
+            content,
             annexes
         }
     })

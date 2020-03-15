@@ -13,7 +13,7 @@
                             <span style="margin-left: 20px" >浏览量:{{detailsData.pageview}}</span>
                         </div>
                         <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
-                            <span v-html="detailsData.contentStr" ></span>
+                            <span v-html="detailsData.content" ></span>
                         </div>
 
 
@@ -29,8 +29,8 @@
                                         <span style="text-align:center" >{{item.name}}</span>
                                     </div>
                                     <div style="position: absolute;left: 6%;top: 60%" >
-                                           <el-button type="primary" round  >预览</el-button>
-                                           <el-button type="primary" round >下载</el-button>
+                                           <!-- <el-button type="primary" round  >预览</el-button> -->
+                                           <el-button type="primary" round @click="handleFileDownLoad(item)" >下载</el-button>
                                     </div>
                                 </div>
                          </div>
@@ -41,7 +41,9 @@
     
     <script>
 import Breadcrumd from '@/components/breadcrumd.vue'
-import { getKnlgeShareDetail,fileDownload } from "@/api/knowledge-sharing"
+import { getKnlgeShareDetail } from "@/api/knowledge-sharing"
+import {fileDownload} from '@/api/files'
+import { download } from '@/utils/commonality'
 import Long from "long" 
     export default {
         data(){
@@ -74,6 +76,15 @@ import Long from "long"
                     }
               })
             },
+            //文件下载
+            handleFileDownLoad(file){
+                const fileId = (Long.fromValue(file.fid)).toString()
+                fileDownload({fid:fileId}).then(response => {
+                     download(response,file.name)
+                })
+                
+            },
+            
         },
         mounted(){
             this.handleGetKnlgeShareDetail()
