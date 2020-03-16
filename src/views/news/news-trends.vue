@@ -25,7 +25,7 @@
             <div v-else style="min-height: 400px; position: relative;">
                 <loading></loading>
             </div>
-            <div v-if="!isNoData&&isNew" style="min-height: 400px;position: relative;">
+            <div v-if="!isNoData&&isloading" style="min-height: 400px;position: relative;">
                 <no-data></no-data>
              </div>
         </div>

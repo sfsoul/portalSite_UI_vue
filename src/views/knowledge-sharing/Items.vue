@@ -33,14 +33,14 @@
                                         <span>{{row.title}}</span>
                                 </div>
                               </router-link>
-                                <div style="font-weight: 700;" >
+                                <div style="font-weight: 700;line-height:34px;" >
                                         <span>{{row.author}}</span>   
                                 </div>
                              
-                                <div>
+                                <div style="line-height:34px;">
                                         <span>{{row.publishdate}}</span>
                                 </div>
-                                <div>
+                                <div style="line-height:34px;">
                                         <span>{{row.reviewstatusStr}}</span>
                                 </div>
                                 <div >

@@ -1,32 +1,53 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-03-16 10:43:56
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\quality\quality-details.vue
+ -->
 <template>
     <div style="margin: 100px 18%" >
         <breadcrumd></breadcrumd>
-        <div style="height: 100px;background: #fff;line-height: 40px;min-width: 1000px;" >
-            <div>
-                <h2 style="text-align: center" >质量标题</h2>
-            </div>
-            <div style="text-align: center;" >
-                <span>2019/12/12</span>
-                <span style="margin-left: 20px" >浏览量:1250</span>
-            </div>
-        </div>
-        <div>
-
+        <detail v-show="loading" @emitIsLoading="getLoading" :getDetail="getQualityDetail" :detailId="detailId"></detail>
+        <div v-if="!loading" style="min-height: 250px;position: relative;" >
+            <loading></loading>
         </div>
     </div>
 </template>
 
 <script>
 import Breadcrumd from '@/components/breadcrumd.vue'
+import { getQualityDetail } from "@/api/quality"
+import Detail from "@/components/detail"
+import Loading from "@/components/loading"
 export default {
     props:{
         
     },
     components:{
-        Breadcrumd
+        Breadcrumd,
+        Detail,
+        Loading
+    },
+    methods: {
+        getQualityDetail,
+        getLoading(val){
+            console.log(val)
+            this.loading = val
+        }
+    },
+    data(){
+        return {
+            loading:false,
+        }
+    },
+    computed: {
+        detailId(){
+            return this.$route.params.articleid
+        }
     },
     mounted(){
-
         let routes = [
             {
               name:"质量信息",

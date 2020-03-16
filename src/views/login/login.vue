@@ -18,11 +18,11 @@
                     </el-form-item>
                 </el-form>
                 <el-button style="width:100%" type="primary" round size="medium" :loading="subloading" @click="handleLogin" >登录</el-button>
-                <div style="margin: 14px 0px 0px 10px" >
+               <!--  <div style="margin: 14px 0px 0px 10px" >
                     <span>没有账号?
                         <el-link type="primary" style="color: #1886d1;cursor: pointer;" >注册</el-link>
                     </span>
-                </div>
+                </div> -->
                 <div style="position: absolute;top:0%;width: 100%;" >
                     <img v-show="pawFocus" style="position: absolute;top: 0%;left: 50%;width: 10rem;transform: translate(-58%,-78%)" src="../../assets/images/blindfold.png" alt="">
                     <img v-show="userFocus" style="position: absolute;top: 0%;left: 50%;width: 10rem;transform: translate(-58%,-78%)" src="../../assets/images/greeting.png" alt="">

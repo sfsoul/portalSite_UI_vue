@@ -93,7 +93,7 @@ export const constantRouter = [
             meta:{title:'质量信息'}
             },
             {
-            path:'quality-details',
+            path:'quality-details/:articleid',
             name:'quality-details',
             component:()=>import('@/views/quality/quality-details'),
             hidden:true,
@@ -135,7 +135,7 @@ export const constantRouter = [
             meta:{title:'培训专栏'}
             },
             {
-                path:'train-details',
+                path:'train-details/:articleid',
                 name:'train-details',
                 component:()=>import('@/views/train/details'),
                 meta:{title:'文档详情'},
