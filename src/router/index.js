@@ -114,7 +114,7 @@ export const constantRouter = [
             meta:{title:'荣誉中亚'}
             },
             {
-                path:'honor-details',
+                path:'honor-details/:articleid',
                 name:'honor-details',
                 component:()=>import('@/views/honor/honor-details'),
                 meta:{title:'员工信息'},

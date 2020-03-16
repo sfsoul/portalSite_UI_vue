@@ -40,10 +40,14 @@ export default {
         handleGetNoticeList(current,pageSize){
                  getNoticeList(current,pageSize).then(response=>{
                      this.isNotice = true
-                    response.value.map(item => {
+                     if(response.value && response.value.length >0){
+                         this.isNoData = true
+                        response.value.map(item => {
                         item.id = BigInt(item.id)
-                    })
-                    this.noticeData = response.value
+                          })
+                         this.noticeData = response.value
+                     }
+                   
                  })
             }
     },

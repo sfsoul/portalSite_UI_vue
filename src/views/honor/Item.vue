@@ -1,27 +1,27 @@
 <template>
-  
-    <div class="persion-content" >
-        <div class="persion-intro" >
-                <p>{{info.name}}</p>
-                <p>{{info.honor}}</p>
-        </div>
-        <router-link :to="{name:'honor-details',params:{info}}" >
-        <div class="persion-details"  >
+    <div class="port-2 effect-2">
+        <div class="image-box">
+            <img :src="imageUrl" >
+            <div style="position: absolute;bottom: 0%;width: 100%;color: #fff;background-color: rgba(209, 201, 200, 0.5);" >
+                <h4>{{info.pepole}}</h4>
+                <span>{{info.title}}</span>
+            </div>
             
-                    <div class="persion-details-content" >
-                            <p>{{info.name}}</p>
-                            <p class="persion-content-p" >{{info.content}}</p>
-                            <span style="position: absolute;right: -16px;bottom: 20px;">...</span>
-                     </div>
         </div>
-        </router-link>
+        <div class="text-desc">
+            <h3>{{info.pepole}}</h3>
+            <p>{{info.honortitle}}</p>
+            <div class="pan-btn light-blue-btn" @click="goDetail">
+                 了解他
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data(){
         return {
-
+            scrUrl:null,
         }
     },
     props:{
@@ -29,70 +29,46 @@ export default {
             type:Object,
             default:{}
         }
+    },
+    computed: {
+       imageUrl(){
+             return `${process.env.VUE_APP_BASE_API}/${this.info.imageUrl}`
+       } 
+    },
+    methods: {
+        goDetail(){
+            this.$router.push({name:"honor-details",params:{articleid:this.info.id}})
+        }
     }
 }
 </script>
 
-<style scoped lang="scss" >
-.persion-intro {
-    position: absolute;
-    bottom: 0%;
-    text-align: center;
-    width: 100%;
-    height: 29%;
-    background-color: rgba(243, 247, 250, 0.5);
-    
-}
-.persion-content {
-    position: relative;
-    height: 260px;
-    background-image:url('../../assets/images/beijing.png');
-    cursor: pointer;
-  
-}
-.persion-content:hover .persion-details{
-    opacity: 1;
-    box-shadow: 1px 6px 20px 1px #666;
-}
-
-.persion-details {
+<style scoped  >
+img{
     width: 100%;
     height: 100%;
-    background-color: rgba(24, 131, 202,0.8);
-    position: absolute;
-    top:0%;
-    opacity: 0;
-    text-align: center;
-    color: #fff;
-}
-.persion-details-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-.persion-content-p {
-   /*  display: -webkit-box;
-    -webkit-line-clamp: 4;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    -moz-line-clamp:4; */
-    position: relative;
-    line-height: 20px;
-    overflow: hidden;
-    max-height: 60px;
-}
-.persion-content-p::after {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding-left: 40px;
- /*    background: -webkit-linear-gradient(left,transparent,#fff 55%);
-    background: -o-linear-gradient(right,transparent,#fff 55%);
-    background: -moz-linear-gradient(right,transparent,#fff 55%);
-    background: linear-gradient(to right,transparent,#fff 55%) */
-}
+    }
+h3{
+    font-size: 20px; 
+    margin: 5px 0 10px;}
+p{font-weight: 300;
+ line-height: 20px;
+ font-size: 14px;
+ margin-bottom: 15px;}
+.text-desc{
+    position: absolute; 
+    left: 0; 
+    top: 0; 
+    background-color: #fff; 
+    height: 100%; 
+    opacity: 0; 
+    width: 100%;}
 
+.port-2{float: left; width: 100%;height: 100%; position: relative;border-radius: 10px; overflow: hidden; text-align: center; border: 4px solid rgba(255, 255, 255, 0.9); perspective: 800px;}
+.port-2 .text-desc{z-index: -1; transition: 0.6s;}
+.port-2 .image-box{transition: 0.4s;width: 100%;height: 100%;position: relative;}
+.port-2:hover .image-box{transform: rotateX(80deg); transform-origin: center bottom 0; transition: 0.4s;}
+
+.port-2.effect-2 .text-desc{opacity: 1; top: -100%;}
+.port-2.effect-2:hover .text-desc{top: 0;}
 </style>
