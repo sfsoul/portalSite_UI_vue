@@ -155,7 +155,7 @@ export const constantRouter = [
             meta:{title:'制度文档'}
             },
             {
-                path:'institution-details',
+                path:'institution-details/:articleid',
                 name:'institution-details',
                 component:()=>import('@/views/institution/details'),
                 meta:{title:'文档详情'},

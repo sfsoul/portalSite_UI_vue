@@ -6,11 +6,15 @@
                     <institution-title :title="title" english="System Document" :ismany="false"  ></institution-title>
 
 
-                    <el-row :gutter="20" justify="space-between" >
-                            <el-col :span="24" style="height: 40px;line-height: 20px" v-for="(item,index) in documentList" :key="index" >
-                                    <items :row="item" ></items>
-                            </el-col>
-                    </el-row>
+                    <div v-if="isLoading"  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
+                         <items :row="item" :index="index" ></items>
+                    </div>
+                    <div v-else style="min-height: 500px;position: relative;" >
+                       <loading></loading>
+                    </div>
+                    <div v-if="!isNoData&&isLoading" style="min-height: 500px;position: relative;">
+                     <no-data></no-data>
+                    </div>
                   
                     <el-pagination
                        background 
@@ -29,66 +33,68 @@
         </div>
     </template>
     
-    <script>
-    import Item from './Item'
-    import InstitutionTitle from '@/components/title'
-    import SidebarMenu from './sidebar-menu'
-    import Items from './Items'
+<script>
+import InstitutionTitle from '@/components/title'
+import SidebarMenu from './sidebar-menu'
+import Items from './Items'
+import { getRegulations } from "@/api/institution"
+import Long from "long"
+import Loading from "@/components/loading"
+import NoData from '@/components/noData'
     export default {
         components:{
-            Item,
             InstitutionTitle,
             SidebarMenu,
             Items,
+            Loading,
+            NoData
            
         },
         data(){
             return {
                 pageSize:10,
                 current:1,
-                total:120,
-                pageSizes:[8,16,32],
+                total:0,
+                pageSizes:[10,20,30],
                 title:{
                    nameLeft:'制度',
                    nameRight:'文档'
                 },
-                documentList:[
-                        {
-                                title:'如何高效的学习.doc',
-                                date:'2019/12/15',
-                                description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                        },
-                        {
-                                title:'如何高效的学习.doc',
-                                date:'2019/12/15',
-                                description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点,这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                        },
-                        {
-                                title:'如何高效的学习.doc',
-                                date:'2019/12/15',
-                                description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                        },
-                        {
-                                title:'如何高效的学习.doc',
-                                date:'2019/12/15',
-                                description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                        },{
-                                title:'如何高效的学习.doc',
-                                date:'2019/12/15',
-                                description:'这个是讲述如何高效的学习,高效的利用时间来达到短时间内的高效输出和学习新的知识点'
-                        }
-                ]
+                documentList:[],
+                isLoading:false,
+                isNoData:false,
+
             }
         },
         methods:{
             // pagesize 变化回调
             handleSizeChange(val){
-    
+                this.pageSize = val 
+                this.handleGetRegulations()
             },
            //current 变化回调
             handleCurrentChange(val){
-    
+                this.current = val
+                this.handleGetRegulations()
+            },
+            //分页获取制度文档详情
+            handleGetRegulations({current=this.current,pageSize=this.pageSize}={}){
+                getRegulations({current,pageSize}).then(response => {
+                this.isLoading = true
+                let page = response.page
+                this.total = page.total
+                if(response && response.value.length>0){
+                    this.isNoData = true
+                    this.documentList = response.value.map(item =>{
+                        item.id = (Long.fromValue(item.id)).toString()
+                        return item
+                    })
+                }
+            }) 
             }
+        },
+        mounted () {
+                this.handleGetRegulations()
         }
     }
     </script>

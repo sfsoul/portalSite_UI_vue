@@ -14,7 +14,7 @@ export function getRegulations({current,pageSize}){
 export function getRegulationsDetail({articleid}){
     return request({
         url:"regulations/getRegulationsDetail",
-        method:"post",
+        method:"get",
         params:{
             articleid
         }
