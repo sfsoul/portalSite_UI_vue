@@ -27,9 +27,9 @@
     
     <div class="header-content" >
       <!--搜索框--->
-      <el-input v-model="searchVlaue"  class="header-search" placeholder="请输入" >
-          <template slot="append">
-              <i class="el-icon-search" style="color: #fff" @click="searchEnter" ></i>
+      <el-input v-model="fastsearch"  class="header-search" placeholder="请输入" >
+          <template slot="append" >
+              <i class="el-icon-search" style="color: #fff" @click="searchEnter"  ></i>
            </template>
         </el-input>
     <!-- 登录框--->
@@ -69,6 +69,7 @@ export default {
         return{
           onlyOneChild:[],
           searchVlaue:null,
+          fastsearch:null,
         }
     },
     components:{
@@ -107,7 +108,19 @@ export default {
       },
       //跳转
       searchEnter(){
-        this.$router.push({path:'/search'})
+        if(this.fastsearch === null || this.fastsearch === ""){
+          this.$message.info("请输入搜索内容")
+          return ;
+        }else{
+          this.$router.push({path:'/search',query:{fastsearch:this.fastsearch}})
+        }
+        
+        /*   this.bus.$emit('searchData',{fastsearch:this.fastsearch}); */
+          // 定时让其目标组件加载完成
+        /*   setTimeout(()=>{
+            this.bus.$emit('searchData',{fastsearch:this.fastsearch});
+          },1000) */
+        
       },
       //用户下拉菜单指令
       handleCommand(value){

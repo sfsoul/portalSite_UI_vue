@@ -1,6 +1,8 @@
 import axios from 'axios'
 import store from '@/store'
 import config from '@/config'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 import { Message,MessageBox } from 'element-ui'
 import { getToken,removeToken } from '@/utils/auth'
 import router,{resetRouter} from  'vue-router'
@@ -14,7 +16,7 @@ const server = axios.create({
 // 添加请求拦截
 server.interceptors.request.use(
   config => {
-   
+    NProgress.start()
     if(store.getters.token){
       config.headers['X-TOKEN'] = getToken()
     }
@@ -32,7 +34,7 @@ server.interceptors.response.use(
   response => {
     // 响应数据处理
     const [data,code] = [response.data,response.status]
-  
+    NProgress.done()
     if(code<200 || code >300){
       Message.error(`${response.message}`)
       return Promise.reject(response.message)
@@ -42,6 +44,7 @@ server.interceptors.response.use(
     }
   },
   error => {
+    NProgress.done()
     //错误处理
     let code = null
     try {

@@ -65,14 +65,16 @@ import Long from "long"
             },
             detailName:{
                 type:String
-            }
+            },
+            
         },
         methods:{
             //获取分享详情
             handleGetKnlgeShareDetail(){
-              const data = {
-                 articleid:this.detailId,
-              }
+            let detailName = this.detailName
+           
+              const data = {}
+              data[detailName] = this.detailId
               console.log(data)
               this.getDetail(data).then(response=>{
                   if(response !== undefined && response){

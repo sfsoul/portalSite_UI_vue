@@ -3,7 +3,7 @@
                 <div class="news-details" v-if="activeInfo">
                         <img :src="scrUrl" alt=""  >
                         <p >{{activeInfo.title}}</p>
-                        <span style="position: absolute;top: 40%;left:50%;transform: translate(-50%,-40%);color: #ffffff;" >
+                        <span style="position: absolute;bottom: 15%;left:50%;transform: translateX(-50%); color: #ffffff;" >
                                 {{activeInfo.summary}}
                         </span>
                             

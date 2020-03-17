@@ -1,22 +1,36 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-02-23 18:16:10
+ * @LastEditTime: 2020-03-17 13:19:42
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: \portalSite_UI_vue\src\views\search\search-menu.vue
+ -->
 <template>
         <div>
             <dl class="list nigiri" style="transform: perspective(1200px);font-size: 14px;font-weight: 600;" >
-                <dt>信息类别</dt>
-                <span><dd>全部</dd></span>
-                <span><dd>新闻动态</dd></span>
-                <span><dd>通知公告</dd></span>
-                <span><dd>质量信息</dd></span>
-                <span><dd>荣誉中亚</dd></span>
-                <span><dd>培训专栏</dd></span>
-                <span><dd>制度文档</dd></span>
-                <span><dd>项目进度</dd></span>
-                <span><dd>知识共享</dd></span>
+                   <el-badge v-for="(item,index) in informationCategory" :max="99" :key="index" :value="item.count" class="item" >
+                     <span>
+                         <dd>{{item.articletypeStr}}</dd>
+                    </span>
+                  </el-badge>
             </dl>
         </div>
     </template>
     
     <script  >
-    
+    export default {
+        data(){
+            return {
+            }
+        },
+        props:{
+            informationCategory:{
+                type:Array,
+                default:[]
+            }
+        }
+    }
     </script>
     
     <style scoped >
@@ -34,7 +48,7 @@
         transform: perspective(1200px) rotateY(40deg) !important;
         transform-origin: 110% 25%;
     }
-    .list dt, .list dd {
+    .list dt, .list  dd {
         text-indent: 10px;
         line-height: 35px;
         margin: 0;
@@ -46,7 +60,7 @@
         border:1px ridge #fdfdfc;
         transition: all 0.5s;
     }
-    .list dd:hover {
+    .list  dd:hover {
         margin-left: 30px;
         border-radius: 18px;
         background:#f0831e;
@@ -58,7 +72,7 @@
         text-shadow: 1px 1px 2px rgba(0, 0, 0, .2);
         font-size: 15px;
     }
-    .nigiri dt, .nigiri dd{
+    .nigiri dt, .nigiri  dd{
         background: #1886d1;
     }
     

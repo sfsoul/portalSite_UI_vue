@@ -18,9 +18,9 @@ export function getNoticeList(current,pageSize){
 
 /**
  * 获取通知公告详情
- * @param {BigInt} noticeid 公告id
+ * @param {} noticeid 公告id
  */
-export function getNoticeDetail(noticeid){
+export function getNoticeDetail({noticeid}){
     return request({
         url:'notice/getNoticeDetail',
         method:'get',

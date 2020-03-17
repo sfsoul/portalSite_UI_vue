@@ -1,20 +1,20 @@
 <template>
-    <div class="search-item" >
+    <div class="search-item" v-if="searchInfo" >
         <div class="search-cla" >
-            <span>通知公告</span>
+            <span>{{searchInfo.articletypeStr}}</span>
         </div>
         <div class="search-title">
-            <span>关于春节放假通知</span>
+            <span>{{searchInfo.title}}</span>
         </div>
         
         <div class="search-content">
             <router-link :to="{path:'/'}" style="text-decoration: none;color: #222;" >
-                    <span>搜素结果的内容描述,搜素结果的内容描述,搜素结果的内容描述,搜素结果的内容描述,搜素结果的内容描述,搜素结果的内容描述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述述,搜素结果的内容描述</span>
+                    <span>{{searchInfo.summary}}</span>
             </router-link>
             
         </div>
         <div class="search-item-date" >
-            <span>2016/6/6</span>
+            <span>{{searchInfo.publishdate}}</span>
         </div>
     </div>
 </template>

@@ -10,9 +10,13 @@
         </div>
         <div class="text-desc">
             <h3>{{info.pepole}}</h3>
-            <p>{{info.honortitle}}</p>
+            <p style="overflow : hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;">{{info.honortitle}}</p>
             <div class="pan-btn light-blue-btn" @click="goDetail">
-                 了解他
+                 详情
             </div>
         </div>
     </div>

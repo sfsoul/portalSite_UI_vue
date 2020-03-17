@@ -1,19 +1,19 @@
 <template>
         <div class="institution" >
-             <sidebar-menu class="animated fadeInLeftBig" ></sidebar-menu>      
+             <sidebar-menu :get-regulations="handleGetRegulations" class="animated fadeInLeftBig" ></sidebar-menu>      
             <div style="margin: 100px 18% 40px 18%;position: relative;" >
                  <!--头部标题-->
                     <institution-title :title="title" english="System Document" :ismany="false"  ></institution-title>
 
 
-                    <div v-if="isLoading"  style="line-height: 20px" v-for="(item,index) in documentList" :key="index" >
-                         <items :row="item" :index="index" ></items>
+                    <div v-if="isLoading"  style="line-height: 20px">
+                         <items  v-for="(item,index) in documentList" :key="index"  :row="item" :index="index" ></items>
                     </div>
                     <div v-else style="min-height: 500px;position: relative;" >
                        <loading></loading>
                     </div>
                     <div v-if="!isNoData&&isLoading" style="min-height: 500px;position: relative;">
-                     <no-data></no-data>
+                       <no-data></no-data>
                     </div>
                   
                     <el-pagination
@@ -63,6 +63,7 @@ import NoData from '@/components/noData'
                 documentList:[],
                 isLoading:false,
                 isNoData:false,
+                deptid:'-1',
 
             }
         },
@@ -78,11 +79,15 @@ import NoData from '@/components/noData'
                 this.handleGetRegulations()
             },
             //分页获取制度文档详情
-            handleGetRegulations({current=this.current,pageSize=this.pageSize}={}){
-                getRegulations({current,pageSize}).then(response => {
+            handleGetRegulations({current=this.current,pageSize=this.pageSize,deptid=this.deptid}={}){
+                getRegulations({current,pageSize,deptid}).then(response => {
                 this.isLoading = true
                 let page = response.page
                 this.total = page.total
+                if(response && response.value.length === 0){
+                    this.documentList=[]
+                    this.isNoData = false
+                }
                 if(response && response.value.length>0){
                     this.isNoData = true
                     this.documentList = response.value.map(item =>{
@@ -116,6 +121,6 @@ import NoData from '@/components/noData'
     .institution {
          position: relative;
          min-width: 1200px;
-         height: 75vh;
+       /*   height: 85vh; */
     }
     </style>

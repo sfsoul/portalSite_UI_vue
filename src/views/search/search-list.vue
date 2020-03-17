@@ -8,10 +8,10 @@
  -->
 <template>
     <div  class="search" >
-        <search-menu></search-menu>
+        <search-menu :information-category="informationCategory" ></search-menu>
         <div class="search-content">
             <search-title :title="title" english="Search Result" :ismany="false" ></search-title>
-           <item></item> 
+            <item v-for="(item,index) in infoDataList" :searchInfo="item" :key="index" ></item> 
 
            <el-pagination
                    background 
@@ -33,17 +33,22 @@
 import SearchMenu from './search-menu'
 import Item from './Item'
 import SearchTitle from '@/components/title'
+import {searchArticles} from "@/api/home"
 export default {
     data(){
         return {
             pageSize:10,
             current:1,
-            total:120,
+            total:0,
             pageSizes:[8,16,32],
             title:{
                 nameLeft:"搜索",
                 nameRight:"结果"
-            }
+            },
+            informationCategory:null,//信息类别统计
+            infoDataList:[],
+            fastsearch:null,
+
         }
     },
     components:{
@@ -59,8 +64,36 @@ export default {
        //current 变化回调
         handleCurrentChange(val){
 
+        },
+        handleSearchArticles({current=this.current,pageSize=this.pageSize,articletype=-1,fastsearch=this.fastsearch}={}){
+           
+            const data = {
+                current,
+                pageSize,
+                articletype,
+                fastsearch
+            }
+            searchArticles(data).then(response => {
+                this.total = response.articles.page.total
+                this.informationCategory = response.categorys
+                this.infoDataList = response.articles.value
+
+            })
         }
-    }
+    },
+
+    watch: {
+        fastsearch(){
+            this.handleSearchArticles()
+        }
+    },
+    mounted () {
+      
+       this.fastsearch = this.$route.query.fastsearch
+    },
+    beforeDestroy () {
+      
+    },
 }
 </script>
 

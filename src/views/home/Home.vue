@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2020-02-23 18:16:10
- * @LastEditTime: 2020-03-02 11:41:49
+ * @LastEditTime: 2020-03-17 13:09:54
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: \portalSite_UI_vue\src\views\home\Home.vue
@@ -13,15 +13,15 @@
         <div style="margin:10px 18% " >
                 <news></news>
                 <el-row type="flex" :gutter="60" justify="space-btween" style="margin-top: 40px" >
-                        <el-col ref="notice"  :span="12" style="max-height: 400px;" :class="noticeClass" >
+                        <el-col ref="notice"  :span="12" style="height: 400px;" :class="noticeClass" >
                             <notice></notice>
                         </el-col>
-                        <el-col ref="quality"  :span="12" style="max-height: 400px;" :class="qualityClass" >
+                        <el-col ref="quality"  :span="12" style="height: 400px;" :class="qualityClass" >
                                 <quality></quality>
                         </el-col>
                 </el-row>
                 <module-entrance ref="entrance" :class="entranceClass" ></module-entrance>
-                <honor :class="honorClass"></honor>
+                <honor :class="honorClass" style="margin-bottom: 100px;"></honor>
         </div>
         
     </div>
@@ -97,5 +97,6 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
+    
 </style>

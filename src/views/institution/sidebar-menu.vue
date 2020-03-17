@@ -2,22 +2,39 @@
     <div style=" position: relative;width:300px;" >
         <dl class="list nigiri" style="transform: perspective(1200px)" >
             <dt>部门名称</dt>
-            <span><dd>软件部</dd></span>
-            <span><dd>产品导入部</dd></span>
-            <span><dd>技术服务中心</dd></span>
-            <span><dd>项目管理部</dd></span>
-            <span><dd>财务部</dd></span>
-            <span><dd>总经办</dd></span>
-            <span><dd>采购部</dd></span>
-            <span><dd>市场部</dd></span>
-            <span><dd>质量部</dd></span>
-            <span><dd>生产总部</dd></span>
+            <span><dd @click="getRegulations" >全部</dd></span>
+            <span v-for="(item,index) in departMents" :key="index"><dd @click="handleDeptSearch(item.dptid)">{{item.dptname}}</dd></span>
         </dl>
     </div>
 </template>
 
 <script  >
-
+import { getDepartMents } from "@/api/institution"
+export default {
+    data(){
+        return {
+            departMents:[]
+        }
+    },
+    methods: {
+        handleGetDepartMents(){
+            getDepartMents().then(response => {
+                this.departMents = response
+            })
+        },
+        handleDeptSearch(deptid){
+            this.getRegulations({deptid:deptid})
+        }
+    },
+    mounted () {
+        this.handleGetDepartMents()
+    },
+    props:{
+        getRegulations:{
+            type:Function,
+        }
+    }
+}
 </script>
 
 <style scoped>

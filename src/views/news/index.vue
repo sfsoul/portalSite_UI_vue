@@ -33,6 +33,7 @@ import NewsTitle from '@/components/title'
 import { getNewList } from '@/api/news'
 import Loading from '@/components/loading'
 import NoData from '@/components/noData'
+import Long from "long"
 export default {
     data(){
         return {
@@ -72,7 +73,7 @@ export default {
                         this.isNew = true
                         this.newsData = response.value.slice(0,6);
                         this.newsData.map(item=>{
-                            item.id = BigInt(item.id)
+                            item.id = (Long.fromValue(item.id)).toString()
                         })
                     }
                     if(response.value.length>0){

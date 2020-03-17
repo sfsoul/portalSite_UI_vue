@@ -4,8 +4,8 @@
                         <breadcrumd  ></breadcrumd>
                 </div>
                 <div v-if="detailsData"  style="background: #fff;padding: 20px;margin-top: 40px;">
-                        <div style="text-align: center;" >
-                            <h2>{{detailsData.title}}</h2>
+                        <div  >
+                            <h2 style="text-align: center;">{{detailsData.title}}</h2>
                         </div>
                         <div style="text-align: center;" >
                             <span>{{detailsData.publishdate}}</span>
@@ -35,6 +35,9 @@
                                 </div>
                          </div>
                 </div>
+                <div v-else style="min-height: 500px;position: relative;" >
+                    <loading></loading>
+                </div>
         </div>
         
     </template>
@@ -44,7 +47,8 @@ import Breadcrumd from '@/components/breadcrumd.vue'
 import { getKnlgeShareDetail } from "@/api/knowledge-sharing"
 import {fileDownload} from '@/api/files'
 import { download } from '@/utils/commonality'
-import Long from "long" 
+import Long from "long"
+import Loading from "@/components/loading"
     export default {
         data(){
             return{
@@ -101,7 +105,8 @@ import Long from "long"
             this.$store.dispatch('breadcrumd/setBreadcrumd',routes)
         },
         components:{
-            Breadcrumd
+            Breadcrumd,
+            Loading
         }
     }
     </script>

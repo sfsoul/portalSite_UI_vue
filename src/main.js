@@ -12,11 +12,10 @@ import animated  from 'animate.css'
 import App from './App'
 import store from './store'
 import router from './router'
+import './permission'
 
-/* import '@/icons' // icon
-import '@/permission' // permission control
- */
-// set ElementUI lang to EN
+import plugin from './utils/bus';
+Vue.use(plugin)
 Vue.use(ElementUI, {size: 'mini'})
 Vue.use(animated)
 Vue.config.productionTip = false

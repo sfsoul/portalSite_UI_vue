@@ -9,7 +9,7 @@
 <template>
     <div style="margin: 100px 18%" >
         <breadcrumd></breadcrumd>
-        <detail v-show="loading" @emitIsLoading="getLoading" :getDetail="getQualityDetail" :detailId="detailId"></detail>
+        <detail v-show="loading" detailName="articleid" @emitIsLoading="getLoading" :getDetail="getQualityDetail" :detailId="detailId"></detail>
         <div v-if="!loading" style="min-height: 250px;position: relative;" >
             <loading></loading>
         </div>

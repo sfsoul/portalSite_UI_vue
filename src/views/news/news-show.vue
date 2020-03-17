@@ -9,23 +9,10 @@
 <template>
     <div style="margin: 100px 18%">
         <breadcrumd></breadcrumd>
-        <div v-if="newInfo">
-            <el-divider content-position="right">{{newInfo.newsTName}}</el-divider>
-            <div style="background: #fff;line-height: 40px;" >
-                <div>
-                    <h2 style="text-align: center" >{{newInfo.title}}</h2>
-                </div>
-                <div style="text-align: center;" >
-                    <span>{{newInfo.publishdate}}</span>
-                    <span style="margin-left: 20px">发布人:{{newInfo.author}}</span>
-                    <span style="margin-left: 20px" >浏览量:{{newInfo.pageview}}</span>
-                </div>
-            </div>
-            <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
-                <span v-html="newInfo.content" ></span>
-            </div>
-        </div>
-        <div v-else style="min-height: 400px; position: relative;">
+
+        <detail v-show="isLoading"  detailName="newsid" @emitIsLoading="getLoading" :getDetail="getNewsDetail" :detailId="detailId"></detail>
+
+        <div v-if="!isLoading" style="min-height: 400px; position: relative;">
             <loading></loading>
         </div>
     </div>
@@ -34,11 +21,13 @@
 <script>
 import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewsDetail } from '@/api/news'
+import Detail from "@/components/detail"
 import Loading from '@/components/loading'
 export default {
     data(){
         return {
             newInfo:null,//新闻详情
+            isLoading:false,
         }
     },
     props:{
@@ -46,22 +35,22 @@ export default {
     },
     components:{
         Breadcrumd,
-        Loading
+        Loading,
+        Detail
     },
     computed: {
+        detailId(){
+                return this.$route.query.newsid
+        },
     },
     methods: {
-       handleGetNewsDetail(newsid){
-          getNewsDetail(newsid).then(response => {
-                  this.newInfo = response
-                  console.log(this.newInfo)
-          })
-       }  
+        getNewsDetail,
+      
+       getLoading(val){
+            this.isLoading = val
+        }  
     },
     mounted(){
-       let newsid = BigInt(this.$route.query.newsid) 
-       //获取新闻详情
-       this.handleGetNewsDetail(newsid)
         let routes = [
             {
               name:"新闻动态",

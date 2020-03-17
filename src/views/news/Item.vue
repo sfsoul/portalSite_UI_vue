@@ -1,7 +1,10 @@
 <template>
     <router-link :to="{path:'news-show',query:{newsid:row.id}}" style="text-decoration: none;color:#1f1e1e;" >
             <div class="news-row"  ref="activeItem"  @mouseover="itemActive" >
-                    <div class="news-row-date" >
+                  <!--   <div style="width: 18px;height: 16px;line-height:44px; background-color:#1886d1;color: #fff;text-align: center" >
+                      <span>{{index + 1}}</span>
+                    </div> -->
+                   <div class="news-row-date" >
                         <p>{{publishdate}}</p>
                     </div>
                    

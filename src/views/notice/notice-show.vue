@@ -1,24 +1,9 @@
 <template>
         <div style="margin: 100px 18%" >
             <breadcrumd></breadcrumd>
-            <div v-if="isNotice">
-                <div style="background: #fff;line-height: 40px;min-width: 1000px;">
-                    <div>
-                        <h2 style="text-align: center" >{{noticeDetail.title}}</h2>
-                    </div>
-                    <div style="text-align: center;" >
-                        <span>{{noticeDetail.reviewdate}}</span>
-                        <span style="margin-left: 20px" >发布人:{{noticeDetail.author}}</span>
-                        <span style="margin-left: 20px" >浏览量:{{noticeDetail.pageview}}</span>
-                    </div>
-                </div>
-                
-                <div style="width: 100%;height: 100%;background: #fff;overflow: hidden;border-top: 1px solid #666;" >
-                    <span v-html="noticeDetail.content" ></span>
-                </div>
-            </div>
-           
-            <div v-else style="min-height: 400px; position: relative;">
+            
+            <detail v-show="isLoading"  detailName="noticeid" @emitIsLoading="getLoading" :getDetail="getNoticeDetail" :detailId="detailId"></detail>
+            <div v-if="!isLoading" style="min-height: 400px; position: relative;">
                 <loading></loading>
             </div>
             
@@ -29,11 +14,12 @@
  import Breadcrumd from '@/components/breadcrumd.vue'
  import { getNoticeDetail } from '@/api/notice'
  import Loading from '@/components/loading'
+ import Detail from "@/components/detail"
  export default {
         data(){
             return {
                 noticeDetail:null,
-                isNotice:false,
+                isLoading:false,
             }    
         },
         props:{
@@ -41,22 +27,23 @@
         },
         components:{
             Breadcrumd,
-            Loading
+            Loading,
+            Detail
         },
         methods:{
             //获取通知详情
-            handleGetNoticeDetail(noticeid){
-                getNoticeDetail(noticeid).then(response=>{
-                    this.isNotice = true
-                    this.noticeDetail = response
-                })
+            getNoticeDetail,
+            getLoading(val){
+                this.isLoading = val
             }
+           
+        },
+        computed: {
+            detailId(){
+                return this.$route.params.noticeid
+            },
         },
         mounted(){
-
-            //获取通知详情
-            let noticeid = this.$route.params.noticeid || null
-            this.handleGetNoticeDetail(noticeid)
 
             //面包屑
             let routes = [

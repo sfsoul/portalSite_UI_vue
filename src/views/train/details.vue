@@ -11,7 +11,7 @@
                 <div >
                         <breadcrumd  ></breadcrumd>
                 </div>
-                 <detail v-show="loading" @emitIsLoading="getLoading" :getDetail="getOrgTrainDetail" :detailId="detailId"></detail>
+                 <detail v-show="loading"  detailName="articleid"  @emitIsLoading="getLoading" :getDetail="getOrgTrainDetail" :detailId="detailId"></detail>
                  <div v-if="!loading" style="position: relative;min-height: 400px;" >
                      <loading></loading>
                  </div>

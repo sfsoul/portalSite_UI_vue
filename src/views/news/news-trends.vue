@@ -39,6 +39,7 @@ import Breadcrumd from '@/components/breadcrumd.vue'
 import { getNewList } from '@/api/news'
 import Loading from '@/components/loading'
 import NoData from '@/components/noData'
+import Long from "long"
     export default {
         data(){
             return{
@@ -92,7 +93,7 @@ import NoData from '@/components/noData'
                     this.total = page.total
                     this.newsData = response.value
                     this.newsData.map(item=>{
-                            item.id = BigInt(item.id)
+                            item.id = (Long.fromValue(item.id)).toString()
                         })
                 })
             },
